@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        provinsi: {
+        provinsiId: {
             type: Sequelize.STRING,
             allowNull: false,
             references: {
@@ -27,8 +27,8 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     Kota.associate = function (models) {
-        Kota.hasOne(models.Provinsi, { foreignKey: 'provinsi' })
-        Kota.belongsTo(models.Provinsi, { foreignKey: 'provinsi' })
+        Kota.belongsTo(models.Provinsi, { foreignKey: 'provinsiId', as: 'provinsi' })
+        Kota.hasMany(models.Kecamatan, { foreignKey: 'kecamatanId' })
     };
 
     return Kota;

@@ -12,9 +12,9 @@ module.exports = (sequelize, Sequelize) => {
         }
     });
 
-    // Provinsi.associate = function (models) {
-    //     Provinsi.belongsTo(models.Kota, { as: 'provinsi' })
-    // };
+    Provinsi.associate = function (models) {
+        Provinsi.hasMany(models.Kota, { foreignKey: 'provinsiId' })
+    };
 
     return Provinsi;
 }

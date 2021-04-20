@@ -21,6 +21,9 @@ db.sequelize = sequelize;
 
 db.Provinsi = require('../models/Provinsi')(sequelize, Sequelize);
 db.Kota = require('../models/Kota')(sequelize, Sequelize);
+db.Kecamatan = require('../models/Kecamatan')(sequelize, Sequelize);
+db.Kelurahan = require('../models/Kelurahan')(sequelize, Sequelize);
+db.Kodepos = require('../models/Kodepos')(sequelize, Sequelize);
 
 
 module.exports = db;

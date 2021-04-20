@@ -5,6 +5,9 @@ require('colors');
 const db = require('./config/db');
 const provinsiRoutes = require('./routes/provinsiRoute');
 const kotaRoutes = require('./routes/kotaRoute');
+const kecamatanRoutes = require('./routes/kecamatanRoute');
+const kelurahanRoutes = require('./routes/kelurahanRoute');
+const kodeposRoutes = require('./routes/kodeposRoute');
 
 // koneksi ke database
 db.sequelize.sync();
@@ -24,6 +27,9 @@ app.use(morgan('dev'));
 // route
 app.use('/provinsi', provinsiRoutes);
 app.use('/kota', kotaRoutes);
+app.use('/kecamatan', kecamatanRoutes);
+app.use('/kelurahan', kelurahanRoutes);
+app.use('/kodepos', kodeposRoutes);
 
 const PORT = 5000
 
