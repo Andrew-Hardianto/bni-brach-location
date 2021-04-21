@@ -22,11 +22,7 @@ exports.getProvinsi = async (req, res) => {
 // get by id data
 exports.getByIdProvinsi = async (req, res) => {
     try {
-        const provinsi = await Provinsi.findAll({
-            where: {
-                id: req.params.id
-            }
-        });
+        const provinsi = await Provinsi.findByPk(req.params.id);
 
         res.status(200).json({
             success: true,

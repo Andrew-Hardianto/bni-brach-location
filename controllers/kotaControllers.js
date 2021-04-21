@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 // get all kota
 exports.getKota = async (req, res) => {
     try {
-        const kota = await Kota.findAll()
+        const kota = await Kota.findAll();
 
         res.status(200).json({
             success: true,
@@ -23,11 +23,7 @@ exports.getKota = async (req, res) => {
 // get kota by id
 exports.getByIdKota = async (req, res, next) => {
     try {
-        const kota = await Kota.findOne({
-            where: {
-                id: req.params.id
-            }
-        })
+        const kota = await Kota.findByPk(req.params.id);
 
         if (!kota) return next(new Error(`Kota dengan id ${id} idak ditemukan`, 404));
 

@@ -22,11 +22,7 @@ exports.getKodepos = async (req, res) => {
 // get by id data
 exports.getByIdKodepos = async (req, res) => {
     try {
-        const kodepos = await Kodepos.findAll({
-            where: {
-                id: req.params.id
-            }
-        });
+        const kodepos = await Kodepos.findByPk(req.params.id);
 
         res.status(200).json({
             success: true,

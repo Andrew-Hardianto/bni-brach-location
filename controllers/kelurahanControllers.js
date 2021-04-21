@@ -22,11 +22,7 @@ exports.getKelurahan = async (req, res) => {
 // get by id data
 exports.getByIdKelurahan = async (req, res) => {
     try {
-        const kelurahan = await Kelurahan.findAll({
-            where: {
-                id: req.params.id
-            }
-        });
+        const kelurahan = await Kelurahan.findByPk(req.params.id);
 
         res.status(200).json({
             success: true,

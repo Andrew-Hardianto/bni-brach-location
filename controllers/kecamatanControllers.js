@@ -22,11 +22,7 @@ exports.getKecamatan = async (req, res) => {
 // get by id data
 exports.getByIdKecamatan = async (req, res) => {
     try {
-        const kecamatan = await Kecamatan.findAll({
-            where: {
-                id: req.params.id
-            }
-        });
+        const kecamatan = await Kecamatan.findByPk(req.params.id);
 
         res.status(200).json({
             success: true,
