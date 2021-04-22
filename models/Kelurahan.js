@@ -12,12 +12,15 @@ module.exports = (sequelize, Sequelize) => {
         },
         kecamatanId: {
             type: Sequelize.STRING,
-            allowNull: false,
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
             references: {
-                model: "kecamatans",
+                model: "kecamatan",
                 key: 'id'
             }
         },
+    }, {
+        tableName: 'kelurahan'
     });
 
     Kelurahan.associate = function (models) {

@@ -1,15 +1,16 @@
 module.exports = (sequelize, Sequelize) => {
     const Provinsi = sequelize.define("provinsi", {
         id: {
-            type: Sequelize.STRING,
+            type: Sequelize.INTEGER,
             primaryKey: true,
-            unique: true,
-            allowNull: false
+            allowNull: true
         },
         nama: {
             type: Sequelize.STRING,
             allowNull: false
         }
+    }, {
+        tableName: 'provinsi'
     });
 
     Provinsi.associate = function (models) {

@@ -12,17 +12,20 @@ module.exports = (sequelize, Sequelize) => {
         },
         kelurahanId: {
             type: Sequelize.STRING,
-            allowNull: false,
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
             references: {
-                model: "kelurahans",
+                model: "kelurahan",
                 key: 'id'
             }
         },
+    }, {
+        tableName: 'kodepos'
     });
 
-    // Kodepos.associate = function (models) {
-    //     Kodepos.hasOne(models.Kelurahan, { foreignKey: 'kelurahanId' })
-    // };
+    Kodepos.associate = function (models) {
+        Kodepos.hasOne(models.Kelurahan, { foreignKey: 'kelurahanId' })
+    };
 
     return Kodepos;
 }

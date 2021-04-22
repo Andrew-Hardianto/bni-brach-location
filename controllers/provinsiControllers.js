@@ -39,15 +39,19 @@ exports.getByIdProvinsi = async (req, res) => {
 // add Provinsi
 exports.createProvinsi = async (req, res, next) => {
     try {
-        const id = await Provinsi.findOne(
+        const { id, nama } = req.body;
+
+        const checkId = await Provinsi.findOne(
             {
                 where: {
-                    id: req.body.id
+                    id
                 }
             }
         )
 
-        if (id) return next(new Error('ID sudah ada!', 400))
+        if (!id || !nama) return next(new Error('ID/Nama harus diisi', 401))
+
+        if (checkId) return next(new Error('ID sudah ada!', 400))
 
         const provinsi = await Provinsi.create(req.body);
 

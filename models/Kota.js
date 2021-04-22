@@ -11,10 +11,11 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
         provinsiId: {
-            type: Sequelize.STRING,
-            allowNull: false,
+            type: Sequelize.INTEGER,
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
             references: {
-                model: "provinsis",
+                model: "provinsi",
                 key: 'id'
             }
         },
@@ -24,10 +25,12 @@ module.exports = (sequelize, Sequelize) => {
         antasenaCode: {
             type: Sequelize.STRING,
         }
+    }, {
+        tableName: 'kota'
     });
 
     Kota.associate = function (models) {
-        Kota.belongsTo(models.Provinsi, { foreignKey: 'provinsiId', as: 'provinsi' })
+        Kota.belongsToMany(models.Provinsi, { foreignKey: 'provinsiId' })
         Kota.hasMany(models.Kecamatan, { foreignKey: 'kecamatanId' })
     };
 
