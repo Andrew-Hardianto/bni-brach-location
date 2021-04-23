@@ -17,9 +17,9 @@ db.sequelize.sync();
 //         console.log('Drop and Resync with { force: true }');
 //     });
 // });
-db.sequelize.sync({ force: true }).then(() => {
-    console.log('Drop and Resync with { force: true }');
-});
+// db.sequelize.sync({ force: true }).then(() => {
+//     console.log('Drop and Resync with { force: true }');
+// });
 
 const app = express();
 

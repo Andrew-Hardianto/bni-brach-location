@@ -30,8 +30,8 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     Kota.associate = function (models) {
-        Kota.belongsToMany(models.Provinsi, { foreignKey: 'provinsiId' })
-        Kota.hasMany(models.Kecamatan, { foreignKey: 'kecamatanId' })
+        Kota.belongsToMany(models.Provinsi, { foreignKey: 'provinsiId', targetKey: 'id', as: 'provinsi' })
+        Kota.hasMany(models.Kecamatan, { as: 'kecamatan' })
     };
 
     return Kota;

@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     Provinsi.associate = function (models) {
-        Provinsi.hasMany(models.Kota, { foreignKey: 'provinsiId' })
+        Provinsi.hasMany(models.Kota, { sourceKey: 'id', as: 'kota' })
     };
 
     return Provinsi;

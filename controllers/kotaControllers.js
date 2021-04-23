@@ -67,22 +67,18 @@ exports.addKota = async (req, res, next) => {
 // update kota 
 exports.updateKota = async (req, res, next) => {
     try {
-        const id = await Kota.findOne({ where: req.params.id });
-
-        if (!id) return next(new Error(`Kota dengan id ${id} tidak ditemukan!`, 404));
-
         const kota = await Kota.update(req.body, {
             where: {
                 id: req.params.id
             }
         })
 
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             kota
         })
     } catch (err) {
-        res.status(500).json({
+        res.status(401).json({
             success: false,
             message: err.message
         })
@@ -92,10 +88,6 @@ exports.updateKota = async (req, res, next) => {
 // delete kota
 exports.deleteKota = async (req, res, next) => {
     try {
-        const id = await Kota.findOne({ where: req.params.id });
-
-        if (!id) return next(new Error(`Kota dengan id ${id} tidak ditemukan!`, 404));
-
         await Kota.destroy({ where: { id: req.params.id } });
 
         res.status(200).json({

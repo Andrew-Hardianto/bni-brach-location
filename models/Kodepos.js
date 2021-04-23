@@ -24,7 +24,7 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     Kodepos.associate = function (models) {
-        Kodepos.hasOne(models.Kelurahan, { foreignKey: 'kelurahanId' })
+        Kodepos.belongsToMany(models.Kelurahan, { foreignKey: 'kelurahanId', as: 'kelurahan' })
     };
 
     return Kodepos;

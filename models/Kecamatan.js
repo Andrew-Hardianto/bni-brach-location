@@ -24,7 +24,8 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     Kecamatan.associate = function (models) {
-        Kecamatan.hasMany(models.Kelurahan, { foreignKey: 'kelurahanId' })
+        Kecamatan.hasMany(models.Kelurahan, { as: 'kelurahan' })
+        Kecamatan.belongsToMany(models.Kota, { foreignKey: 'kotaId', as: 'kota' })
     };
 
     return Kecamatan;
