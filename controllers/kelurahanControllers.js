@@ -39,15 +39,19 @@ exports.getByIdKelurahan = async (req, res) => {
 // add Kelurahan
 exports.createKelurahan = async (req, res, next) => {
     try {
-        const id = await Kelurahan.findOne(
+        const { id, nama } = req.body;
+
+        const checkId = await Kelurahan.findOne(
             {
                 where: {
-                    id: req.body.id
+                    id
                 }
             }
         )
 
-        if (id) return next(new Error('ID sudah ada!', 400))
+        if (!id || !nama) return next(new Error('ID/Nama Kelurahan harus diisi!'));
+        
+        if (checkId) return next(new Error('ID sudah ada!'));
 
         const kelurahan = await Kelurahan.create(req.body);
 

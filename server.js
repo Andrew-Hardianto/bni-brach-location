@@ -3,11 +3,13 @@ const morgan = require('morgan');
 require('colors');
 
 const db = require('./config/db');
+const { notFound, errorHandler } = require('./middleware/errorHandler');
 const provinsiRoutes = require('./routes/provinsiRoute');
 const kotaRoutes = require('./routes/kotaRoute');
 const kecamatanRoutes = require('./routes/kecamatanRoute');
 const kelurahanRoutes = require('./routes/kelurahanRoute');
 const kodeposRoutes = require('./routes/kodeposRoute');
+const wilayahRoutes = require('./routes/wilayahRoute');
 
 // koneksi ke database
 // db.sequelize.sync();
@@ -36,6 +38,10 @@ app.use('/kota', kotaRoutes);
 app.use('/kecamatan', kecamatanRoutes);
 app.use('/kelurahan', kelurahanRoutes);
 app.use('/kodepos', kodeposRoutes);
+app.use('/wilayah', wilayahRoutes);
+
+app.use(notFound)
+app.use(errorHandler)
 
 const PORT = 5000
 

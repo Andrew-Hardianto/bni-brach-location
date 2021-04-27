@@ -39,6 +39,9 @@ exports.getByIdKodepos = async (req, res) => {
 // add Kodepos
 exports.createKodepos = async (req, res, next) => {
     try {
+        const { kode } = req.body;
+
+        if (!kode) return next(new Error('Kode POS harus diisi!'));
 
         const kodepos = await Kodepos.create(req.body);
 

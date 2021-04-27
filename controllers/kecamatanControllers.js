@@ -39,15 +39,18 @@ exports.getByIdKecamatan = async (req, res) => {
 // add kecamatan
 exports.createKecamatan = async (req, res, next) => {
     try {
-        const id = await Kecamatan.findOne(
+        const { id, nama } = req.body;
+
+        const checkId = await Provinsi.findOne(
             {
                 where: {
-                    id: req.body.id
+                    id
                 }
             }
         )
 
-        if (id) return next(new Error('ID sudah ada!', 400))
+        if (!id || !nama) return next(new Error('ID/Nama Kecamatan harus diisi!'));
+        if (checkId) return next(new Error('ID sudah ada!'));
 
         const kecamatan = await Kecamatan.create(req.body);
 

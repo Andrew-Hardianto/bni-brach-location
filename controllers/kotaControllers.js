@@ -42,13 +42,19 @@ exports.getByIdKota = async (req, res, next) => {
 // add kota
 exports.addKota = async (req, res, next) => {
     try {
-        const id = await Kota.findOne({
-            where: {
-                id: req.body.id
-            }
-        })
+        const { id, nama } = req.body;
 
-        if (id) return next(new Error('ID Sudah ada!', 400));
+        const checkId = await Provinsi.findOne(
+            {
+                where: {
+                    id
+                }
+            }
+        )
+
+        if (!id || !nama) return next(new Error('ID/Nama Kota harus diisi!'));
+        
+        if (checkId) return next(new Error('ID sudah ada!'));
 
         const kota = await Kota.create(req.body);
 

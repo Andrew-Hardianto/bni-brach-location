@@ -24,6 +24,9 @@ db.Kota = require('../models/Kota')(sequelize, Sequelize);
 db.Kecamatan = require('../models/Kecamatan')(sequelize, Sequelize);
 db.Kelurahan = require('../models/Kelurahan')(sequelize, Sequelize);
 db.Kodepos = require('../models/Kodepos')(sequelize, Sequelize);
+db.Wilayah = require('../models/Wilayah')(sequelize, Sequelize);
+db.Cabang = require('../models/Cabang')(sequelize, Sequelize);
+db.Outlet = require('../models/Outlet')(sequelize, Sequelize);
 
 
 db.Provinsi.hasMany(db.Kota, { as: "kota",foreignKey: "provinsiId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
@@ -49,6 +52,18 @@ db.Kodepos.belongsTo(db.Kelurahan, {
   foreignKey: "kelurahanId",
   as: "kelurahan",
   targetKey:"id"
+});
+db.Wilayah.hasMany(db.Cabang, { as: "cabang",foreignKey: "kodeWilayah",onDelete:"set null",onUpdate:"cascade",sourceKey:"kode" });
+db.Cabang.belongsTo(db.Wilayah, {
+  foreignKey: "kodeWilayah",
+  as: "wilayah",
+  targetKey:"kode"
+});
+db.Cabang.hasMany(db.Outlet, { as: "outlet",foreignKey: "kodeCabang",onDelete:"set null",onUpdate:"cascade",sourceKey:"kode" });
+db.Outlet.belongsTo(db.Cabang, {
+  foreignKey: "kodeCabang",
+  as: "cabang",
+  targetKey:"kode"
 });
 
 module.exports = db;
