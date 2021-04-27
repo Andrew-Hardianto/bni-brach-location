@@ -10,23 +10,23 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        kecamatanId: {
-            type: Sequelize.STRING,
-            onUpdate: 'CASCADE',
-            onDelete: 'SET NULL',
-            references: {
-                model: "kecamatan",
-                key: 'id'
-            }
-        },
+        // kecamatanId: {
+        //     type: Sequelize.STRING,
+        //     onUpdate: 'CASCADE',
+        //     onDelete: 'SET NULL',
+        //     references: {
+        //         model: "kecamatan",
+        //         key: 'id'
+        //     }
+        // },
     }, {
         tableName: 'kelurahan'
     });
 
-    Kelurahan.associate = function (models) {
-        Kelurahan.hasMany(models.Kodepos, { as: 'kodepos' })
-        Kelurahan.belongsToMany(models.Kecamatan, { foreignKey: 'kecamatanId', as: 'kecamatan' })
-    };
+    // Kelurahan.associate = function (models) {
+    //     Kelurahan.hasMany(models.Kodepos, { as: 'kodepos' })
+    //     Kelurahan.belongsTo(models.Kecamatan, { foreignKey: 'kecamatanId', as: 'kecamatan' })
+    // };
 
     return Kelurahan;
 }

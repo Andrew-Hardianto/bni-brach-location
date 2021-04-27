@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // get all data
 exports.getKecamatan = async (req, res) => {
     try {
-        const kecamatan = await Kecamatan.findAll();
+        const kecamatan = await Kecamatan.findAll({ include: ["kota"] });
 
         res.status(200).json({
             success: true,

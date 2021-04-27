@@ -10,22 +10,22 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        kelurahanId: {
-            type: Sequelize.STRING,
-            onUpdate: 'CASCADE',
-            onDelete: 'SET NULL',
-            references: {
-                model: "kelurahan",
-                key: 'id'
-            }
-        },
+        // kelurahanId: {
+        //     type: Sequelize.STRING,
+        //     onUpdate: 'CASCADE',
+        //     onDelete: 'SET NULL',
+        //     references: {
+        //         model: "kelurahan",
+        //         key: 'id'
+        //     }
+        // },
     }, {
         tableName: 'kodepos'
     });
 
-    Kodepos.associate = function (models) {
-        Kodepos.belongsToMany(models.Kelurahan, { foreignKey: 'kelurahanId', as: 'kelurahan' })
-    };
+    // Kodepos.associate = function (models) {
+    //     Kodepos.belongsTo(models.Kelurahan, { foreignKey: 'kelurahanId', as: 'kelurahan' })
+    // };
 
     return Kodepos;
 }

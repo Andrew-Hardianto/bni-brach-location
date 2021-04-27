@@ -10,16 +10,16 @@ const kelurahanRoutes = require('./routes/kelurahanRoute');
 const kodeposRoutes = require('./routes/kodeposRoute');
 
 // koneksi ke database
-db.sequelize.sync();
+// db.sequelize.sync();
 
 // db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true }).then(function () {
 //     db.sequelize.sync({ force: true }).then(function () {
 //         console.log('Drop and Resync with { force: true }');
 //     });
 // });
-// db.sequelize.sync({ force: true }).then(() => {
-//     console.log('Drop and Resync with { force: true }');
-// });
+db.sequelize.sync({ force: false }).then(() => {
+    console.log('Drop and Resync');
+});
 
 const app = express();
 

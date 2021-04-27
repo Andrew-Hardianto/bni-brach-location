@@ -1,11 +1,11 @@
 const db = require('../config/db');
 const Kelurahan = db.Kelurahan;
 const Op = db.Sequelize.Op;
-
+// const fs = require('fs')
 // get all data
 exports.getKelurahan = async (req, res) => {
     try {
-        const kelurahan = await Kelurahan.findAll();
+        const kelurahan = await Kelurahan.findAll({ include: ["kecamatan"] });
 
         res.status(200).json({
             success: true,
@@ -114,3 +114,13 @@ exports.deleteKelurahan = async (req, res, next) => {
         })
     }
 }
+
+// exports.insertKelurahan = async(req,res) => {
+//     const kelurahan = JSON.parse(fs.readFileSync(`${__dirname}/kelurahan.json`, 'utf-8'))
+//     try {
+//         const kel = await Kelurahan.bulkCreate(kelurahan)
+//         res.status(201).json(kel)
+//     } catch (error) {
+//         res.status(500).json(error)
+//     }
+// }

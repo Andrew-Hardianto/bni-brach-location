@@ -26,4 +26,29 @@ db.Kelurahan = require('../models/Kelurahan')(sequelize, Sequelize);
 db.Kodepos = require('../models/Kodepos')(sequelize, Sequelize);
 
 
+db.Provinsi.hasMany(db.Kota, { as: "kota",foreignKey: "provinsiId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Kota.belongsTo(db.Provinsi, {
+  foreignKey: "provinsiId",
+  as: "provinsi",
+  targetKey:"id"
+});
+db.Kota.hasMany(db.Kecamatan, { as: "kecamatan",foreignKey: "kotaId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Kecamatan.belongsTo(db.Kota, {
+  foreignKey: "kotaId",
+  as: "kota",
+  targetKey:"id"
+});
+db.Kecamatan.hasMany(db.Kelurahan, { as: "kelurahan",foreignKey: "kecamatanId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Kelurahan.belongsTo(db.Kecamatan, {
+  foreignKey: "kecamatanId",
+  as: "kecamatan",
+  targetKey:"id"
+});
+db.Kelurahan.hasMany(db.Kodepos, { as: "kodepos",foreignKey: "kelurahanId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Kodepos.belongsTo(db.Kelurahan, {
+  foreignKey: "kelurahanId",
+  as: "kelurahan",
+  targetKey:"id"
+});
+
 module.exports = db;

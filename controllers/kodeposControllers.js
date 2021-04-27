@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // get all data
 exports.getKodepos = async (req, res) => {
     try {
-        const kodepos = await Kodepos.findAll();
+        const kodepos = await Kodepos.findAll({ include: ["kelurahan"] });
 
         res.status(200).json({
             success: true,

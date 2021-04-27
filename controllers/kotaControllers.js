@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 // get all kota
 exports.getKota = async (req, res) => {
     try {
-        const kota = await Kota.findAll();
+        const kota = await Kota.findAll({ include: ["provinsi"] });
 
         res.status(200).json({
             success: true,

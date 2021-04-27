@@ -3,7 +3,7 @@ module.exports = (sequelize, Sequelize) => {
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-            allowNull: true
+            allowNull: false
         },
         nama: {
             type: Sequelize.STRING,
@@ -13,9 +13,9 @@ module.exports = (sequelize, Sequelize) => {
         tableName: 'provinsi'
     });
 
-    Provinsi.associate = function (models) {
-        Provinsi.hasMany(models.Kota, { sourceKey: 'id', as: 'kota' })
-    };
+    // Provinsi.associate = function (models) {
+    //     Provinsi.hasMany(models.Kota, { sourceKey: 'id', as: 'kota' })
+    // };
 
     return Provinsi;
 }
