@@ -46,9 +46,13 @@ exports.createWilayah = async (req, res, next) => {
     try {
         const { kode, nama } = req.body;
 
-        const checkId = Wilayah.findOne({
-            id
-        })
+        const checkId = await Wilayah.findOne(
+            {
+                where: {
+                    kode: kode
+                }
+            }
+        )
 
         if (!kode || !nama) return next(new Error('Kode/Nama harus diisi!'))
 
@@ -62,6 +66,56 @@ exports.createWilayah = async (req, res, next) => {
         })
     } catch (error) {
         res.status(401).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+// Update wilayah
+exports.updateWilayah = async (req, res, next) => {
+    try {
+
+        const checkId = await Wilayah.findByPk(req.params.kode)
+
+        if (!checkId) {
+            res.status(404)
+            return next(new Error('Wilayah tidak ditemukan!'))
+        }
+
+        const wilayah = await Wilayah.update(req.body, {
+            where: {
+                kode: req.params.kode
+            }
+        })
+
+        res.status(200).json({
+            success: true,
+            wilayah
+        })
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+// delete wilayah
+exports.deleteWilayah = async (req, res) => {
+    try {
+        await Wilayah.destroy({
+            where: {
+                kode: req.params.kode
+            }
+        })
+
+        res.status(200).json({
+            success: true,
+            data: {}
+        })
+    } catch (error) {
+        res.status(500).json({
             success: false,
             message: error.message
         })

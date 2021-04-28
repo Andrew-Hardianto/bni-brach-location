@@ -1,6 +1,7 @@
+require('colors');
 const express = require('express');
 const morgan = require('morgan');
-require('colors');
+const dotenv = require('dotenv');
 
 const db = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
@@ -10,15 +11,14 @@ const kecamatanRoutes = require('./routes/kecamatanRoute');
 const kelurahanRoutes = require('./routes/kelurahanRoute');
 const kodeposRoutes = require('./routes/kodeposRoute');
 const wilayahRoutes = require('./routes/wilayahRoute');
+const cabangRoutes = require('./routes/cabangRoute');
+const outletRoutes = require('./routes/outletRoute');
+
+// Load env vars
+dotenv.config();
 
 // koneksi ke database
 // db.sequelize.sync();
-
-// db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true }).then(function () {
-//     db.sequelize.sync({ force: true }).then(function () {
-//         console.log('Drop and Resync with { force: true }');
-//     });
-// });
 db.sequelize.sync({ force: false }).then(() => {
     console.log('Drop and Resync');
 });
@@ -39,6 +39,8 @@ app.use('/kecamatan', kecamatanRoutes);
 app.use('/kelurahan', kelurahanRoutes);
 app.use('/kodepos', kodeposRoutes);
 app.use('/wilayah', wilayahRoutes);
+app.use('/cabang', cabangRoutes);
+app.use('/outlet', outletRoutes);
 
 app.use(notFound)
 app.use(errorHandler)

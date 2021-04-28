@@ -53,7 +53,7 @@ exports.addKota = async (req, res, next) => {
         )
 
         if (!id || !nama) return next(new Error('ID/Nama Kota harus diisi!'));
-        
+
         if (checkId) return next(new Error('ID sudah ada!'));
 
         const kota = await Kota.create(req.body);
@@ -79,12 +79,12 @@ exports.updateKota = async (req, res, next) => {
             }
         })
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             kota
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
             message: err.message
         })

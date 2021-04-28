@@ -1,5 +1,11 @@
 const express = require('express');
-const { getAllWilayah, createWilayah, getByIdWilayah } = require('../controllers/wilayahControllers');
+const {
+    getAllWilayah,
+    createWilayah,
+    getByIdWilayah,
+    updateWilayah,
+    deleteWilayah
+} = require('../controllers/wilayahControllers');
 
 const router = express.Router();
 
@@ -9,5 +15,7 @@ router.route('/')
 
 router.route('/:kode')
     .get(getByIdWilayah)
+    .put(updateWilayah)
+    .delete(deleteWilayah)
 
 module.exports = router;
