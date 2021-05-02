@@ -2,6 +2,7 @@ require('colors');
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 const db = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
@@ -31,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Logging middleware
 app.use(morgan('dev'));
+// Enable CORS
+app.use(cors());
 
 // route
 app.use('/provinsi', provinsiRoutes);
