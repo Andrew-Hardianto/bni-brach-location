@@ -31,7 +31,7 @@ exports.getByIdOutlet = async (req, res) => {
             outlet
         })
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
             success: false,
             message: error.message
         })
@@ -89,7 +89,7 @@ exports.createOutlet = async (req, res, next) => {
 // update outlet
 exports.updateOutlet = async (req, res, next) => {
     try {
-        const { nama, alamat, kodeCabang } = req.body;
+        const { nama, alamat, kodeCabang, status } = req.body;
 
         if (!nama || !alamat) return next(new Error('Nama/alamat harus diisi!'))
 
@@ -99,13 +99,17 @@ exports.updateOutlet = async (req, res, next) => {
             }
         );
 
+        const cab = await Cabang.findOne({ where: { kode: kodeCabang } })
+
         const outlet = await Outlet.update({
             nama: nama,
             alamat: alamat,
             kodepos: loc[0].zipcode,
             latitude: loc[0].latitude,
             longitude: loc[0].longitude,
-            kodeCabang: kodeCabang
+            kodeCabang: kodeCabang,
+            status: status,
+            namaCabang: cab.nama
         }, {
             where: {
                 kode: req.params.kode

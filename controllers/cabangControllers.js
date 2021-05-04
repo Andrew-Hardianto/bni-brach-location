@@ -89,7 +89,7 @@ exports.createCabang = async (req, res, next) => {
 // update cabang
 exports.updateCabang = async (req, res, next) => {
     try {
-        const { nama, alamat, kodeWilayah } = req.body;
+        const { nama, alamat, kodeWilayah, status } = req.body;
 
         if (!nama || !alamat) return next(new Error('Nama/alamat harus diisi!'))
 
@@ -99,13 +99,17 @@ exports.updateCabang = async (req, res, next) => {
             }
         );
 
+        const will = await Wilayah.findOne({ where: { kode: kodeWilayah } })
+
         const cabang = await Cabang.update({
             nama: nama,
             alamat: alamat,
             kodepos: loc[0].zipcode,
             latitude: loc[0].latitude,
             longitude: loc[0].longitude,
-            kodeWilayah: kodeWilayah
+            kodeWilayah: kodeWilayah,
+            status: status,
+            namaWilayah: will.nama
         }, {
             where: {
                 kode: req.params.kode
