@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const geocoder = require('../utils/geocoder');
 const Outlet = db.Outlet;
+const Cabang = db.Cabang;
 const Op = db.Sequelize.Op;
 
 // get all outlet
@@ -60,6 +61,8 @@ exports.createOutlet = async (req, res, next) => {
             }
         );
 
+        const cab = await Cabang.findOne({ where: { kode: kodeCabang } })
+        // console.log(cab.nama)
         const outlet = await Outlet.create({
             kode: kode,
             nama: nama,
@@ -67,7 +70,8 @@ exports.createOutlet = async (req, res, next) => {
             kodepos: loc[0].zipcode,
             latitude: loc[0].latitude,
             longitude: loc[0].longitude,
-            kodeCabang: kodeCabang
+            kodeCabang: kodeCabang,
+            namaCabang: cab.nama
         })
 
         res.status(201).json({

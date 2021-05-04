@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const geocoder = require('../utils/geocoder');
 const Cabang = db.Cabang;
+const Wilayah = db.Wilayah;
 const Op = db.Sequelize.Op;
 
 // get all cabang
@@ -60,6 +61,8 @@ exports.createCabang = async (req, res, next) => {
             }
         );
 
+        const will = await Wilayah.findOne({ where: { kode: kodeWilayah } })
+        // console.log(will.nama)
         const cabang = await Cabang.create({
             kode: kode,
             nama: nama,
@@ -67,7 +70,8 @@ exports.createCabang = async (req, res, next) => {
             kodepos: loc[0].zipcode,
             latitude: loc[0].latitude,
             longitude: loc[0].longitude,
-            kodeWilayah: kodeWilayah
+            kodeWilayah: kodeWilayah,
+            namaWilayah: will.nama
         })
 
         res.status(201).json({

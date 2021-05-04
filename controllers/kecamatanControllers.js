@@ -41,7 +41,7 @@ exports.createKecamatan = async (req, res, next) => {
     try {
         const { id, nama } = req.body;
 
-        const checkId = await Provinsi.findOne(
+        const checkId = await Kecamatan.findOne(
             {
                 where: {
                     id
@@ -61,7 +61,7 @@ exports.createKecamatan = async (req, res, next) => {
     } catch (err) {
         res.status(401).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
