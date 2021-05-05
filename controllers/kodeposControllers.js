@@ -31,7 +31,7 @@ exports.getByIdKodepos = async (req, res) => {
     } catch (err) {
         res.status(404).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -43,6 +43,10 @@ exports.createKodepos = async (req, res, next) => {
 
         if (!kode) return next(new Error('Kode POS harus diisi!'));
 
+        const checkkode = await Kodepos.findOne({ where: { kode } });
+
+        if (checkkode) return next(new Error('kodepos sudah digunakan!'));
+
         const kodepos = await Kodepos.create(req.body);
 
         res.status(201).json({
@@ -52,7 +56,7 @@ exports.createKodepos = async (req, res, next) => {
     } catch (err) {
         res.status(401).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -67,14 +71,14 @@ exports.updateKodepos = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             kodepos
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -97,12 +101,12 @@ exports.deleteKodepos = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             data: {}
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
             message: err.message
         })

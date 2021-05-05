@@ -1,32 +1,26 @@
 module.exports = (sequelize, Sequelize) => {
     const Kelurahan = sequelize.define("Kelurahan", {
         id: {
-            type: Sequelize.STRING,
+            type: Sequelize.UUID,
             primaryKey: true,
-            unique: true,
-            allowNull: false
+            allowNull: false,
+            defaultValue: Sequelize.UUIDV4
+        },
+        kode: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Kode sudah digunakan!'
+            },
         },
         nama: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        // kecamatanId: {
-        //     type: Sequelize.STRING,
-        //     onUpdate: 'CASCADE',
-        //     onDelete: 'SET NULL',
-        //     references: {
-        //         model: "kecamatan",
-        //         key: 'id'
-        //     }
-        // },
     }, {
         tableName: 'kelurahan'
     });
-
-    // Kelurahan.associate = function (models) {
-    //     Kelurahan.hasMany(models.Kodepos, { as: 'kodepos' })
-    //     Kelurahan.belongsTo(models.Kecamatan, { foreignKey: 'kecamatanId', as: 'kecamatan' })
-    // };
 
     return Kelurahan;
 }

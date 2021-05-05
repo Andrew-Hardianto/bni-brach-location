@@ -2,16 +2,16 @@ const Sequelize = require('sequelize');
 const env = require('./env');
 
 const sequelize = new Sequelize(env.database, env.username, env.password, {
-    host: env.host,
-    dialect: env.dialect,
-    operatorsAliases: false,
+  host: env.host,
+  dialect: env.dialect,
+  operatorsAliases: false,
 
-    pool: {
-        max: env.max,
-        min: env.pool.min,
-        acquire: env.pool.acquire,
-        idle: env.pool.idle
-    }
+  pool: {
+    max: env.max,
+    min: env.pool.min,
+    acquire: env.pool.acquire,
+    idle: env.pool.idle
+  }
 });
 
 const db = {};
@@ -29,41 +29,50 @@ db.Cabang = require('../models/Cabang')(sequelize, Sequelize);
 db.Outlet = require('../models/Outlet')(sequelize, Sequelize);
 
 
-db.Provinsi.hasMany(db.Kota, { as: "kota",foreignKey: "provinsiId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Provinsi.hasMany(db.Kota, { as: "kota", foreignKey: "provinsiId", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
 db.Kota.belongsTo(db.Provinsi, {
   foreignKey: "provinsiId",
   as: "provinsi",
-  targetKey:"id"
+  targetKey: "kode"
 });
-db.Kota.hasMany(db.Kecamatan, { as: "kecamatan",foreignKey: "kotaId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Kota.hasMany(db.Kecamatan, { as: "kecamatan", foreignKey: "kotaId", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
 db.Kecamatan.belongsTo(db.Kota, {
   foreignKey: "kotaId",
   as: "kota",
-  targetKey:"id"
+  targetKey: "kode"
 });
-db.Kecamatan.hasMany(db.Kelurahan, { as: "kelurahan",foreignKey: "kecamatanId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Kecamatan.hasMany(db.Kelurahan, { as: "kelurahan", foreignKey: "kecamatanId", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
 db.Kelurahan.belongsTo(db.Kecamatan, {
   foreignKey: "kecamatanId",
   as: "kecamatan",
-  targetKey:"id"
+  targetKey: "kode"
 });
-db.Kelurahan.hasMany(db.Kodepos, { as: "kodepos",foreignKey: "kelurahanId",onDelete:"set null",onUpdate:"cascade",sourceKey:"id" });
+db.Kelurahan.hasMany(db.Kodepos, { as: "kodepos", foreignKey: "kelurahanId", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
 db.Kodepos.belongsTo(db.Kelurahan, {
   foreignKey: "kelurahanId",
   as: "kelurahan",
-  targetKey:"id"
+  targetKey: "kode"
 });
-db.Wilayah.hasMany(db.Cabang, { as: "cabang",foreignKey: "kodeWilayah",onDelete:"set null",onUpdate:"cascade",sourceKey:"kode" });
+db.Wilayah.hasMany(db.Cabang, { as: "cabang", foreignKey: "kodeWilayah", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
 db.Cabang.belongsTo(db.Wilayah, {
   foreignKey: "kodeWilayah",
   as: "wilayah",
-  targetKey:"kode"
+  targetKey: "kode"
 });
-db.Cabang.hasMany(db.Outlet, { as: "outlet",foreignKey: "kodeCabang",onDelete:"set null",onUpdate:"cascade",sourceKey:"kode" });
+db.Cabang.hasMany(db.Outlet, { as: "outlet", foreignKey: "kodeCabang", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
 db.Outlet.belongsTo(db.Cabang, {
   foreignKey: "kodeCabang",
-  as: "cabang",
-  targetKey:"kode"
+  targetKey: "kode"
+});
+db.Kodepos.hasMany(db.Outlet, { as: "outlet", foreignKey: "kodepos", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
+db.Kodepos.hasMany(db.Cabang, { as: "cabang", foreignKey: "kodepos", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
+db.Outlet.belongsTo(db.Kodepos, {
+  foreignKey: "kodepos",
+  targetKey: "kode"
+});
+db.Cabang.belongsTo(db.Kodepos, {
+  foreignKey: "kodepos",
+  targetKey: "kode"
 });
 
 module.exports = db;

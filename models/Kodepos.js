@@ -1,24 +1,19 @@
 module.exports = (sequelize, Sequelize) => {
     const Kodepos = sequelize.define("kodepos", {
         id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
-            autoIncrement: true,
-            allowNull: false
+            allowNull: false,
+            defaultValue: Sequelize.UUIDV4
         },
         kode: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Kode sudah digunakan!'
+            },
         },
-        // kelurahanId: {
-        //     type: Sequelize.STRING,
-        //     onUpdate: 'CASCADE',
-        //     onDelete: 'SET NULL',
-        //     references: {
-        //         model: "kelurahan",
-        //         key: 'id'
-        //     }
-        // },
     }, {
         tableName: 'kodepos'
     });

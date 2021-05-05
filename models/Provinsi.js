@@ -1,9 +1,18 @@
 module.exports = (sequelize, Sequelize) => {
     const Provinsi = sequelize.define("provinsi", {
         id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
+            defaultValue: Sequelize.UUIDV4
+        },
+        kode: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Kode sudah digunakan!'
+            },
         },
         nama: {
             type: Sequelize.STRING,
@@ -12,10 +21,6 @@ module.exports = (sequelize, Sequelize) => {
     }, {
         tableName: 'provinsi'
     });
-
-    // Provinsi.associate = function (models) {
-    //     Provinsi.hasMany(models.Kota, { sourceKey: 'id', as: 'kota' })
-    // };
 
     return Provinsi;
 }

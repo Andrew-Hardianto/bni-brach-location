@@ -1,9 +1,18 @@
 module.exports = (sequelize, Sequelize) => {
     const Outlet = sequelize.define("outlet", {
-        kode: {
-            type: Sequelize.INTEGER,
+        id: {
+            type: Sequelize.UUID,
+            primaryKey: true,
             allowNull: false,
-            primaryKey: true
+            defaultValue: Sequelize.UUIDV4
+        },
+        kode: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Kode sudah digunakan!'
+            },
         },
         nama: {
             type: Sequelize.STRING,
@@ -28,9 +37,6 @@ module.exports = (sequelize, Sequelize) => {
         },
         namaCabang: {
             type: Sequelize.STRING
-        },
-        kodepos: {
-            type: Sequelize.INTEGER
         }
     }, {
         tableName: 'outlet'

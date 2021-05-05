@@ -7,7 +7,16 @@ const Op = db.Sequelize.Op;
 // get all outlet
 exports.getAllOutlet = async (req, res) => {
     try {
-        const outlet = await Outlet.findAll();
+        const outlet = await Outlet.findAll({
+            include: [
+                {
+                    model: Cabang,
+                    include: [
+                        'wilayah'
+                    ]
+                }
+            ]
+        });
 
         res.status(200).json({
             success: true,
@@ -41,7 +50,7 @@ exports.getByIdOutlet = async (req, res) => {
 // add outlet
 exports.createOutlet = async (req, res, next) => {
     try {
-        const { kode, nama, alamat, kodeCabang } = req.body;
+        const { kode, nama, biLocationCode, alamat, kodeCabang, kodepos, latitude, longitude } = req.body;
 
         const checkId = await Outlet.findOne(
             {
@@ -55,21 +64,22 @@ exports.createOutlet = async (req, res, next) => {
 
         if (checkId) return next(new Error('Kode outlet sudah digunakan!'))
 
-        const loc = await geocoder.geocode(
-            {
-                address: alamat,
-            }
-        );
+        // const loc = await geocoder.geocode(
+        //     {
+        //         address: alamat,
+        //     }
+        // );
 
         const cab = await Cabang.findOne({ where: { kode: kodeCabang } })
-        // console.log(cab.nama)
+
         const outlet = await Outlet.create({
             kode: kode,
             nama: nama,
             alamat: alamat,
-            kodepos: loc[0].zipcode,
-            latitude: loc[0].latitude,
-            longitude: loc[0].longitude,
+            biLocationCode: biLocationCode,
+            kodepos: kodepos,
+            latitude: latitude,
+            longitude: longitude,
             kodeCabang: kodeCabang,
             namaCabang: cab.nama
         })
@@ -89,24 +99,26 @@ exports.createOutlet = async (req, res, next) => {
 // update outlet
 exports.updateOutlet = async (req, res, next) => {
     try {
-        const { nama, alamat, kodeCabang, status } = req.body;
+        const { kode, nama, alamat, kodeCabang, kodepos, latitude, longitude, status } = req.body;
 
         if (!nama || !alamat) return next(new Error('Nama/alamat harus diisi!'))
 
-        const loc = await geocoder.geocode(
-            {
-                address: alamat,
-            }
-        );
+        // const loc = await geocoder.geocode(
+        //     {
+        //         address: alamat,
+        //     }
+        // );
 
         const cab = await Cabang.findOne({ where: { kode: kodeCabang } })
 
         const outlet = await Outlet.update({
+            kode: kode,
             nama: nama,
             alamat: alamat,
-            kodepos: loc[0].zipcode,
-            latitude: loc[0].latitude,
-            longitude: loc[0].longitude,
+            biLocationCode: biLocationCode,
+            kodepos: kodepos,
+            latitude: latitude,
+            longitude: longitude,
             kodeCabang: kodeCabang,
             status: status,
             namaCabang: cab.nama

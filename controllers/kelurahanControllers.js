@@ -1,7 +1,7 @@
 const db = require('../config/db');
 const Kelurahan = db.Kelurahan;
 const Op = db.Sequelize.Op;
-// const fs = require('fs')
+
 // get all data
 exports.getKelurahan = async (req, res) => {
     try {
@@ -22,7 +22,7 @@ exports.getKelurahan = async (req, res) => {
 // get by id data
 exports.getByIdKelurahan = async (req, res) => {
     try {
-        const kelurahan = await Kelurahan.findByPk(req.params.id);
+        const kelurahan = await Kelurahan.findByPk(req.params.id, { include: ["kecamatan"] });
 
         res.status(200).json({
             success: true,
@@ -31,7 +31,7 @@ exports.getByIdKelurahan = async (req, res) => {
     } catch (err) {
         res.status(404).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -39,19 +39,19 @@ exports.getByIdKelurahan = async (req, res) => {
 // add Kelurahan
 exports.createKelurahan = async (req, res, next) => {
     try {
-        const { id, nama } = req.body;
+        const { kode, nama } = req.body;
 
-        const checkId = await Kelurahan.findOne(
+        const checkkode = await Kelurahan.findOne(
             {
                 where: {
-                    id
+                    kode
                 }
             }
         )
 
-        if (!id || !nama) return next(new Error('ID/Nama Kelurahan harus diisi!'));
-        
-        if (checkId) return next(new Error('ID sudah ada!'));
+        if (!kode || !nama) return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
+
+        if (checkkode) return next(new Error('Kode Kelurahan sudah ada!'));
 
         const kelurahan = await Kelurahan.create(req.body);
 
@@ -62,7 +62,7 @@ exports.createKelurahan = async (req, res, next) => {
     } catch (err) {
         res.status(401).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -77,14 +77,14 @@ exports.updateKelurahan = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             kelurahan
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -107,24 +107,14 @@ exports.deleteKelurahan = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             data: {}
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
             message: err.message
         })
     }
 }
-
-// exports.insertKelurahan = async(req,res) => {
-//     const kelurahan = JSON.parse(fs.readFileSync(`${__dirname}/kelurahan.json`, 'utf-8'))
-//     try {
-//         const kel = await Kelurahan.bulkCreate(kelurahan)
-//         res.status(201).json(kel)
-//     } catch (error) {
-//         res.status(500).json(error)
-//     }
-// }

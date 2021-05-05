@@ -1,10 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
     const Wilayah = sequelize.define("wilayah", {
-        kode: {
-            type: Sequelize.INTEGER,
+        id: {
+            type: Sequelize.UUID,
+            primaryKey: true,
             allowNull: false,
-            primaryKey: true
-        }, nama: {
+            defaultValue: Sequelize.UUIDV4
+        },
+        kode: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Kode sudah digunakan!'
+            },
+        },
+        nama: {
             type: Sequelize.STRING,
             allowNull: false,
         },

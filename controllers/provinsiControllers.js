@@ -14,7 +14,7 @@ exports.getProvinsi = async (req, res) => {
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -39,19 +39,19 @@ exports.getByIdProvinsi = async (req, res) => {
 // add Provinsi
 exports.createProvinsi = async (req, res, next) => {
     try {
-        const { id, nama } = req.body;
+        const { kode, nama } = req.body;
 
-        const checkId = await Provinsi.findOne(
+        const checkkode = await Provinsi.findOne(
             {
                 where: {
-                    id
+                    kode
                 }
             }
         )
 
-        if (!id || !nama) return next(new Error('ID/Nama harus diisi', 401))
+        if (!kode || !nama) return next(new Error('kode provinsi/Nama harus diisi', 401))
 
-        if (checkId) return next(new Error('ID sudah ada!', 400))
+        if (checkkode) return next(new Error('kode provinsi sudah digunakan!', 400))
 
         const provinsi = await Provinsi.create(req.body);
 
@@ -62,7 +62,7 @@ exports.createProvinsi = async (req, res, next) => {
     } catch (err) {
         res.status(401).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -70,6 +70,9 @@ exports.createProvinsi = async (req, res, next) => {
 // update Provinsi
 exports.updateProvinsi = async (req, res, next) => {
     try {
+        const { kode, nama } = req.body;
+
+        if (!kode || !nama) return next(new Error('kode provinsi/Nama harus diisi', 401))
 
         const provinsi = await Provinsi.update(req.body, {
             where: {
@@ -77,14 +80,14 @@ exports.updateProvinsi = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             provinsi
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -107,14 +110,14 @@ exports.deleteProvinsi = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             data: {}
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }

@@ -15,7 +15,7 @@ exports.getKota = async (req, res) => {
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -42,19 +42,19 @@ exports.getByIdKota = async (req, res, next) => {
 // add kota
 exports.addKota = async (req, res, next) => {
     try {
-        const { id, nama } = req.body;
+        const { kode, nama } = req.body;
 
-        const checkId = await Provinsi.findOne(
+        const checkkode = await Kota.findOne(
             {
                 where: {
-                    id
+                    kode
                 }
             }
         )
 
-        if (!id || !nama) return next(new Error('ID/Nama Kota harus diisi!'));
+        if (!kode || !nama) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
 
-        if (checkId) return next(new Error('ID sudah ada!'));
+        if (checkkode) return next(new Error('Kode Kota sudah digunakan!'));
 
         const kota = await Kota.create(req.body);
 
@@ -73,6 +73,10 @@ exports.addKota = async (req, res, next) => {
 // update kota 
 exports.updateKota = async (req, res, next) => {
     try {
+        const { kode, nama } = req.body;
+
+        if (!kode || !nama) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
+
         const kota = await Kota.update(req.body, {
             where: {
                 id: req.params.id

@@ -2,10 +2,19 @@ const geocoder = require('../utils/geocoder');
 
 module.exports = (sequelize, Sequelize) => {
     const Cabang = sequelize.define("cabang", {
-        kode: {
-            type: Sequelize.INTEGER,
+        id: {
+            type: Sequelize.UUID,
+            primaryKey: true,
             allowNull: false,
-            primaryKey: true
+            defaultValue: Sequelize.UUIDV4
+        },
+        kode: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique: {
+                args: true,
+                msg: 'Kode sudah digunakan!'
+            },
         },
         nama: {
             type: Sequelize.STRING,
@@ -30,9 +39,6 @@ module.exports = (sequelize, Sequelize) => {
         },
         namaWilayah: {
             type: Sequelize.STRING
-        },
-        kodepos: {
-            type: Sequelize.INTEGER
         }
     }, {
         tableName: 'cabang'

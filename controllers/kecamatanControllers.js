@@ -22,7 +22,7 @@ exports.getKecamatan = async (req, res) => {
 // get by id data
 exports.getByIdKecamatan = async (req, res) => {
     try {
-        const kecamatan = await Kecamatan.findByPk(req.params.id);
+        const kecamatan = await Kecamatan.findByPk(req.params.id, { include: ["kota"] });
 
         res.status(200).json({
             success: true,
@@ -39,18 +39,18 @@ exports.getByIdKecamatan = async (req, res) => {
 // add kecamatan
 exports.createKecamatan = async (req, res, next) => {
     try {
-        const { id, nama } = req.body;
+        const { kode, nama } = req.body;
 
-        const checkId = await Kecamatan.findOne(
+        const checkkode = await Kecamatan.findOne(
             {
                 where: {
-                    id
+                    kode
                 }
             }
         )
 
-        if (!id || !nama) return next(new Error('ID/Nama Kecamatan harus diisi!'));
-        if (checkId) return next(new Error('ID sudah ada!'));
+        if (!kode || !nama) return next(new Error('Kode Kecamatan/Nama Kecamatan harus diisi!'));
+        if (checkkode) return next(new Error('Kode Kecamatan sudah ada!'));
 
         const kecamatan = await Kecamatan.create(req.body);
 
@@ -69,6 +69,9 @@ exports.createKecamatan = async (req, res, next) => {
 // update kecamatan
 exports.updateKecamatan = async (req, res, next) => {
     try {
+        const { kode, nama } = req.body;
+
+        if (!kode || !nama) return next(new Error('Kode Kecamatan/Nama Kecamatan harus diisi!'));
 
         const kecamatan = await Kecamatan.update(req.body, {
             where: {
@@ -76,14 +79,14 @@ exports.updateKecamatan = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             kecamatan
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }
@@ -106,14 +109,14 @@ exports.deleteKecamatan = async (req, res, next) => {
             }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             data: {}
         })
     } catch (err) {
-        res.status(401).json({
+        res.status(400).json({
             success: false,
-            message: err
+            message: err.message
         })
     }
 }

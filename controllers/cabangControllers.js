@@ -41,7 +41,7 @@ exports.getByIdCabang = async (req, res) => {
 // add cabang
 exports.createCabang = async (req, res, next) => {
     try {
-        const { kode, nama, alamat, kodeWilayah } = req.body;
+        const { kode, nama, alamat, kodeWilayah, latitude, biLocationCode, longitude, kodepos } = req.body;
 
         const checkId = await Cabang.findOne(
             {
@@ -55,21 +55,22 @@ exports.createCabang = async (req, res, next) => {
 
         if (checkId) return next(new Error('Kode tidak boleh sama!'))
 
-        const loc = await geocoder.geocode(
-            {
-                address: alamat,
-            }
-        );
+        // const loc = await geocoder.geocode(
+        //     {
+        //         address: alamat,
+        //     }
+        // );
 
         const will = await Wilayah.findOne({ where: { kode: kodeWilayah } })
         // console.log(will.nama)
         const cabang = await Cabang.create({
             kode: kode,
             nama: nama,
+            biLocationCode: biLocationCode,
             alamat: alamat,
-            kodepos: loc[0].zipcode,
-            latitude: loc[0].latitude,
-            longitude: loc[0].longitude,
+            kodepos: kodepos,
+            latitude: latitude,
+            longitude: longitude,
             kodeWilayah: kodeWilayah,
             namaWilayah: will.nama
         })
@@ -89,24 +90,25 @@ exports.createCabang = async (req, res, next) => {
 // update cabang
 exports.updateCabang = async (req, res, next) => {
     try {
-        const { nama, alamat, kodeWilayah, status } = req.body;
+        const { nama, alamat, biLocationCode, kodeWilayah, latitude, longitude, kodepos, status } = req.body;
 
         if (!nama || !alamat) return next(new Error('Nama/alamat harus diisi!'))
 
-        const loc = await geocoder.geocode(
-            {
-                address: alamat,
-            }
-        );
+        // const loc = await geocoder.geocode(
+        //     {
+        //         address: alamat,
+        //     }
+        // );
 
         const will = await Wilayah.findOne({ where: { kode: kodeWilayah } })
 
         const cabang = await Cabang.update({
             nama: nama,
             alamat: alamat,
-            kodepos: loc[0].zipcode,
-            latitude: loc[0].latitude,
-            longitude: loc[0].longitude,
+            biLocationCode: biLocationCode,
+            kodepos: kodepos,
+            latitude: latitude,
+            longitude: longitude,
             kodeWilayah: kodeWilayah,
             status: status,
             namaWilayah: will.nama
