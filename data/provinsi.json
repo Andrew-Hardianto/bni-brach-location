@@ -1,138 +1,138 @@
 [
   {
-    "id": 11,
+    "kode": 11,
     "nama": "Aceh"
   },
   {
-    "id": 12,
+    "kode": 12,
     "nama": "Sumatera Utara"
   },
   {
-    "id": 13,
+    "kode": 13,
     "nama": "Sumatera Barat"
   },
   {
-    "id": 14,
+    "kode": 14,
     "nama": "Riau"
   },
   {
-    "id": 15,
+    "kode": 15,
     "nama": "Jambi"
   },
   {
-    "id": 16,
+    "kode": 16,
     "nama": "Sumatera Selatan"
   },
   {
-    "id": 17,
+    "kode": 17,
     "nama": "Bengkulu"
   },
   {
-    "id": 18,
+    "kode": 18,
     "nama": "Lampung"
   },
   {
-    "id": 19,
+    "kode": 19,
     "nama": "Kepulauan Bangka Belitung"
   },
   {
-    "id": 21,
+    "kode": 21,
     "nama": "Kepulauan Riau"
   },
   {
-    "id": 31,
+    "kode": 31,
     "nama": "DKI Jakarta"
   },
   {
-    "id": 32,
+    "kode": 32,
     "nama": "Jawa Barat"
   },
   {
-    "id": 33,
+    "kode": 33,
     "nama": "Jawa Tengah"
   },
   {
-    "id": 34,
+    "kode": 34,
     "nama": "DI Yogyakarta"
   },
   {
-    "id": 35,
+    "kode": 35,
     "nama": "Jawa Timur"
   },
   {
-    "id": 36,
+    "kode": 36,
     "nama": "Banten"
   },
   {
-    "id": 51,
+    "kode": 51,
     "nama": "Bali"
   },
   {
-    "id": 52,
+    "kode": 52,
     "nama": "Nusa Tenggara Barat"
   },
   {
-    "id": 53,
+    "kode": 53,
     "nama": "Nusa Tenggara Timur"
   },
   {
-    "id": 61,
+    "kode": 61,
     "nama": "Kalimantan Barat"
   },
   {
-    "id": 62,
+    "kode": 62,
     "nama": "Kalimantan Tengah"
   },
   {
-    "id": 63,
+    "kode": 63,
     "nama": "Kalimantan Selatan"
   },
   {
-    "id": 64,
+    "kode": 64,
     "nama": "Kalimantan Timur"
   },
   {
-    "id": 65,
+    "kode": 65,
     "nama": "Kalimantan Utara"
   },
   {
-    "id": 71,
+    "kode": 71,
     "nama": "Sulawesi Utara"
   },
   {
-    "id": 72,
+    "kode": 72,
     "nama": "Sulawesi Tengah"
   },
   {
-    "id": 73,
+    "kode": 73,
     "nama": "Sulawesi Selatan"
   },
   {
-    "id": 74,
+    "kode": 74,
     "nama": "Sulawesi Tenggara"
   },
   {
-    "id": 75,
+    "kode": 75,
     "nama": "Gorontalo"
   },
   {
-    "id": 76,
+    "kode": 76,
     "nama": "Sulawesi Barat"
   },
   {
-    "id": 81,
+    "kode": 81,
     "nama": "Maluku"
   },
   {
-    "id": 82,
+    "kode": 82,
     "nama": "Maluku Utara"
   },
   {
-    "id": 91,
+    "kode": 91,
     "nama": "Papua Barat"
   },
   {
-    "id": 94,
+    "kode": 94,
     "nama": "Papua"
   }
 ]
