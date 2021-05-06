@@ -13,7 +13,7 @@ router.route('/')
     .get(getAllWilayah)
     .post(createWilayah)
 
-router.route('/:kode')
+router.route('/:id')
     .get(getByIdWilayah)
     .put(updateWilayah)
     .delete(deleteWilayah)

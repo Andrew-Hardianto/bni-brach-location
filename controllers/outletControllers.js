@@ -33,7 +33,7 @@ exports.getAllOutlet = async (req, res) => {
 // get all outlet
 exports.getByIdOutlet = async (req, res) => {
     try {
-        const outlet = await Outlet.findByPk(req.params.kode);
+        const outlet = await Outlet.findByPk(req.params.id);
 
         res.status(200).json({
             success: true,
@@ -124,7 +124,7 @@ exports.updateOutlet = async (req, res, next) => {
             namaCabang: cab.nama
         }, {
             where: {
-                kode: req.params.kode
+                id: req.params.id
             }
         })
 
@@ -145,7 +145,7 @@ exports.deleteOutlet = async (req, res) => {
     try {
         await Outlet.destroy({
             where: {
-                kode: req.params.kode
+                id: req.params.id
             }
         })
 

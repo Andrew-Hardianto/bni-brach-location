@@ -13,7 +13,7 @@ router.route('/')
     .get(getAllOutlet)
     .post(createOutlet)
 
-router.route('/:kode')
+router.route('/:id')
     .get(getByIdOutlet)
     .put(updateOutlet)
     .delete(deleteOutlet)

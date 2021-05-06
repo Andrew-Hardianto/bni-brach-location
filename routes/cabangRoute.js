@@ -13,7 +13,7 @@ router.route('/')
     .get(getAllCabang)
     .post(createCabang)
 
-router.route('/:kode')
+router.route('/:id')
     .get(getByIdCabang)
     .put(updateCabang)
     .delete(deleteCabang)

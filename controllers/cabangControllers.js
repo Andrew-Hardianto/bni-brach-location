@@ -24,7 +24,7 @@ exports.getAllCabang = async (req, res) => {
 // get all cabang
 exports.getByIdCabang = async (req, res) => {
     try {
-        const cabang = await Cabang.findByPk(req.params.kode);
+        const cabang = await Cabang.findByPk(req.params.id);
 
         res.status(200).json({
             success: true,
@@ -114,7 +114,7 @@ exports.updateCabang = async (req, res, next) => {
             namaWilayah: will.nama
         }, {
             where: {
-                kode: req.params.kode
+                kode: req.params.id
             }
         })
 
@@ -135,7 +135,7 @@ exports.deleteCabang = async (req, res) => {
     try {
         await Cabang.destroy({
             where: {
-                kode: req.params.kode
+                id: req.params.id
             }
         })
 

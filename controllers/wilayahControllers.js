@@ -22,7 +22,7 @@ exports.getAllWilayah = async (req, res) => {
 // get by id wilayah
 exports.getByIdWilayah = async (req, res, next) => {
     try {
-        const wilayah = await Wilayah.findByPk(req.params.kode);
+        const wilayah = await Wilayah.findByPk(req.params.id);
 
         if (!wilayah) {
             res.status(404)
@@ -85,7 +85,7 @@ exports.updateWilayah = async (req, res, next) => {
 
         const wilayah = await Wilayah.update(req.body, {
             where: {
-                kode: req.params.kode
+                id: req.params.id
             }
         })
 
@@ -106,7 +106,7 @@ exports.deleteWilayah = async (req, res) => {
     try {
         await Wilayah.destroy({
             where: {
-                kode: req.params.kode
+                id: req.params.id
             }
         })
 
