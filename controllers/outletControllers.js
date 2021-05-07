@@ -33,7 +33,16 @@ exports.getAllOutlet = async (req, res) => {
 // get all outlet
 exports.getByIdOutlet = async (req, res) => {
     try {
-        const outlet = await Outlet.findByPk(req.params.id);
+        const outlet = await Outlet.findByPk(req.params.id, {
+            include: [
+                {
+                    model: Cabang,
+                    include: [
+                        'wilayah'
+                    ]
+                }
+            ]
+        });
 
         res.status(200).json({
             success: true,
@@ -50,7 +59,7 @@ exports.getByIdOutlet = async (req, res) => {
 // add outlet
 exports.createOutlet = async (req, res, next) => {
     try {
-        const { kode, nama, biLocationCode, alamat, kodeCabang, kodepos, latitude, longitude } = req.body;
+        const { kode, nama, biLocationCode, alamat, kodeCabang, kodePos, latitude, longitude } = req.body;
 
         const checkId = await Outlet.findOne(
             {
@@ -77,7 +86,7 @@ exports.createOutlet = async (req, res, next) => {
             nama: nama,
             alamat: alamat,
             biLocationCode: biLocationCode,
-            kodepos: kodepos,
+            kodepos: kodePos,
             latitude: latitude,
             longitude: longitude,
             kodeCabang: kodeCabang,
@@ -99,7 +108,7 @@ exports.createOutlet = async (req, res, next) => {
 // update outlet
 exports.updateOutlet = async (req, res, next) => {
     try {
-        const { kode, nama, alamat, kodeCabang, kodepos, latitude, longitude, status } = req.body;
+        const { kode, nama, alamat, biLocationCode, kodeCabang, kodepos, latitude, longitude, status } = req.body;
 
         if (!nama || !alamat) return next(new Error('Nama/alamat harus diisi!'))
 

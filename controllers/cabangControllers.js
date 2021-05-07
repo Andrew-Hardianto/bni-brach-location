@@ -41,7 +41,7 @@ exports.getByIdCabang = async (req, res) => {
 // add cabang
 exports.createCabang = async (req, res, next) => {
     try {
-        const { kode, nama, alamat, kodeWilayah, latitude, biLocationCode, longitude, kodepos } = req.body;
+        const { kode, nama, alamat, kodeWilayah, latitude, biLocationCode, longitude, kodePos } = req.body;
 
         const checkId = await Cabang.findOne(
             {
@@ -68,7 +68,7 @@ exports.createCabang = async (req, res, next) => {
             nama: nama,
             biLocationCode: biLocationCode,
             alamat: alamat,
-            kodepos: kodepos,
+            kodepos: kodePos,
             latitude: latitude,
             longitude: longitude,
             kodeWilayah: kodeWilayah,
@@ -114,7 +114,7 @@ exports.updateCabang = async (req, res, next) => {
             namaWilayah: will.nama
         }, {
             where: {
-                kode: req.params.id
+                id: req.params.id
             }
         })
 
