@@ -19,7 +19,7 @@ const importData = async () => {
         await Provinsi.bulkCreate(provinsi)
         await Kota.bulkCreate(kota)
         await Kecamatan.bulkCreate(kecamatan)
-        // await Kelurahan.bulkCreate(kelurahan)
+        await Kelurahan.bulkCreate(kelurahan)
 
         console.log('Data Imported'.green.inverse)
         process.exit()
