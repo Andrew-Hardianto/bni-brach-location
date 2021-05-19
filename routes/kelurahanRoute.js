@@ -5,12 +5,11 @@ const {
     createKelurahan,
     updateKelurahan,
     deleteKelurahan,
-    // insertKelurahan
 } = require('../controllers/kelurahanControllers');
 
 const router = express.Router();
 
-// router.post('/bulk',insertKelurahan)
+// router.post('/bulk', bulkCreateKelurahan)
 
 router.route('/')
     .get(getKelurahan)

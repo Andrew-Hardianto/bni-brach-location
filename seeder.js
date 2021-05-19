@@ -11,7 +11,7 @@ const dotenv = require('dotenv')
 const provinsi = JSON.parse(fs.readFileSync(`${__dirname}/data/provinsi.json`, 'utf-8'))
 const kota = JSON.parse(fs.readFileSync(`${__dirname}/data/kota.json`, 'utf-8'))
 const kecamatan = JSON.parse(fs.readFileSync(`${__dirname}/data/kecamatan.json`, 'utf-8'))
-const kelurahan = JSON.parse(fs.readFileSync(`${__dirname}/data/kelurahan.json`, 'utf-8'))
+// const kelurahan = JSON.parse(fs.readFileSync(`${__dirname}/data/kelurahan.json`, 'utf-8'))
 
 // Import data 
 const importData = async () => {
