@@ -9,10 +9,10 @@ module.exports = (sequelize, Sequelize) => {
         kode: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: {
-                args: true,
-                msg: 'Kode sudah digunakan!'
-            },
+            // unique: {
+            //     args: true,
+            //     msg: 'Kode sudah digunakan!'
+            // },
         },
     }, {
         tableName: 'kodepos'

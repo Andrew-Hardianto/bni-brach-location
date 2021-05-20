@@ -64,15 +64,15 @@ db.Outlet.belongsTo(db.Cabang, {
   foreignKey: "kodeCabang",
   targetKey: "kode"
 });
-db.Kodepos.hasMany(db.Outlet, { as: "outlet", foreignKey: "kodepos", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
-db.Kodepos.hasMany(db.Cabang, { as: "cabang", foreignKey: "kodepos", onDelete: "set null", onUpdate: "cascade", sourceKey: "kode" });
+db.Kodepos.hasMany(db.Outlet, { as: "outlet", foreignKey: "kodepos", onDelete: "set null", onUpdate: "cascade", sourceKey: "id" });
+db.Kodepos.hasMany(db.Cabang, { as: "cabang", foreignKey: "kodepos", onDelete: "set null", onUpdate: "cascade", sourceKey: "id" });
 db.Outlet.belongsTo(db.Kodepos, {
   foreignKey: "kodepos",
-  targetKey: "kode"
+  targetKey: "id"
 });
 db.Cabang.belongsTo(db.Kodepos, {
   foreignKey: "kodepos",
-  targetKey: "kode"
+  targetKey: "id"
 });
 
 module.exports = db;
