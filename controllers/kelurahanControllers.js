@@ -1,6 +1,8 @@
 const db = require('../config/db');
 const Kelurahan = db.Kelurahan;
+const Kodepos = db.Kodepos;
 const Op = db.Sequelize.Op;
+const fs = require('fs')
 
 // get all data
 exports.getKelurahan = async (req, res) => {
