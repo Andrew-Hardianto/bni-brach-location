@@ -32,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Logging middleware
 app.use(morgan('dev'));
+
 // Enable CORS
 app.use(cors());
 

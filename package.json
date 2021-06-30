@@ -30,7 +30,8 @@
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
     "node-geocoder": "^3.27.0",
-    "sequelize": "^6.6.2"
+    "sequelize": "^6.6.2",
+    "tedious": "^11.0.9"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
