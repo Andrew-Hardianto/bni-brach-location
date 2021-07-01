@@ -1,25 +1,23 @@
 module.exports = (sequelize, Sequelize) => {
-    const Kelurahan = sequelize.define("Kelurahan", {
-        id: {
-            type: Sequelize.UUID,
+    const Kelurahan = sequelize.define("Master_Kelurahan", {
+        ID_Kelurahan: {
+            type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            autoIncrement: true
         },
-        kode: {
-            type: Sequelize.STRING,
+        Kelurahan_Code: {
+            type: Sequelize.BIGINT,
+            primaryKey: true,
             allowNull: false,
-            unique: {
-                args: true,
-                msg: 'Kode sudah digunakan!'
-            },
         },
-        nama: {
-            type: Sequelize.STRING,
+        Kelurahan_Name: {
+            type: Sequelize.STRING(100),
             allowNull: false
         },
     }, {
-        tableName: 'kelurahan'
+        tableName: 'Master_Kelurahan',
+        timestamps: false
     });
 
     return Kelurahan;

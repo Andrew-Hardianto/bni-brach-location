@@ -44,17 +44,17 @@ exports.getByIdWilayah = async (req, res, next) => {
 // add Wilayah
 exports.createWilayah = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Region_Code, Region_Subname, Region_Name } = req.body;
 
         const checkId = await Wilayah.findOne(
             {
                 where: {
-                    kode: kode
+                    Region_Code
                 }
             }
         )
 
-        if (!kode || !nama) return next(new Error('Kode/Nama harus diisi!'))
+        if (!Region_Code || !Region_Name || !Region_Subname) return next(new Error('Kode/Nama harus diisi!'))
 
         if (checkId) return next(new Error('Kode tidak boleh sama!'))
 
@@ -76,7 +76,7 @@ exports.createWilayah = async (req, res, next) => {
 exports.updateWilayah = async (req, res, next) => {
     try {
 
-        const checkId = await Wilayah.findByPk(req.params.kode)
+        const checkId = await Wilayah.findByPk(req.params.id)
 
         if (!checkId) {
             res.status(404)
@@ -85,7 +85,7 @@ exports.updateWilayah = async (req, res, next) => {
 
         const wilayah = await Wilayah.update(req.body, {
             where: {
-                id: req.params.id
+                ID_Region: req.params.id
             }
         })
 
@@ -106,7 +106,7 @@ exports.deleteWilayah = async (req, res) => {
     try {
         await Wilayah.destroy({
             where: {
-                id: req.params.id
+                ID_Region: req.params.id
             }
         })
 

@@ -1,25 +1,23 @@
 module.exports = (sequelize, Sequelize) => {
-    const Kecamatan = sequelize.define("kecamatan", {
-        id: {
-            type: Sequelize.UUID,
+    const Kecamatan = sequelize.define("Master_Kecamatan", {
+        ID_Kecamatan: {
+            type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            autoIncrement: true
         },
-        kode: {
-            type: Sequelize.STRING,
+        Kecamatan_Code: {
+            type: Sequelize.BIGINT,
+            primaryKey: true,
             allowNull: false,
-            unique: {
-                args: true,
-                msg: 'Kode sudah digunakan!'
-            },
         },
-        nama: {
-            type: Sequelize.STRING,
+        Kecamatan_Name: {
+            type: Sequelize.STRING(100),
             allowNull: false
         },
     }, {
-        tableName: 'kecamatan'
+        tableName: 'Master_Kecamatan',
+        timestamps: false
     });
 
     // Kecamatan.associate = function (models) {

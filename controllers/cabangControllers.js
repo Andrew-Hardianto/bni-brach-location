@@ -7,7 +7,7 @@ const Op = db.Sequelize.Op;
 // get all cabang
 exports.getAllCabang = async (req, res) => {
     try {
-        const cabang = await Cabang.findAll();
+        const cabang = await Cabang.findAll({ include: ["wilayah"] });
 
         res.status(200).json({
             success: true,
@@ -24,7 +24,7 @@ exports.getAllCabang = async (req, res) => {
 // get all cabang
 exports.getByIdCabang = async (req, res) => {
     try {
-        const cabang = await Cabang.findByPk(req.params.id);
+        const cabang = await Cabang.findByPk(req.params.id, { include: ["wilayah"] });
 
         res.status(200).json({
             success: true,
@@ -41,17 +41,21 @@ exports.getByIdCabang = async (req, res) => {
 // add cabang
 exports.createCabang = async (req, res, next) => {
     try {
-        const { kode, nama, alamat, kodeWilayah, latitude, biLocationCode, longitude, kodePos } = req.body;
+        const { Branch_Code, Branch_Subname, Branch_Name, Address, Region_Code } = req.body;
 
         const checkId = await Cabang.findOne(
             {
                 where: {
-                    kode: kode
+                    Branch_Code: Branch_Code
                 }
             }
         )
 
-        if (!kode || !nama || !alamat) return next(new Error('Kode/Nama/alamat harus diisi!'))
+        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
+        if (!Branch_Subname) return next(new Error('Field Branch Subname tidak boleh kosong!'));
+        if (!Branch_Name) return next(new Error('Field Branch Name tidak boleh kosong!'));
+        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
+        if (!Region_Code) return next(new Error('Field Region Code tidak boleh kosong!'));
 
         if (checkId) return next(new Error('Kode tidak boleh sama!'))
 
@@ -61,19 +65,7 @@ exports.createCabang = async (req, res, next) => {
         //     }
         // );
 
-        const will = await Wilayah.findOne({ where: { kode: kodeWilayah } })
-        // console.log(will.nama)
-        const cabang = await Cabang.create({
-            kode: kode,
-            nama: nama,
-            biLocationCode: biLocationCode,
-            alamat: alamat,
-            kodepos: kodePos,
-            latitude: latitude,
-            longitude: longitude,
-            kodeWilayah: kodeWilayah,
-            namaWilayah: will.nama
-        })
+        const cabang = await Cabang.create(req.body);
 
         res.status(201).json({
             success: true,
@@ -90,31 +82,17 @@ exports.createCabang = async (req, res, next) => {
 // update cabang
 exports.updateCabang = async (req, res, next) => {
     try {
-        const { nama, alamat, biLocationCode, kodeWilayah, latitude, longitude, kodepos, status } = req.body;
+        const { Branch_Code, Branch_Subname, Branch_Name, Address, Region_Code } = req.body;
 
-        if (!nama || !alamat) return next(new Error('Nama/alamat harus diisi!'))
+        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
+        if (!Branch_Subname) return next(new Error('Field Branch Subname tidak boleh kosong!'));
+        if (!Branch_Name) return next(new Error('Field Branch Name tidak boleh kosong!'));
+        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
+        if (!Region_Code) return next(new Error('Field Region Code tidak boleh kosong!'));
 
-        // const loc = await geocoder.geocode(
-        //     {
-        //         address: alamat,
-        //     }
-        // );
-
-        const will = await Wilayah.findOne({ where: { kode: kodeWilayah } })
-
-        const cabang = await Cabang.update({
-            nama: nama,
-            alamat: alamat,
-            biLocationCode: biLocationCode,
-            kodepos: kodepos,
-            latitude: latitude,
-            longitude: longitude,
-            kodeWilayah: kodeWilayah,
-            status: status,
-            namaWilayah: will.nama
-        }, {
+        const cabang = await Cabang.update(req.body, {
             where: {
-                id: req.params.id
+                ID_Branch: req.params.id
             }
         })
 
@@ -135,7 +113,7 @@ exports.deleteCabang = async (req, res) => {
     try {
         await Cabang.destroy({
             where: {
-                id: req.params.id
+                ID_Branch: req.params.id
             }
         })
 

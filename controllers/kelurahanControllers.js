@@ -1,13 +1,13 @@
 const db = require('../config/db');
 const Kelurahan = db.Kelurahan;
-const Kodepos = db.Kodepos;
+const Kecamatan = db.Kecamatan;
 const Op = db.Sequelize.Op;
-const fs = require('fs')
+const fs = require('fs');
 
 // get all data
 exports.getKelurahan = async (req, res) => {
     try {
-        const kelurahan = await Kelurahan.findAll({ include: ["kecamatan"] });
+        const kelurahan = await Kelurahan.findAll({ include: ["kota", "provinsi", "kecamatan"] });
 
         res.status(200).json({
             success: true,
@@ -24,7 +24,7 @@ exports.getKelurahan = async (req, res) => {
 // get by id data
 exports.getByIdKelurahan = async (req, res) => {
     try {
-        const kelurahan = await Kelurahan.findByPk(req.params.id, { include: ["kecamatan"] });
+        const kelurahan = await Kelurahan.findByPk(req.params.id, { include: ["kota", "provinsi", "kecamatan"] });
 
         res.status(200).json({
             success: true,
@@ -41,21 +41,35 @@ exports.getByIdKelurahan = async (req, res) => {
 // add Kelurahan
 exports.createKelurahan = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Kelurahan_Code, Kelurahan_Name, Kecamatan_Code } = req.body;
 
         const checkkode = await Kelurahan.findOne(
             {
                 where: {
-                    kode
+                    Kelurahan_Code
                 }
             }
         )
 
-        if (!kode || !nama) return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
+        if (!Kelurahan_Code || !Kelurahan_Name) return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
 
         if (checkkode) return next(new Error('Kode Kelurahan sudah ada!'));
 
-        const kelurahan = await Kelurahan.create(req.body);
+        const kecamatan = await Kecamatan.findOne({
+            where: {
+                Kecamatan_Code
+            }
+        });
+
+        if (!kecamatan) return next(new Error(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404))
+
+        const kelurahan = await Kelurahan.create({
+            Kelurahan_Code,
+            Kelurahan_Name,
+            Kecamatan_Code,
+            Kabupaten_Code: kecamatan.Kabupaten_Code,
+            Provinsi_Code: kecamatan.Provinsi_Code,
+        });
 
         res.status(201).json({
             success: true,
@@ -73,9 +87,28 @@ exports.createKelurahan = async (req, res, next) => {
 exports.updateKelurahan = async (req, res, next) => {
     try {
 
-        const kelurahan = await Kelurahan.update(req.body, {
+        const { Kelurahan_Code, Kelurahan_Name, Kecamatan_Code } = req.body;
+
+        if (!Kelurahan_Code || !Kelurahan_Name) return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
+
+        const kecamatan = await Kecamatan.findOne({
             where: {
-                id: req.params.id
+                Kecamatan_Code
+            }
+        });
+
+        if (!kecamatan) return next(new Error(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404));
+
+        const kelurahan = await Kelurahan.update(
+            {
+                Kelurahan_Code,
+                Kelurahan_Name,
+                Kecamatan_Code,
+                Kabupaten_Code: kecamatan.Kabupaten_Code,
+                Provinsi_Code: kecamatan.Provinsi_Code,
+            }, {
+            where: {
+                ID_Kelurahan: req.params.id
             }
         });
 
@@ -97,7 +130,7 @@ exports.deleteKelurahan = async (req, res, next) => {
 
         const id = await Kelurahan.findAll({
             where: {
-                id: req.params.id
+                ID_Kelurahan: req.params.id
             }
         });
 
@@ -105,7 +138,7 @@ exports.deleteKelurahan = async (req, res, next) => {
 
         await Kelurahan.destroy({
             where: {
-                id: req.params.id
+                ID_Kelurahan: req.params.id
             }
         });
 

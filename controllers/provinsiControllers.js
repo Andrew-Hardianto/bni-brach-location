@@ -39,17 +39,17 @@ exports.getByIdProvinsi = async (req, res) => {
 // add Provinsi
 exports.createProvinsi = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Provinsi_Code, Provinsi_Name } = req.body;
 
         const checkkode = await Provinsi.findOne(
             {
                 where: {
-                    kode
+                    Provinsi_Code
                 }
             }
         )
 
-        if (!kode || !nama) return next(new Error('kode provinsi/Nama harus diisi', 401))
+        if (!Provinsi_Code || !Provinsi_Name) return next(new Error('kode provinsi/Nama harus diisi', 401))
 
         if (checkkode) return next(new Error('kode provinsi sudah digunakan!', 400))
 
@@ -70,13 +70,13 @@ exports.createProvinsi = async (req, res, next) => {
 // update Provinsi
 exports.updateProvinsi = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Provinsi_Code, Provinsi_Name } = req.body;
 
-        if (!kode || !nama) return next(new Error('kode provinsi/Nama harus diisi', 401))
+        if (!Provinsi_Code || !Provinsi_Name) return next(new Error('kode provinsi/Nama harus diisi', 401))
 
         const provinsi = await Provinsi.update(req.body, {
             where: {
-                id: req.params.id
+                ID_Provinsi: req.params.id
             }
         });
 
@@ -98,7 +98,7 @@ exports.deleteProvinsi = async (req, res, next) => {
 
         const id = await Provinsi.findAll({
             where: {
-                id: req.params.id
+                ID_Provinsi: req.params.id
             }
         });
 
@@ -106,7 +106,7 @@ exports.deleteProvinsi = async (req, res, next) => {
 
         await Provinsi.destroy({
             where: {
-                id: req.params.id
+                ID_Provinsi: req.params.id
             }
         });
 

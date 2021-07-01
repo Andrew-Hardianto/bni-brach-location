@@ -34,7 +34,7 @@ const KodeposEdit = ({ history, match }) => {
             history.push('/location/kodepos')
         } else {
             dispatch(detailKodepos(kodeposId));
-            setData(kodepos.kodepos)
+            setData(kodepos?.kodepos)
         }
     }, [dispatch, history, kodeposId, success])
 

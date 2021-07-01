@@ -1,26 +1,20 @@
 module.exports = (sequelize, Sequelize) => {
-    const Kodepos = sequelize.define("kodepos", {
-        id: {
-            type: Sequelize.UUID,
+    const Kodepos = sequelize.define("Master_Kodepos", {
+        ID_Kodepos: {
+            type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            autoIncrement: true
         },
-        kode: {
-            type: Sequelize.STRING,
+        Kodepos_Code: {
+            type: Sequelize.BIGINT,
+            primaryKey: true,
             allowNull: false,
-            // unique: {
-            //     args: true,
-            //     msg: 'Kode sudah digunakan!'
-            // },
-        },
+        }
     }, {
-        tableName: 'kodepos'
+        tableName: 'Master_Kodepos',
+        timestamps: false
     });
-
-    // Kodepos.associate = function (models) {
-    //     Kodepos.belongsTo(models.Kelurahan, { foreignKey: 'kelurahanId', as: 'kelurahan' })
-    // };
 
     return Kodepos;
 }

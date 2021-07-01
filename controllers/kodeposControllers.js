@@ -1,11 +1,12 @@
 const db = require('../config/db');
 const Kodepos = db.Kodepos;
+const Kelurahan = db.Kelurahan;
 const Op = db.Sequelize.Op;
 
 // get all data
 exports.getKodepos = async (req, res) => {
     try {
-        const kodepos = await Kodepos.findAll({ include: ["kelurahan"] });
+        const kodepos = await Kodepos.findAll({ include: ["kota", "provinsi", "kecamatan", "kelurahan"] });
 
         res.status(200).json({
             success: true,
@@ -22,7 +23,7 @@ exports.getKodepos = async (req, res) => {
 // get by id data
 exports.getByIdKodepos = async (req, res) => {
     try {
-        const kodepos = await Kodepos.findByPk(req.params.id);
+        const kodepos = await Kodepos.findByPk(req.params.id, { include: ["kota", "provinsi", "kecamatan", "kelurahan"] });
 
         res.status(200).json({
             success: true,
@@ -39,15 +40,29 @@ exports.getByIdKodepos = async (req, res) => {
 // add Kodepos
 exports.createKodepos = async (req, res, next) => {
     try {
-        const { kode } = req.body;
+        const { Kodepos_Code, Kelurahan_Code } = req.body;
 
-        if (!kode) return next(new Error('Kode POS harus diisi!'));
+        if (!Kodepos_Code) return next(new Error('Kodepos harus diisi!'));
 
-        const checkkode = await Kodepos.findOne({ where: { kode } });
+        // const checkkode = await Kodepos.findOne({ where: { Kodepos_Code } });
 
-        if (checkkode) return next(new Error('kodepos sudah digunakan!'));
+        // if (checkkode) return next(new Error('kodepos sudah digunakan!'));
 
-        const kodepos = await Kodepos.create(req.body);
+        const kelurahan = await Kelurahan.findOne({
+            where: {
+                Kelurahan_Code
+            }
+        });
+
+        if (!kelurahan) return next(new Error(`Kelurahan dengan kode ${Kelurahan_Code} tidak ditemukan!`, 404));
+
+        const kodepos = await Kodepos.create({
+            Kodepos_Code,
+            Kelurahan_Code,
+            Kecamatan_Code: kelurahan.Kecamatan_Code,
+            Kabupaten_Code: kelurahan.Kabupaten_Code,
+            Provinsi_Code: kelurahan.Provinsi_Code,
+        });
 
         res.status(201).json({
             success: true,
@@ -64,10 +79,28 @@ exports.createKodepos = async (req, res, next) => {
 // update Kodepos
 exports.updateKodepos = async (req, res, next) => {
     try {
+        const { Kodepos_Code, Kelurahan_Code } = req.body;
 
-        const kodepos = await Kodepos.update(req.body, {
+        if (!Kodepos_Code) return next(new Error('Kodepos harus diisi!'));
+
+        const kelurahan = await Kelurahan.findOne({
             where: {
-                id: req.params.id
+                Kelurahan_Code
+            }
+        });
+
+        if (!kelurahan) return next(new Error(`Kelurahan dengan kode ${Kelurahan_Code} tidak ditemukan!`, 404));
+
+        const kodepos = await Kodepos.update(
+            {
+                Kodepos_Code: Kodepos_Code,
+                Kelurahan_Code,
+                Kecamatan_Code: kelurahan.Kecamatan_Code,
+                Kabupaten_Code: kelurahan.Kabupaten_Code,
+                Provinsi_Code: kelurahan.Provinsi_Code,
+            }, {
+            where: {
+                ID_Kodepos: req.params.id
             }
         });
 
@@ -89,15 +122,15 @@ exports.deleteKodepos = async (req, res, next) => {
 
         const id = await Kodepos.findAll({
             where: {
-                id: req.params.id
+                ID_Kodepos: req.params.id
             }
         });
 
-        if (!id) return next(new Error(`Kodepos dengan Id ${id} tidak ditemukan!`, 404))
+        if (!id) return next(new Error(`Kodepos dengan Id ${req.params.id} tidak ditemukan!`, 404))
 
         await Kodepos.destroy({
             where: {
-                id: req.params.id
+                ID_Kodepos: req.params.id
             }
         });
 

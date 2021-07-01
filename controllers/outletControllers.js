@@ -9,12 +9,8 @@ exports.getAllOutlet = async (req, res) => {
     try {
         const outlet = await Outlet.findAll({
             include: [
-                {
-                    model: Cabang,
-                    include: [
-                        'wilayah'
-                    ]
-                }
+                "cabang",
+                "wilayah"
             ]
         });
 
@@ -35,12 +31,8 @@ exports.getByIdOutlet = async (req, res) => {
     try {
         const outlet = await Outlet.findByPk(req.params.id, {
             include: [
-                {
-                    model: Cabang,
-                    include: [
-                        'wilayah'
-                    ]
-                }
+                "wilayah",
+                "cabang"
             ]
         });
 
@@ -59,38 +51,33 @@ exports.getByIdOutlet = async (req, res) => {
 // add outlet
 exports.createOutlet = async (req, res, next) => {
     try {
-        const { kode, nama, biLocationCode, alamat, kodeCabang, kodePos, latitude, longitude } = req.body;
+        const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude } = req.body;
 
         const checkId = await Outlet.findOne(
             {
                 where: {
-                    kode: kode
+                    Outlet_Code: Outlet_Code
                 }
             }
         )
 
-        if (!kode || !nama || !alamat) return next(new Error('Kode/Nama/alamat harus diisi!'))
+        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
+        if (!Outlet_Code) return next(new Error('Field Outlet code tidak boleh kosong!'));
+        if (!Outlet_Name) return next(new Error('Field Outlet name tidak boleh kosong!'));
+        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
 
         if (checkId) return next(new Error('Kode outlet sudah digunakan!'))
 
-        // const loc = await geocoder.geocode(
-        //     {
-        //         address: alamat,
-        //     }
-        // );
-
-        const cab = await Cabang.findOne({ where: { kode: kodeCabang } })
+        const cabang = await Cabang.findOne({ where: { Branch_Code } });
 
         const outlet = await Outlet.create({
-            kode: kode,
-            nama: nama,
-            alamat: alamat,
-            biLocationCode: biLocationCode,
-            kodepos: kodePos,
-            latitude: latitude,
-            longitude: longitude,
-            kodeCabang: kodeCabang,
-            namaCabang: cab.nama
+            Outlet_Code,
+            Outlet_Name,
+            Address,
+            Branch_Code,
+            Region_Code: cabang.Region_Code,
+            Latitude,
+            Longitude,
         })
 
         res.status(201).json({
@@ -108,32 +95,26 @@ exports.createOutlet = async (req, res, next) => {
 // update outlet
 exports.updateOutlet = async (req, res, next) => {
     try {
-        const { kode, nama, alamat, biLocationCode, kodeCabang, kodepos, latitude, longitude, status } = req.body;
+        const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude } = req.body;
 
-        if (!nama || !alamat) return next(new Error('Nama/alamat harus diisi!'))
+        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
+        if (!Outlet_Code) return next(new Error('Field Outlet code tidak boleh kosong!'));
+        if (!Outlet_Name) return next(new Error('Field Outlet name tidak boleh kosong!'));
+        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
 
-        // const loc = await geocoder.geocode(
-        //     {
-        //         address: alamat,
-        //     }
-        // );
-
-        const cab = await Cabang.findOne({ where: { kode: kodeCabang } })
+        const cabang = await Cabang.findOne({ where: { Branch_Code } });
 
         const outlet = await Outlet.update({
-            kode: kode,
-            nama: nama,
-            alamat: alamat,
-            biLocationCode: biLocationCode,
-            kodepos: kodepos,
-            latitude: latitude,
-            longitude: longitude,
-            kodeCabang: kodeCabang,
-            status: status,
-            namaCabang: cab.nama
+            Outlet_Code,
+            Outlet_Name,
+            Address,
+            Branch_Code,
+            Region_Code: cabang.Region_Code,
+            Latitude,
+            Longitude,
         }, {
             where: {
-                id: req.params.id
+                ID_Outlet: req.params.id
             }
         })
 
@@ -154,7 +135,7 @@ exports.deleteOutlet = async (req, res) => {
     try {
         await Outlet.destroy({
             where: {
-                id: req.params.id
+                ID_Outlet: req.params.id
             }
         })
 

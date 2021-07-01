@@ -1,11 +1,12 @@
 const db = require('../config/db');
+const Kota = db.Kota;
 const Kecamatan = db.Kecamatan;
 const Op = db.Sequelize.Op;
 
 // get all data
 exports.getKecamatan = async (req, res) => {
     try {
-        const kecamatan = await Kecamatan.findAll({ include: ["kota"] });
+        const kecamatan = await Kecamatan.findAll({ include: ["kota", "provinsi"] });
 
         res.status(200).json({
             success: true,
@@ -22,7 +23,9 @@ exports.getKecamatan = async (req, res) => {
 // get by id data
 exports.getByIdKecamatan = async (req, res) => {
     try {
-        const kecamatan = await Kecamatan.findByPk(req.params.id, { include: ["kota"] });
+        const kecamatan = await Kecamatan.findByPk(req.params.id, { include: ["kota", "provinsi"] });
+
+        if (!kecamatan) return next(new Error(`Kecamatan dengan id ${req.params.id} idak ditemukan`, 404));
 
         res.status(200).json({
             success: true,
@@ -39,20 +42,37 @@ exports.getByIdKecamatan = async (req, res) => {
 // add kecamatan
 exports.createKecamatan = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Kecamatan_Code, Kecamatan_Name, Kabupaten_Code, BI_Location_Code, Antasena_Code } = req.body;
 
         const checkkode = await Kecamatan.findOne(
             {
                 where: {
-                    kode
+                    Kecamatan_Code
                 }
             }
         )
 
-        if (!kode || !nama) return next(new Error('Kode Kecamatan/Nama Kecamatan harus diisi!'));
+        if (!Kecamatan_Code || !Kecamatan_Name) return next(new Error('Kode Kecamatan/Nama Kecamatan harus diisi!'));
         if (checkkode) return next(new Error('Kode Kecamatan sudah ada!'));
 
-        const kecamatan = await Kecamatan.create(req.body);
+        const kota = await Kota.findOne(
+            {
+                where: {
+                    Kabupaten_Code
+                }
+            }
+        )
+
+        if (!kota) return next(new Error(`Kota/kabupaten dengan kode ${Kabupaten_Code} tidak ditemukan!`, 404))
+
+        const kecamatan = await Kecamatan.create({
+            Kecamatan_Code,
+            Kecamatan_Name,
+            Kabupaten_Code,
+            Provinsi_Code: kota.Provinsi_Code,
+            BI_Location_Code,
+            Antasena_Code
+        });
 
         res.status(201).json({
             success: true,
@@ -69,13 +89,31 @@ exports.createKecamatan = async (req, res, next) => {
 // update kecamatan
 exports.updateKecamatan = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Kecamatan_Code, Kecamatan_Name, Kabupaten_Code, BI_Location_Code, Antasena_Code } = req.body;
 
-        if (!kode || !nama) return next(new Error('Kode Kecamatan/Nama Kecamatan harus diisi!'));
+        if (!Kecamatan_Code || !Kecamatan_Name) return next(new Error('Kode Kecamatan/Nama Kecamatan harus diisi!'));
 
-        const kecamatan = await Kecamatan.update(req.body, {
+        const kota = await Kota.findOne(
+            {
+                where: {
+                    Kabupaten_Code
+                }
+            }
+        )
+
+        if (!kota) return next(new Error(`Kota/kabupaten dengan kode ${Kabupaten_Code} tidak ditemukan!`, 404))
+
+        const kecamatan = await Kecamatan.update(
+            {
+                Kecamatan_Code,
+                Kecamatan_Name,
+                Kabupaten_Code,
+                Provinsi_Code: kota.Provinsi_Code,
+                BI_Location_Code,
+                Antasena_Code
+            }, {
             where: {
-                id: req.params.id
+                ID_Kecamatan: req.params.id
             }
         });
 
@@ -97,15 +135,15 @@ exports.deleteKecamatan = async (req, res, next) => {
 
         const id = await Kecamatan.findAll({
             where: {
-                id: req.params.id
+                ID_Kecamatan: req.params.id
             }
         });
 
-        if (!id) return next(new Error(`Kecamatan dengan Id ${id} tidak ditemukan!`, 404))
+        if (!id) return next(new Error(`Kecamatan dengan Id ${req.params.id} tidak ditemukan!`, 404))
 
         await Kecamatan.destroy({
             where: {
-                id: req.params.id
+                ID_Kecamatan: req.params.id
             }
         });
 

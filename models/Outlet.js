@@ -1,45 +1,33 @@
 module.exports = (sequelize, Sequelize) => {
-    const Outlet = sequelize.define("outlet", {
-        id: {
-            type: Sequelize.UUID,
+    const Outlet = sequelize.define("Outlet", {
+        ID_Outlet: {
+            type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            autoIncrement: true
         },
-        kode: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            unique: {
-                args: true,
-                msg: 'Kode sudah digunakan!'
-            },
-        },
-        nama: {
-            type: Sequelize.STRING,
+        Outlet_Code: {
+            type: Sequelize.BIGINT,
+            primaryKey: true,
             allowNull: false,
         },
-        status: {
-            type: Sequelize.ENUM('Aktif', 'Tidak Aktif'),
-            defaultValue: "Aktif"
+        Outlet_Name: {
+            type: Sequelize.STRING(100),
+            allowNull: false,
         },
-        alamat: {
+        Address: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        biLocationCode: {
-            type: Sequelize.INTEGER
+        Latitude: {
+            type: Sequelize.STRING(100)
         },
-        latitude: {
-            type: Sequelize.STRING
-        },
-        longitude: {
-            type: Sequelize.STRING
-        },
-        namaCabang: {
-            type: Sequelize.STRING
+        Longitude: {
+            type: Sequelize.STRING(100)
         }
     }, {
-        tableName: 'outlet'
+        tableName: 'Outlet',
+        timestamps: false
     });
     return Outlet;
 }

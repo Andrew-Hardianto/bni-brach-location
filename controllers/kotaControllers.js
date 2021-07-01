@@ -23,9 +23,9 @@ exports.getKota = async (req, res) => {
 // get kota by id
 exports.getByIdKota = async (req, res, next) => {
     try {
-        const kota = await Kota.findByPk(req.params.id);
+        const kota = await Kota.findByPk(req.params.id, { include: ["provinsi"] });
 
-        if (!kota) return next(new Error(`Kota dengan id ${id} idak ditemukan`, 404));
+        if (!kota) return next(new Error(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
 
         res.status(200).json({
             success: true,
@@ -42,17 +42,17 @@ exports.getByIdKota = async (req, res, next) => {
 // add kota
 exports.addKota = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Kabupaten_Code, Kabupaten_Name } = req.body;
 
         const checkkode = await Kota.findOne(
             {
                 where: {
-                    kode
+                    Kabupaten_Code
                 }
             }
         )
 
-        if (!kode || !nama) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
+        if (!Kabupaten_Code || !Kabupaten_Name) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
 
         if (checkkode) return next(new Error('Kode Kota sudah digunakan!'));
 
@@ -73,13 +73,13 @@ exports.addKota = async (req, res, next) => {
 // update kota 
 exports.updateKota = async (req, res, next) => {
     try {
-        const { kode, nama } = req.body;
+        const { Kabupaten_Code, Kabupaten_Name } = req.body;
 
-        if (!kode || !nama) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
+        if (!Kabupaten_Code || !Kabupaten_Name) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
 
         const kota = await Kota.update(req.body, {
             where: {
-                id: req.params.id
+                ID_Kabupaten: req.params.id
             }
         })
 
@@ -98,7 +98,15 @@ exports.updateKota = async (req, res, next) => {
 // delete kota
 exports.deleteKota = async (req, res, next) => {
     try {
-        await Kota.destroy({ where: { id: req.params.id } });
+        const kota = await Kota.findByPk(req.params.id);
+
+        if (!kota) return next(new Error(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
+
+        await Kota.destroy({
+            where: {
+                ID_Kabupaten: req.params.id
+            }
+        });
 
         res.status(200).json({
             success: true,

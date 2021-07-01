@@ -1,47 +1,38 @@
 const geocoder = require('../utils/geocoder');
 
 module.exports = (sequelize, Sequelize) => {
-    const Cabang = sequelize.define("cabang", {
-        id: {
-            type: Sequelize.UUID,
+    const Cabang = sequelize.define("Branch", {
+        ID_Branch: {
+            type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            autoIncrement: true
         },
-        kode: {
-            type: Sequelize.STRING,
-            allowNull: false,
-            unique: {
-                args: true,
-                msg: 'Kode sudah digunakan!'
-            },
-        },
-        nama: {
-            type: Sequelize.STRING,
+        Branch_Code: {
+            type: Sequelize.BIGINT,
+            primaryKey: true,
             allowNull: false,
         },
-        status: {
-            type: Sequelize.ENUM('Aktif', 'Tidak Aktif'),
-            defaultValue: "Aktif"
+        Branch_Name: {
+            type: Sequelize.STRING(100),
+            allowNull: false,
         },
-        alamat: {
+        BI_Location_Code: {
+            type: Sequelize.INTEGER
+        },
+        Address: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        biLocationCode: {
-            type: Sequelize.INTEGER
+        Latitude: {
+            type: Sequelize.STRING(100)
         },
-        latitude: {
-            type: Sequelize.STRING
-        },
-        longitude: {
-            type: Sequelize.STRING
-        },
-        namaWilayah: {
-            type: Sequelize.STRING
+        Longitude: {
+            type: Sequelize.STRING(100)
         }
     }, {
-        tableName: 'cabang'
+        tableName: 'Branch',
+        timestamps: false
     });
 
     // Cabang.beforeSave(async function (next) {

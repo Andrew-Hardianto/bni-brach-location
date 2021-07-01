@@ -1,25 +1,27 @@
 module.exports = (sequelize, Sequelize) => {
-    const Wilayah = sequelize.define("wilayah", {
-        id: {
-            type: Sequelize.UUID,
+    const Wilayah = sequelize.define("Region", {
+        ID_Region: {
+            type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            autoIncrement: true
         },
-        kode: {
-            type: Sequelize.STRING,
+        Region_Code: {
+            type: Sequelize.BIGINT,
+            primaryKey: true,
             allowNull: false,
-            unique: {
-                args: true,
-                msg: 'Kode sudah digunakan!'
-            },
         },
-        nama: {
-            type: Sequelize.STRING,
+        Region_Subname: {
+            type: Sequelize.STRING(100),
+            allowNull: false,
+        },
+        Region_Name: {
+            type: Sequelize.STRING(100),
             allowNull: false,
         },
     }, {
-        tableName: 'wilayah'
+        tableName: 'Region',
+        timestamps: false
     });
     return Wilayah;
 }

@@ -59,7 +59,7 @@ const KecamatanEdit = ({ match, history }) => {
                                 type="text"
                                 placeholder="Masukkan Kode Kecamatan..."
                                 name="kode"
-                                value={data.kode}
+                                value={data?.kode}
                                 onChange={(e) => setData({ ...data, kode: e.target.value })}
                             />
                         </Form.Group>
