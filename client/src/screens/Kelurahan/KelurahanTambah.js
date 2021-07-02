@@ -8,7 +8,7 @@ import Message from '../../components/Message';
 import { createKelurahan } from '../../actions/kelurahanActions';
 import { listKecamatan } from '../../actions/kecamatanActions';
 
-const initialState = { kode: '', nama: '', kecamatanId: '' }
+const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '' }
 
 const KelurahanTambah = ({ history }) => {
 
@@ -46,40 +46,40 @@ const KelurahanTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="kode">
+                        <Form.Group controlId="Kelurahan_Code">
                             <Form.Label>Kode Kelurahan</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Kelurahan..."
-                                name="kode"
+                                name="Kelurahan_Code"
                                 // value={id}
                                 onChange={handleChange}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Kelurahan_Name">
                             <Form.Label>Nama Kelurahan</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Nama Kelurahan..."
-                                name="nama"
+                                name="Kelurahan_Name"
                                 // value={nama}
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="kecamatanId">
+                        <Form.Group controlId="Kecamatan_Code">
                             <Form.Label>Kecamatan</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="kecamatanId"
+                                name="Kecamatan_Code"
                                 // value={kecamatanId}
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Kecamatan -</option>
-                                {kecamatan.filter((kc) => kc.kode.toString().includes(data.kode.toString().substring(0, 7)))
-                                    .map((data, index) => (
-                                        <option key={index} value={data.kode} >{data.nama}</option>
+                                {kecamatan.filter((kc) => kc.Kecamatan_Code.toString().includes(data.Kelurahan_Code.toString().substring(0, 7)))
+                                    .map((data) => (
+                                        <option key={data.ID_Kecamatan} value={data.Kecamatan_Code} >{data.Kecamatan_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>

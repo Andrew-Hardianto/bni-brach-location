@@ -7,7 +7,7 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { createWilayah } from '../../actions/wilayahActions';
 
-const initialState = { kode: '', nama: '' }
+const initialState = { Region_Code: '', Region_Subname: '', Region_Name: '' }
 
 const WilayahTambah = ({ history }) => {
     const [data, setData] = useState(initialState)
@@ -40,22 +40,30 @@ const WilayahTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="id">
+                        <Form.Group controlId="Region_Code">
                             <Form.Label>Kode Wilayah</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Wilayah..."
-                                name="kode"
+                                name="Region_Code"
                                 onChange={handleChange}
                             />
                         </Form.Group>
-
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Region_Subname">
+                            <Form.Label>Sub Nama Wilayah</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Masukkan Sub Nama Wilayah..."
+                                name="Region_Subname"
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="Region_Name">
                             <Form.Label>Nama Wilayah</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Nama Wilayah..."
-                                name="nama"
+                                name="Region_Name"
                                 onChange={handleChange}
                             />
                         </Form.Group>

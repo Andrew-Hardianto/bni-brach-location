@@ -41,7 +41,7 @@ exports.getByIdCabang = async (req, res) => {
 // add cabang
 exports.createCabang = async (req, res, next) => {
     try {
-        const { Branch_Code, Branch_Subname, Branch_Name, Address, Region_Code } = req.body;
+        const { Branch_Code, Branch_Name, Address, Region_Code } = req.body;
 
         const checkId = await Cabang.findOne(
             {
@@ -52,18 +52,11 @@ exports.createCabang = async (req, res, next) => {
         )
 
         if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
-        if (!Branch_Subname) return next(new Error('Field Branch Subname tidak boleh kosong!'));
         if (!Branch_Name) return next(new Error('Field Branch Name tidak boleh kosong!'));
         if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
         if (!Region_Code) return next(new Error('Field Region Code tidak boleh kosong!'));
 
-        if (checkId) return next(new Error('Kode tidak boleh sama!'))
-
-        // const loc = await geocoder.geocode(
-        //     {
-        //         address: alamat,
-        //     }
-        // );
+        if (checkId) return next(new Error('Kode tidak boleh sama!'));
 
         const cabang = await Cabang.create(req.body);
 
@@ -82,10 +75,9 @@ exports.createCabang = async (req, res, next) => {
 // update cabang
 exports.updateCabang = async (req, res, next) => {
     try {
-        const { Branch_Code, Branch_Subname, Branch_Name, Address, Region_Code } = req.body;
+        const { Branch_Code, Branch_Name, Address, Region_Code } = req.body;
 
         if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
-        if (!Branch_Subname) return next(new Error('Field Branch Subname tidak boleh kosong!'));
         if (!Branch_Name) return next(new Error('Field Branch Name tidak boleh kosong!'));
         if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
         if (!Region_Code) return next(new Error('Field Region Code tidak boleh kosong!'));

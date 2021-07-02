@@ -35,14 +35,14 @@ const KotaEdit = ({ history, match }) => {
             dispatch({ type: KOTA_UPDATE_RESET })
             history.push('/location/kota')
         } else {
-            if (!kota.kota?.nama || kota.kota?.id !== kotaId) {
+            if (!kota?.kota?.Kabupaten_Name || kota?.kota?.ID_Kabupaten !== kotaId) {
                 dispatch(detailKota(kotaId));
             }
-            setKode(kota.kota?.kode)
-            setNama(kota.kota?.nama)
-            setBiCode(kota.kota?.biCode)
-            setAntasenaCode(kota.kota?.antasenaCode)
-            setProvinsiId(kota.kota?.provinsiId)
+            setKode(kota.kota?.Kabupaten_Code)
+            setNama(kota.kota?.Kabupaten_Name)
+            setBiCode(kota.kota?.BI_Location_Code)
+            setAntasenaCode(kota.kota?.Antasena_Code)
+            setProvinsiId(kota.kota?.Provinsi_Code)
         }
     }, [dispatch, history, kotaId, kota, success])
 
@@ -105,10 +105,14 @@ const KotaEdit = ({ history, match }) => {
                                 value={provinsiId}
                                 onChange={(e) => setProvinsiId(e.target.value)}
                             >
-                                <option value="">- Pilih Provinsi -</option>
-                                {provinsi.map((prov) => (
-                                    <option value={prov.kode} >{prov.nama}</option>
-                                ))}
+                                {/* <option value="">- Pilih Provinsi -</option> */}
+                                {/* {provinsi.map((prov, index) => (
+                                    <option key={index} value={prov?.Provinsi_Code} >{prov?.Provinsi_Name}</option>
+                                ))} */}
+                                {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(kode?.toString().substring(0, 2)))
+                                    .map((prov) => (
+                                        <option key={prov.ID_Provinsi} value={prov.Provinsi_Code} >{prov.Provinsi_Name}</option>
+                                    ))}
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">

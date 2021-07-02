@@ -24,16 +24,85 @@ const KecamatanDetail = ({ match }) => {
             {loading ? <Loader />
                 : error ? (<Message variant="danger" >{error}</Message>)
                     : (
-                        <Card style={{ width: '20rem' }} className="shadow" >
+                        <Card style={{ width: '30rem' }} className="shadow" >
                             <Card.Body>
-                                <Card.Title>Detail Kecamatan</Card.Title>
-                                <Card.Subtitle className="mb-3">Kode Kecamatan : {kecamatan.kecamatan?.kode}</Card.Subtitle>
-                                <Card.Text>
-                                    Nama Kecamatan : {kecamatan.kecamatan?.nama}
-                                </Card.Text>
-                                <Card.Text>
-                                    Kode Kota : {kecamatan.kecamatan?.kotaId}
-                                </Card.Text>
+                                <Card.Title className="text-center font-weight-bold">DETAIL KECAMATAN</Card.Title>
+                                <table className="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Kecamatan
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kecamatan.kecamatan?.Kecamatan_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama kecamatan
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kecamatan.kecamatan?.Kecamatan_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Kota/ Kabupaten
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kecamatan.kecamatan?.Kabupaten_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Kota/ Kabupaten
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kecamatan.kecamatan?.kota.Kabupaten_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Provinsi
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kecamatan.kecamatan?.Provinsi_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Provinsi
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kecamatan.kecamatan?.provinsi.Provinsi_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <Link to={'/location/kecamatan'} className="btn btn-primary" >
                                     <i className="fas fa-arrow-left"></i>
                                 </Link>

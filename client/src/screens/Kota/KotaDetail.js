@@ -27,14 +27,83 @@ const KotaDetail = ({ match }) => {
                     : (
                         <Card style={{ width: '20rem' }} className="shadow" >
                             <Card.Body>
-                                <Card.Title>Detail Kota</Card.Title>
-                                <Card.Subtitle className="mb-3">Kode Kota : {kota.kota?.kode}</Card.Subtitle>
-                                <Card.Text>
-                                    Nama Kota : {kota.kota?.nama}
-                                </Card.Text>
-                                <Card.Text>
-                                    Kode Provinsi : {kota.kota?.provinsiId}
-                                </Card.Text>
+                                <Card.Title className="text-center font-weight-bold">DETAIL KOTA</Card.Title>
+                                <table className="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Kota
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.Kabupaten_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Kota
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.Kabupaten_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Provinsi
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.Provinsi_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Provinsi
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.provinsi.Provinsi_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    BI Location Code
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.BI_Location_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Antasena Code
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.Antasena_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <Link to={'/location/kota'} className="btn btn-primary" >
                                     <i className="fas fa-arrow-left"></i>
                                 </Link>

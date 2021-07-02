@@ -65,7 +65,7 @@ export const detailCabang = (id) => async (dispatch) => {
     }
 }
 
-export const createCabang = (kode, nama, alamat, kodeWilayah, kodePos, biLocationCode, latitude, longitude) => async (dispatch) => {
+export const createCabang = (Branch_Code, Branch_Name, BI_Location_Code, Address, Region_Code, Latitude, Longitude) => async (dispatch) => {
     try {
         dispatch({ type: CABANG_CREATE_REQUEST })
 
@@ -77,7 +77,7 @@ export const createCabang = (kode, nama, alamat, kodeWilayah, kodePos, biLocatio
 
         const { postData } = await axios.post(
             '/cabang',
-            { kode, nama, alamat, kodeWilayah, kodePos, biLocationCode, latitude, longitude },
+            { Branch_Code, Branch_Name, BI_Location_Code, Address, Region_Code, Latitude, Longitude },
             config
         )
 
@@ -106,7 +106,7 @@ export const editCabang = (cabang) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/cabang/${cabang.id}`, cabang, config);
+        const { dataPost } = await axios.put(`/cabang/${cabang.ID_Branch}`, cabang, config);
 
         dispatch({
             type: CABANG_UPDATE_SUCCESS,

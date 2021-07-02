@@ -9,7 +9,7 @@ import { editKecamatan, detailKecamatan } from '../../actions/kecamatanActions';
 import { listKota } from '../../actions/kotaActions';
 import { KECAMATAN_UPDATE_RESET } from '../../constants/kecamatanConstants';
 
-const initialState = { kode: '', nama: '', kotaId: '' }
+const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabupaten_Code: '' }
 
 const KecamatanEdit = ({ match, history }) => {
     const kecamatanId = match.params.id;
@@ -33,7 +33,7 @@ const KecamatanEdit = ({ match, history }) => {
             dispatch({ type: KECAMATAN_UPDATE_RESET })
             history.push('/location/kecamatan')
         } else {
-            if (!kecamatan.kecamatan?.nama || kecamatan.kecamatan?.id !== kecamatanId) {
+            if (!kecamatan.kecamatan?.Kecamatan_Name || kecamatan.kecamatan?.ID_Kecamatan !== kecamatanId) {
                 dispatch(detailKecamatan(kecamatanId));
             }
             setData(kecamatan.kecamatan)
@@ -53,40 +53,40 @@ const KecamatanEdit = ({ match, history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="kode">
+                        <Form.Group controlId="Kecamatan_Code">
                             <Form.Label>Kode Kecamatan</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Kecamatan..."
-                                name="kode"
-                                value={data?.kode}
-                                onChange={(e) => setData({ ...data, kode: e.target.value })}
+                                name="Kecamatan_Code"
+                                value={data?.Kecamatan_Code}
+                                onChange={(e) => setData({ ...data, Kecamatan_Code: e.target.value })}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Kecamatan_Name">
                             <Form.Label>Nama Kecamatan</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Nama Kecamatan..."
-                                name="nama"
-                                value={data?.nama}
-                                onChange={(e) => setData({ ...data, nama: e.target.value })}
+                                name="Kecamatan_Name"
+                                value={data?.Kecamatan_Name}
+                                onChange={(e) => setData({ ...data, Kecamatan_Name: e.target.value })}
                             />
                         </Form.Group>
-                        <Form.Group controlId="kotaId">
-                            <Form.Label>Kota</Form.Label>
+                        <Form.Group controlId="Kabupaten_Code">
+                            <Form.Label>Kota/Kabupaten</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="kotaId"
-                                value={data?.kotaId}
-                                onChange={(e) => setData({ ...data, kotaId: e.target.value })}
+                                name="Kabupaten_Code"
+                                value={data?.Kabupaten_Code}
+                                onChange={(e) => setData({ ...data, Kabupaten_Code: e.target.value })}
                             >
                                 <option value="">- Pilih Kota -</option>
-                                {kota.map((data, index) => (
-                                    <option key={index} value={data.kode} >{data.nama}</option>
-                                ))}
+                                {/* {kota?.map((data) => (
+                                    <option key={data.ID_Kabupaten} value={data.Kabupaten_Code} >{data.Kabupaten_Name}</option>
+                                ))} */}
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">

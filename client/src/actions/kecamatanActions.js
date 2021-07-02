@@ -107,7 +107,7 @@ export const editKecamatan = (data) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/kecamatan/${data.id}`, data, config);
+        const { dataPost } = await axios.put(`/kecamatan/${data.ID_Kecamatan}`, data, config);
 
         dispatch({
             type: KECAMATAN_UPDATE_SUCCESS,

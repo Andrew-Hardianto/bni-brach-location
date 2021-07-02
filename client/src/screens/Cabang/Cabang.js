@@ -37,19 +37,15 @@ const Cabang = () => {
 
     const columns = [
         {
-            dataField: 'kode',
+            dataField: 'Branch_Code',
             text: 'Kode Cabang'
         },
         {
-            dataField: 'nama',
+            dataField: 'Branch_Name',
             text: 'Nama Cabang'
         },
         {
-            dataField: 'status',
-            text: 'Status'
-        },
-        {
-            dataField: 'alamat',
+            dataField: 'Address',
             text: 'Alamat',
             style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
         },
@@ -59,17 +55,17 @@ const Cabang = () => {
             formatter: (rowContent, row) => {
                 return (
                     <div className="">
-                        <LinkContainer to={`/location/branch/detail/${row.id}`}>
+                        <LinkContainer to={`/location/branch/detail/${row.ID_Branch}`}>
                             <Button variant="info" size="sm">
                                 <i className="fas fa-info"></i>
                             </Button>
                         </LinkContainer>
-                        <LinkContainer to={`/location/branch/edit/${row.id}`} className="ml-2">
+                        <LinkContainer to={`/location/branch/edit/${row.ID_Branch}`} className="ml-2">
                             <Button variant="success" size="sm">
                                 <i class="fas fa-edit"></i>
                             </Button>
                         </LinkContainer>
-                        <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(row.id)}>
+                        <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(row.ID_Branch)}>
                             <i className="fas fa-trash-alt"></i>
                         </Button>
                     </div>

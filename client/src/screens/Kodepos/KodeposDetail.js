@@ -24,15 +24,121 @@ const KodeposDetail = ({ match }) => {
             {loading ? <Loader />
                 : error ? (<Message variant="danger" >{error}</Message>)
                     : (
-                        <Card style={{ width: '20rem' }} className="shadow" >
+                        <Card style={{ width: '40rem' }} className="shadow" >
                             <Card.Body>
-                                <Card.Title>Detail Kode POS</Card.Title>
-                                <Card.Text>
-                                    Kode POS : {kodepos.kodepos?.kode}
-                                </Card.Text>
-                                <Card.Text>
-                                    Kode Kelurahan : {kodepos.kodepos?.kelurahanId}
-                                </Card.Text>
+                                <Card.Title className="text-center font-weight-bold">DETAIL KODEPOS</Card.Title>
+                                <table className="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td style={{ width: '30%' }}>
+                                                <Card.Text>
+                                                    Kodepos
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.Kodepos_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ width: '30%' }}>
+                                                <Card.Text>
+                                                    Kode Kelurahan
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.Kelurahan_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Kelurahan
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.kelurahan.Kelurahan_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Kecamatan
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.Kecamatan_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Kecamatan
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.kecamatan.Kecamatan_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Kota/ Kabupaten
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.Kabupaten_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Kota/ Kabupaten
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.kota.Kabupaten_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Kode Provinsi
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.Provinsi_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Nama Provinsi
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.provinsi.Provinsi_Name}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <Link to={'/location/kodepos'} className="btn btn-primary" >
                                     <i className="fas fa-arrow-left"></i>
                                 </Link>

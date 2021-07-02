@@ -36,20 +36,20 @@ const Kota = () => {
     }
 
     const columns = [{
-        dataField: 'kode',
+        dataField: 'Kabupaten_Code',
         text: 'Kode Kota',
         sort: true
     }, {
-        dataField: 'nama',
+        dataField: 'Kabupaten_Name',
         text: 'Nama Kota'
     }, {
-        dataField: 'biCode',
-        text: 'BI Code'
+        dataField: 'BI_Location_Code',
+        text: 'BI Location Code'
     }, {
-        dataField: 'antasenaCode',
+        dataField: 'Antasena_Code',
         text: 'Antasena Code'
     }, {
-        dataField: 'provinsiId',
+        dataField: 'Provinsi_Code',
         text: 'Kode Provinsi'
     }, {
         dataField: "link",
@@ -57,17 +57,17 @@ const Kota = () => {
         formatter: (rowContent, row) => {
             return (
                 <div className="">
-                    <LinkContainer to={`/location/kota/detail/${row.id}`}>
+                    <LinkContainer to={`/location/kota/detail/${row.ID_Kabupaten}`}>
                         <Button variant="info" className="btn-sm">
                             <i className="fas fa-info"></i>
                         </Button>
                     </LinkContainer>
-                    <LinkContainer to={`/location/kota/edit/${row.id}`} className="ml-2">
+                    <LinkContainer to={`/location/kota/edit/${row.ID_Kabupaten}`} className="ml-2">
                         <Button variant="success" className="btn-sm">
                             <i class="fas fa-edit"></i>
                         </Button>
                     </LinkContainer>
-                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.id)}>
+                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Kabupaten)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
                 </div>

@@ -10,7 +10,6 @@ import { createOutlet } from '../../actions/outletActions';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import Apikey from '../../components/Apikey';
-import { listKodepos } from '../../actions/kodeposActions';
 
 const initialState = {
     kode: '',
@@ -27,14 +26,12 @@ const initialState = {
 const OutletTambah = ({ history }) => {
     // const [data, setData] = useState(initialState)
 
-    const [kode, setKode] = useState('');
-    const [nama, setNama] = useState('');
-    const [alamat, setAlamat] = useState('');
-    const [kodePos, setKodePos] = useState('');
-    const [kodeCabang, setKodeCabang] = useState('');
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
-    const [biLocationCode, setBiLocationCode] = useState('');
+    const [Outlet_Code, setKode] = useState('');
+    const [Outlet_Name, setNama] = useState('');
+    const [Address, setAlamat] = useState('');
+    const [Branch_Code, setKodeCabang] = useState('');
+    const [Latitude, setLatitude] = useState('');
+    const [Longitude, setLongitude] = useState('');
 
     const dispatch = useDispatch();
 
@@ -44,12 +41,8 @@ const OutletTambah = ({ history }) => {
     const cabangList = useSelector(state => state.cabangList);
     const { cabang } = cabangList;
 
-    const kodeposList = useSelector(state => state.kodeposList);
-    const { kodepos } = kodeposList;
-
     useEffect(() => {
-        dispatch(listCabang())
-        dispatch(listKodepos())
+        dispatch(listCabang());
         if (success) {
             history.push('/location/outlet')
         }
@@ -61,7 +54,7 @@ const OutletTambah = ({ history }) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(createOutlet(kode, nama, alamat, kodeCabang, kodePos, biLocationCode, latitude, longitude))
+        dispatch(createOutlet(Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude))
     }
 
     const coords = { lat: -6.241586, lng: 106.992416 };
@@ -84,9 +77,7 @@ const OutletTambah = ({ history }) => {
     )
     const toggleDraggable = useCallback(() => {
         setDraggable((d) => !d)
-    }, [])
-
-    console.log(kode, nama, alamat, kodeCabang, kodePos, biLocationCode, latitude, longitude)
+    }, []);
 
     return (
         <div className="home">
@@ -96,74 +87,49 @@ const OutletTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="id">
+                        <Form.Group controlId="Outlet_Code">
                             <Form.Label>Kode Outlet</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Outlet..."
-                                name="kode"
+                                name="Outlet_Code"
                                 onChange={(e) => setKode(e.target.value)}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Outlet_Name">
                             <Form.Label>Nama Outlet</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Nama Outlet..."
-                                name="nama"
+                                name="Outlet_Name"
                                 onChange={(e) => setNama(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="alamat">
+                        <Form.Group controlId="Address">
                             <Form.Label>Alamat</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Alamat..."
                                 as="textarea"
                                 rows={3}
-                                name="alamat"
+                                name="Address"
                                 onChange={(e) => setAlamat(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="kodeCabang">
-                                <Form.Label>Kode Cabang</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    custom
-                                    name="kodeCabang"
-                                    onChange={(e) => setKodeCabang(e.target.value)}
-                                >
-                                    <option value="">- Pilih Cabang -</option>
-                                    {cabang.map((data) => (
-                                        <option value={data.kode} >{data.nama}</option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="kodepos">
-                                <Form.Label>Kodepos</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    custom
-                                    name="kodepos"
-                                    onChange={(e) => setKodePos(e.target.value)}
-                                >
-                                    <option value="">- Pilih Kodepos -</option>
-                                    {kodepos.map((data) => (
-                                        <option value={data.kode} >{data.kode}</option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
-                        </Form.Row>
-                        <Form.Group controlId="biLocationCode">
-                            <Form.Label>BI Location Code</Form.Label>
+                        <Form.Group controlId="Branch_Code">
+                            <Form.Label>Kode Cabang</Form.Label>
                             <Form.Control
-                                type="text"
-                                placeholder="Masukkan BI Location Code..."
-                                name="biLocationCode"
-                                onChange={(e) => setBiLocationCode(e.target.value)}
-                            />
+                                as="select"
+                                custom
+                                name="Branch_Code"
+                                onChange={(e) => setKodeCabang(e.target.value)}
+                            >
+                                <option value="">- Pilih Cabang -</option>
+                                {cabang.map((data) => (
+                                    <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
+                                ))}
+                            </Form.Control>
                         </Form.Group>
                         <Form.Row>
                             <Form.Group as={Col} controlId="latitude">

@@ -13,6 +13,7 @@ import {
     kotaDeleteReducer,
     kotaDetailsReducer,
     kotaListReducer,
+    kotaReducer,
     kotaUpdateReducer
 } from './reducers/kotaReducers';
 import {
@@ -65,6 +66,7 @@ const reducer = combineReducers({
     provinsiUpdate: provinsiUpdateReducer,
     provinsiDelete: provinsiDeleteReducer,
     kotaList: kotaListReducer,
+    kotaAll: kotaReducer,
     kotaDetail: kotaDetailsReducer,
     kotaCreate: kotaCreateReducer,
     kotaUpdate: kotaUpdateReducer,

@@ -37,11 +37,11 @@ const Kodepos = () => {
 
     const columns = [
         {
-            dataField: 'kode',
+            dataField: 'Kodepos_Code',
             text: 'Kode Pos'
         },
         {
-            dataField: 'kelurahanId',
+            dataField: 'Kelurahan_Code',
             text: 'Kode Kelurahan'
         },
         {
@@ -50,12 +50,12 @@ const Kodepos = () => {
             formatter: (rowContent, row) => {
                 return (
                     <div>
-                        <LinkContainer to={`/location/kodepos/detail/${row.id}`}>
+                        <LinkContainer to={`/location/kodepos/detail/${row.ID_Kodepos}`}>
                             <Button variant="info" className="btn-sm">
                                 <i className="fas fa-info"></i>
                             </Button>
                         </LinkContainer>
-                        <LinkContainer to={`/location/kodepos/edit/${row.id}`} className="ml-2">
+                        <LinkContainer to={`/location/kodepos/edit/${row.ID_Kodepos}`} className="ml-2">
                             <Button variant="success" className="btn-sm">
                                 <i class="fas fa-edit"></i>
                             </Button>
@@ -63,7 +63,7 @@ const Kodepos = () => {
                         <Button
                             variant="danger"
                             className="btn-sm ml-2"
-                            onClick={() => deletehandler(row.id)}
+                            onClick={() => deletehandler(row.ID_Kodepos)}
                         >
                             <i className="fas fa-trash-alt"></i>
                         </Button>

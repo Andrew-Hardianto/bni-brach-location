@@ -1,4 +1,7 @@
 import {
+    KOTA_ALL_REQUEST,
+    KOTA_ALL_SUCCESS,
+    KOTA_ALL_FAIL,
     KOTA_CREATE_FAIL,
     KOTA_CREATE_REQUEST,
     KOTA_CREATE_RESET,
@@ -88,5 +91,21 @@ export const kotaDeleteReducer = (state = {}, action) => {
             return { loading: false, error: action.payload }
         default:
             return state;
+    }
+}
+
+export const kotaReducer = (state = { kota: [] }, action) => {
+    switch (action.type) {
+        case KOTA_ALL_REQUEST:
+            return { loading: true, kota: [] }
+        case KOTA_ALL_SUCCESS:
+            return {
+                loading: false,
+                kota: action.payload,
+            }
+        case KOTA_ALL_FAIL:
+            return { loading: false, error: action.payload }
+        default:
+            return state
     }
 }

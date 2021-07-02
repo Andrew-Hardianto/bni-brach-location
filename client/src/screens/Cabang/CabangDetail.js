@@ -22,45 +22,50 @@ const CabangDetail = ({ match }) => {
     }, [dispatch, cabangId])
 
     // const coords = [cabang.cabang?.latitude, cabang.cabang?.longitude];
-    const coords = [isNaN(cabang?.cabang?.latitude) ? -6.241586 : cabang?.cabang?.latitude, isNaN(cabang?.cabang?.longitude) ? 106.992416 : cabang?.cabang?.longitude];
+    const coords = [isNaN(cabang?.cabang?.Latitude) ? -6.241586 : cabang?.cabang?.Latitude, isNaN(cabang?.cabang?.Longitude) ? 106.992416 : cabang?.cabang?.Longitude];
 
     return (
         <div className="home">
             {loading ? <Loader />
                 : error ? (<Message variant="danger" >{error}</Message>)
                     : (
-                        <Card style={{ width: '40rem' }} className="shadow">
+                        <Card style={{ width: '40rem' }} className="shadow mt-3">
                             <Card.Body>
                                 <Link to={'/location/branch'} className="btn btn-primary mb-3" >
                                     <i className="fas fa-arrow-left"></i>
                                 </Link>
-                                <Card.Title>Detail Branch</Card.Title>
+                                <Card.Title className="text-center font-weight-bold" >Detail Branch</Card.Title>
                                 <Table hover borderless responsive>
                                     <tbody>
                                         <tr>
                                             <td width="150px">Kode Cabang</td>
                                             <td width="30px"> : </td>
-                                            <td>{cabang.cabang?.kode}</td>
+                                            <td>{cabang.cabang?.Branch_Code}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Nama Cabang</td>
                                             <td width="30px"> : </td>
-                                            <td>{cabang.cabang?.nama}</td>
+                                            <td>{cabang.cabang?.Branch_Name}</td>
                                         </tr>
                                         <tr>
-                                            <td width="150px">Status</td>
+                                            <td width="150px">BI Location Code</td>
                                             <td width="30px"> : </td>
-                                            <td>{cabang.cabang?.status}</td>
+                                            <td>{cabang.cabang?.BI_Location_Code}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Kode Wilayah</td>
                                             <td width="30px"> : </td>
-                                            <td>{cabang.cabang?.kodeWilayah}</td>
+                                            <td>{cabang.cabang?.Region_Code}</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="150px">Sub Nama Wilayah</td>
+                                            <td width="30px"> : </td>
+                                            <td>{cabang.cabang?.wilayah.Region_Subname}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Nama Wilayah</td>
                                             <td width="30px"> : </td>
-                                            <td>{cabang.cabang?.namaWilayah}</td>
+                                            <td>{cabang.cabang?.wilayah.Region_Name}</td>
                                         </tr>
                                     </tbody>
                                 </Table>
@@ -72,7 +77,7 @@ const CabangDetail = ({ match }) => {
                                         />
                                         <Marker
                                             position={coords}>
-                                            <Tooltip>{cabang.cabang?.alamat}</Tooltip>
+                                            <Tooltip>{cabang.cabang?.Address}</Tooltip>
                                         </Marker>
                                     </MapContainer>
                                 </div>

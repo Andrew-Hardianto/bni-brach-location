@@ -8,7 +8,7 @@ import Message from '../../components/Message';
 import { createKota } from '../../actions/kotaActions';
 import { listProvinsi } from '../../actions/provinsiActions';
 
-const initialState = { kode: '', nama: '', biCode: '', antasenaCode: '', provinsiId: '' }
+const initialState = { Kabupaten_Code: '', Kabupaten_Name: '', BI_Location_Code: '', Antasena_Code: '', Provinsi_Code: '' }
 
 const KotaTambah = ({ history }) => {
     const [data, setData] = useState(initialState)
@@ -36,7 +36,7 @@ const KotaTambah = ({ history }) => {
         e.preventDefault();
         dispatch(createKota(data))
     }
-
+    console.log(data)
     return (
         <div className="home">
             <Card style={{ width: '25rem' }} className="mt-3">
@@ -45,60 +45,51 @@ const KotaTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="kode">
+                        <Form.Group controlId="Kabupaten_Code">
                             <Form.Label>Kode Kota</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Kode Kota..."
-                                name="kode"
-                                // value={id}
+                                name="Kabupaten_Code"
                                 onChange={handleChange}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Kabupaten_Name">
                             <Form.Label>Nama Kota</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Nama Kota..."
-                                // value={nama}
-                                name="nama"
+                                name="Kabupaten_Name"
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="biCode">
+                        <Form.Group controlId="BI_Location_Code">
                             <Form.Label>BI Code</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan BI Code..."
-                                // value={biCode}
-                                name="biCode"
+                                name="BI_Location_Code"
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="antasenaCode">
+                        <Form.Group controlId="Antasena_Code">
                             <Form.Label>Antasena Code</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Antasena Code..."
-                                // value={antasenaCode}
-                                name="antasenaCode"
+                                name="Antasena_Code"
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="provinsiId">
+                        <Form.Group controlId="Provinsi_Code">
                             <Form.Label>Provinsi</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="provinsiId"
-                                // value={provinsiId}
+                                name="Provinsi_Code"
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Provinsi -</option>
-                                {provinsi.filter(prov => prov.kode.toString().includes(data.kode.toString().substring(0, 2)))
+                                {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(data.Kabupaten_Code.toString().substring(0, 2)))
                                     .map((prov) => (
-                                        <option value={prov.kode} >{prov.nama}</option>
+                                        <option value={prov.Provinsi_Code} >{prov.Provinsi_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>

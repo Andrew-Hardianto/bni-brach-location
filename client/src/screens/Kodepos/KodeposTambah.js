@@ -8,7 +8,7 @@ import { createKodepos } from '../../actions/kodeposActions';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 
-const initialState = { kode: '', kelurahanId: '' }
+const initialState = { Kodepos_Code: '', Kelurahan_Code: '' }
 
 const KodeposTambah = ({ history }) => {
     const [data, setData] = useState(initialState);
@@ -45,28 +45,28 @@ const KodeposTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="kode">
+                        <Form.Group controlId="Kodepos_Code">
                             <Form.Label>Kodepos</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode POS..."
-                                name="kode"
+                                name="Kodepos_Code"
                                 // value={nama}
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="kelurahanId">
+                        <Form.Group controlId="Kelurahan_Code">
                             <Form.Label>Kelurahan</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="kelurahanId"
+                                name="Kelurahan_Code"
                                 // value={kecamatanId}
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Kelurahan -</option>
-                                {kelurahan.map((data, index) => (
-                                    <option key={index} value={data.kode} >{data.nama}</option>
+                                {kelurahan.map((data) => (
+                                    <option key={data.ID_Kelurahan} value={data.Kelurahan_Code} >{data.Kelurahan_Name}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>

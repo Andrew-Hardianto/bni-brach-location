@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 import {
+    KOTA_ALL_FAIL,
+    KOTA_ALL_REQUEST,
+    KOTA_ALL_SUCCESS,
     KOTA_CREATE_FAIL,
     KOTA_CREATE_REQUEST,
     KOTA_CREATE_SUCCESS,
@@ -108,7 +111,7 @@ export const editKota = (kota) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/kota/${kota.id}`, kota, config);
+        const { dataPost } = await axios.put(`/kota/${kota.ID_Kabupaten}`, kota, config);
 
         dispatch({
             type: KOTA_UPDATE_SUCCESS,
@@ -145,6 +148,31 @@ export const deleteKota = (id) => async (dispatch) => {
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,
+        })
+    }
+}
+
+export const Kota = () => async (
+    dispatch
+) => {
+    try {
+        dispatch({ type: KOTA_ALL_REQUEST })
+
+        const { data } = await axios.get(
+            `/kota/kabupaten`
+        )
+
+        dispatch({
+            type: KOTA_ALL_SUCCESS,
+            payload: data,
+        })
+    } catch (error) {
+        dispatch({
+            type: KOTA_ALL_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
         })
     }
 }

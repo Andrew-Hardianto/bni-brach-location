@@ -8,7 +8,7 @@ import Message from '../../components/Message';
 import { createKecamatan } from '../../actions/kecamatanActions';
 import { listKota } from '../../actions/kotaActions';
 
-const initialState = { kode: '', nama: '', kotaId: '' }
+const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabupaten_Code: '' }
 
 const KecamatanTambah = ({ history }) => {
 
@@ -46,40 +46,40 @@ const KecamatanTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="id">
+                        <Form.Group controlId="Kecamatan_Code">
                             <Form.Label>Kode Kecamatan</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Kecamatan..."
-                                name="kode"
+                                name="Kecamatan_Code"
                                 // value={data.kode}
                                 onChange={handleChange}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Kecamatan_Name">
                             <Form.Label>Nama Kecamatan</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Nama Kecamatan..."
-                                name="nama"
+                                name="Kecamatan_Name"
                                 // value={nama}
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="kotaId">
+                        <Form.Group controlId="Kabupaten_Code">
                             <Form.Label>Kota</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="kotaId"
+                                name="Kabupaten_Code"
                                 // value={kotaId}
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Kota -</option>
-                                {kota?.filter((kt) => kt.kode.toString().includes(data?.kode.toString().substring(0, 4)))
-                                    .map((data, index) => (
-                                        <option key={index} value={data?.kode} >{data.nama}</option>
+                                {kota?.filter((kt) => kt.Kabupaten_Code.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
+                                    .map((data) => (
+                                        <option key={data?.ID_Kabupaten} value={data?.Kabupaten_Code} >{data.Kabupaten_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>

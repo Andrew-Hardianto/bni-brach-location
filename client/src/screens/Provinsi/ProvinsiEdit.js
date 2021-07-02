@@ -8,7 +8,7 @@ import { detailProvinsi, editProvinsi } from '../../actions/provinsiActions';
 import { PROVINSI_UPDATE_RESET } from '../../constants/provinsiConstants';
 import Message from '../../components/Message';
 
-const initialState = { kode: '', nama: '' }
+const initialState = { Provinsi_Code: '', Provinsi_Name: '' }
 
 const ProvinsiEdit = ({ history, match }) => {
     const provinsiId = match.params.id;
@@ -32,7 +32,7 @@ const ProvinsiEdit = ({ history, match }) => {
             // } else {
             // }
             dispatch(detailProvinsi(provinsiId));
-            setData(provinsi.provinsi)
+            setData(provinsi?.provinsi)
         }
     }, [dispatch, history, provinsiId, success])
 
@@ -40,7 +40,7 @@ const ProvinsiEdit = ({ history, match }) => {
         e.preventDefault();
         dispatch(editProvinsi({ ...data }))
     }
-
+    console.log(data)
     return (
         <div className="home">
             <Card style={{ width: '25rem' }} className="mt-3" >
@@ -53,9 +53,8 @@ const ProvinsiEdit = ({ history, match }) => {
                             <Form.Label>Kode Provinsi</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Kode Provinsi..."
-                                value={data?.kode}
-                                onChange={(e) => setData({ ...data, kode: e.target.value })}
+                                value={data?.Provinsi_Code}
+                                onChange={(e) => setData({ ...data, Provinsi_Code: e.target.value })}
                             />
                         </Form.Group>
 
@@ -63,10 +62,9 @@ const ProvinsiEdit = ({ history, match }) => {
                             <Form.Label>Nama Provinsi</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Nama Provinsi..."
                                 name="nama"
-                                value={data?.nama}
-                                onChange={(e) => setData({ ...data, nama: e.target.value })}
+                                value={data?.Provinsi_Name}
+                                onChange={(e) => setData({ ...data, Provinsi_Name: e.target.value })}
                             />
                         </Form.Group>
                         <Button variant="primary" type="submit">

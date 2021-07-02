@@ -36,11 +36,11 @@ const Provinsi = () => {
     }
 
     const columns = [{
-        dataField: 'kode',
+        dataField: 'Provinsi_Code',
         text: 'Kode Provinsi',
         sort: true,
     }, {
-        dataField: 'nama',
+        dataField: 'Provinsi_Name',
         text: 'Nama Provinsi'
     }, {
         dataField: "link",
@@ -48,17 +48,17 @@ const Provinsi = () => {
         formatter: (rowContent, row) => {
             return (
                 <div className="">
-                    <LinkContainer to={`/location/provinsi/detail/${row.id}`}>
+                    <LinkContainer to={`/location/provinsi/detail/${row.ID_Provinsi}`}>
                         <Button variant="info" className="btn-sm">
                             <i className="fas fa-info"></i>
                         </Button>
                     </LinkContainer>
-                    <LinkContainer to={`/location/provinsi/edit/${row.id}`} className="ml-2">
+                    <LinkContainer to={`/location/provinsi/edit/${row.ID_Provinsi}`} className="ml-2">
                         <Button variant="success" className="btn-sm">
                             <i class="fas fa-edit"></i>
                         </Button>
                     </LinkContainer>
-                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.id)}>
+                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Provinsi)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
                 </div>

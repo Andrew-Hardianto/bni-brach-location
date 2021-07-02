@@ -22,7 +22,7 @@ const OutletDetail = ({ match }) => {
     }, [dispatch, outletId])
 
     // const coords = { lat: outlet.outlet?.latitude, lng: outlet.outlet?.longitude };
-    const coords = [isNaN(outlet.outlet?.latitude) ? -6.241586 : outlet?.outlet?.latitude, isNaN(outlet.outlet?.longitude) ? 106.992416 : outlet?.outlet?.longitude];
+    const coords = [isNaN(outlet.outlet?.Latitude) ? -6.241586 : outlet?.outlet?.Latitude, isNaN(outlet.outlet?.Longitude) ? 106.992416 : outlet?.outlet?.Longitude];
 
     return (
         <div className="home">
@@ -40,37 +40,32 @@ const OutletDetail = ({ match }) => {
                                         <tr>
                                             <td width="150px">Kode Outlet</td>
                                             <td width="30px"> : </td>
-                                            <td>{outlet.outlet?.kode}</td>
+                                            <td>{outlet.outlet?.Outlet_Code}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Nama Outlet</td>
                                             <td width="30px"> : </td>
-                                            <td>{outlet.outlet?.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <td width="150px">Status</td>
-                                            <td width="30px"> : </td>
-                                            <td>{outlet.outlet?.status}</td>
+                                            <td>{outlet.outlet?.Outlet_Name}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Kode Cabang</td>
                                             <td width="30px"> : </td>
-                                            <td>{outlet.outlet?.kodeCabang}</td>
+                                            <td>{outlet.outlet?.Branch_Code}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Nama Cabang</td>
                                             <td width="30px"> : </td>
-                                            <td>{outlet.outlet?.namaCabang}</td>
+                                            <td>{outlet.outlet?.cabang.Branch_Name}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Kode Wilayah</td>
                                             <td width="30px"> : </td>
-                                            <td>{outlet.outlet?.cabang.kode}</td>
+                                            <td>{outlet.outlet?.Region_Code}</td>
                                         </tr>
                                         <tr>
                                             <td width="150px">Nama Wilayah</td>
                                             <td width="30px"> : </td>
-                                            <td>{outlet.outlet?.cabang.nama}</td>
+                                            <td>{outlet.outlet?.wilayah.Region_Name}</td>
                                         </tr>
                                     </tbody>
                                 </Table>
@@ -81,7 +76,7 @@ const OutletDetail = ({ match }) => {
                                     />
                                     <Marker
                                         position={coords}>
-                                        <Tooltip>{outlet.outlet?.alamat}</Tooltip>
+                                        <Tooltip>{outlet.outlet?.Address}</Tooltip>
                                     </Marker>
                                 </MapContainer>
                             </Card.Body>

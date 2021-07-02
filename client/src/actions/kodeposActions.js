@@ -107,7 +107,7 @@ export const editKodepos = (data) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/kodepos/${data.id}`, data, config);
+        const { dataPost } = await axios.put(`/kodepos/${data.ID_Kodepos}`, data, config);
 
         dispatch({
             type: KODEPOS_UPDATE_SUCCESS,

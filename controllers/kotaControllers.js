@@ -119,3 +119,20 @@ exports.deleteKota = async (req, res, next) => {
         })
     }
 }
+
+// kota
+exports.getListKota = async (req, res) => {
+    try {
+        const kota = await Kota.findAll();
+
+        res.status(200).json({
+            success: true,
+            kota
+        })
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}

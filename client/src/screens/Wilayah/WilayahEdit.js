@@ -8,11 +8,12 @@ import Message from '../../components/Message';
 import { detailWilayah, editWilayah } from '../../actions/wilayahActions';
 import { WILAYAH_UPDATE_RESET } from '../../constants/wilayahConstants';
 
+const initialState = { Region_Code: '', Region_Subname: '', Region_Name: '' }
+
 const WilayahEdit = ({ match, history }) => {
     const wilayahId = match.params.id;
 
-    const [kode, setKode] = useState('');
-    const [nama, setNama] = useState('');
+    const [data, setData] = useState(initialState);
 
     const dispatch = useDispatch();
 
@@ -28,14 +29,17 @@ const WilayahEdit = ({ match, history }) => {
             history.push('/location/region')
         } else {
             dispatch(detailWilayah(wilayahId));
-            setKode(wilayah.wilayah?.kode)
-            setNama(wilayah.wilayah?.nama)
+            setData(wilayah.wilayah)
         }
     }, [dispatch, wilayahId, history, success])
 
+    const handleChange = (e) => {
+        setData({ ...data, [e.target.name]: e.target.value })
+    }
+
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(editWilayah({ id: wilayahId, kode, nama }))
+        dispatch(editWilayah({ ...data }))
     }
 
     return (
@@ -46,14 +50,24 @@ const WilayahEdit = ({ match, history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="kode">
+                        <Form.Group controlId="Region_Code">
                             <Form.Label>Kode Wilayah</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Wilayah..."
-                                name="kode"
-                                value={kode}
-                                onChange={(e) => setKode(e.target.value)}
+                                name="Region_Code"
+                                value={data?.Region_Code}
+                                onChange={(e) => setData({ ...data, Region_Code: e.target.value })}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="Region_Subname">
+                            <Form.Label>Sub Nama Wilayah</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Masukkan Nama Wilayah..."
+                                name="Region_Subname"
+                                value={data?.Region_Subname}
+                                onChange={(e) => setData({ ...data, Region_Name: e.target.value })}
                             />
                         </Form.Group>
                         <Form.Group controlId="nama">
@@ -62,8 +76,8 @@ const WilayahEdit = ({ match, history }) => {
                                 type="text"
                                 placeholder="Masukkan Nama Wilayah..."
                                 name="nama"
-                                value={nama}
-                                onChange={(e) => setNama(e.target.value)}
+                                value={data?.Region_Name}
+                                onChange={(e) => setData({ ...data, Region_Name: e.target.value })}
                             />
                         </Form.Group>
                         <Button variant="primary" type="submit">

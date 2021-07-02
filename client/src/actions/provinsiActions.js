@@ -67,7 +67,7 @@ export const detailProvinsi = (id) => async (dispatch) => {
     }
 }
 
-export const createProvinsi = (kode, nama) => async (dispatch) => {
+export const createProvinsi = (Provinsi_Code, Provinsi_Name) => async (dispatch) => {
     try {
         dispatch({ type: PROVINSI_CREATE_REQUEST })
 
@@ -79,7 +79,7 @@ export const createProvinsi = (kode, nama) => async (dispatch) => {
 
         const { data } = await axios.post(
             '/provinsi',
-            { kode, nama },
+            { Provinsi_Code, Provinsi_Name },
             config
         )
 
@@ -108,7 +108,7 @@ export const editProvinsi = (provinsi) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/provinsi/${provinsi.id}`, provinsi, config);
+        const { dataPost } = await axios.put(`/provinsi/${provinsi.ID_Provinsi}`, provinsi, config);
 
         dispatch({
             type: PROVINSI_UPDATE_SUCCESS,

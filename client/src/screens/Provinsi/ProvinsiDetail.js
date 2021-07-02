@@ -26,11 +26,35 @@ const ProvinsiDetail = ({ match }) => {
                         : (
                             <Card style={{ width: '20rem' }} className="shadow">
                                 <Card.Body>
-                                    <Card.Title>Detail Provinsi</Card.Title>
-                                    <Card.Subtitle className="mb-2">Kode Provinsi : {provinsi.provinsi?.kode}</Card.Subtitle>
-                                    <Card.Text>
-                                        Nama Provinsi : {provinsi.provinsi?.nama}
-                                    </Card.Text>
+                                    <Card.Title className="text-center font-weight-bold">DETAIL PROVINSI</Card.Title>
+                                    <table className="table table-borderless">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <Card.Text>
+                                                        Kode Provinsi
+                                                    </Card.Text>
+                                                </td>
+                                                <td>
+                                                    <Card.Text>
+                                                        : {provinsi.provinsi?.Provinsi_Code}
+                                                    </Card.Text>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <Card.Text>
+                                                        Nama Provinsi
+                                                    </Card.Text>
+                                                </td>
+                                                <td>
+                                                    <Card.Text>
+                                                        : {provinsi.provinsi?.Provinsi_Name}
+                                                    </Card.Text>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                     <Link to={'/location/provinsi'} className="btn btn-primary" >
                                         <i className="fas fa-arrow-left"></i>
                                     </Link>

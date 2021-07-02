@@ -36,10 +36,13 @@ const Wilayah = () => {
     }
 
     const columns = [{
-        dataField: 'kode',
+        dataField: 'Region_Code',
         text: 'Kode Wilayah'
     }, {
-        dataField: 'nama',
+        dataField: 'Region_Subname',
+        text: 'Sub Nama Wilayah'
+    }, {
+        dataField: 'Region_Name',
         text: 'Nama Wilayah'
     }, {
         dataField: "link",
@@ -47,17 +50,17 @@ const Wilayah = () => {
         formatter: (rowContent, row) => {
             return (
                 <div className="">
-                    <LinkContainer to={`/location/region/detail/${row.id}`}>
+                    <LinkContainer to={`/location/region/detail/${row.ID_Region}`}>
                         <Button variant="info" className="btn-sm">
                             <i className="fas fa-info"></i>
                         </Button>
                     </LinkContainer>
-                    <LinkContainer to={`/location/region/edit/${row.id}`} className="ml-2">
+                    <LinkContainer to={`/location/region/edit/${row.ID_Region}`} className="ml-2">
                         <Button variant="success" className="btn-sm">
                             <i class="fas fa-edit"></i>
                         </Button>
                     </LinkContainer>
-                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.id)}>
+                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Region)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
                 </div>

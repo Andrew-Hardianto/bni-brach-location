@@ -37,19 +37,15 @@ const Outlet = () => {
 
     const columns = [
         {
-            dataField: 'kode',
+            dataField: 'Outlet_Code',
             text: 'Kode Outlet'
         },
         {
-            dataField: 'nama',
+            dataField: 'Outlet_Name',
             text: 'Nama Outlet'
         },
         {
-            dataField: 'status',
-            text: 'Status'
-        },
-        {
-            dataField: 'alamat',
+            dataField: 'Address',
             text: 'Alamat',
             style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
         },
@@ -59,17 +55,17 @@ const Outlet = () => {
             formatter: (rowContent, row) => {
                 return (
                     <div className="">
-                        <LinkContainer to={`/location/outlet/detail/${row.id}`}>
+                        <LinkContainer to={`/location/outlet/detail/${row.ID_Outlet}`}>
                             <Button variant="info" className="btn-sm">
                                 <i className="fas fa-info"></i>
                             </Button>
                         </LinkContainer>
-                        <LinkContainer to={`/location/outlet/edit/${row.id}`} className="ml-2">
+                        <LinkContainer to={`/location/outlet/edit/${row.ID_Outlet}`} className="ml-2">
                             <Button variant="success" className="btn-sm">
                                 <i class="fas fa-edit"></i>
                             </Button>
                         </LinkContainer>
-                        <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.id)}>
+                        <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Outlet)}>
                             <i className="fas fa-trash-alt"></i>
                         </Button>
                     </div>

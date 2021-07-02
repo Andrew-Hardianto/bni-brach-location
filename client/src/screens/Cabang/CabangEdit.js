@@ -9,20 +9,16 @@ import Message from '../../components/Message';
 import { detailCabang, editCabang } from '../../actions/cabangActions';
 import { CABANG_UPDATE_RESET } from '../../constants/cabangConstants';
 import { listWilayah } from '../../actions/wilayahActions';
-import Apikey from '../../components/Apikey';
-import { listKodepos } from '../../actions/kodeposActions';
+import Apikey from '../../components/Apikey';;
 
 const initialState = {
-    kode: '',
-    nama: '',
-    alamat: '',
-    status: '',
-    biLocationCode: '',
-    kodepos: '',
-    namaWilayah: '',
-    kodeWilayah: '',
-    latitude: '',
-    longitude: '',
+    Branch_Code: '',
+    Branch_Name: '',
+    Address: '',
+    BI_Location_Code: '',
+    Region_Code: '',
+    Latitude: '',
+    Longitude: ''
 }
 
 const CabangEdit = ({ history, match }) => {
@@ -41,12 +37,8 @@ const CabangEdit = ({ history, match }) => {
     const wilayahList = useSelector(state => state.wilayahList);
     const { wilayah } = wilayahList;
 
-    const kodeposList = useSelector(state => state.kodeposList);
-    const { kodepos } = kodeposList;
-
     useEffect(() => {
-        dispatch(listWilayah())
-        dispatch(listKodepos())
+        dispatch(listWilayah());
         if (success) {
             dispatch({ type: CABANG_UPDATE_RESET })
             history.push('/location/branch')
@@ -64,7 +56,7 @@ const CabangEdit = ({ history, match }) => {
     }
 
     // const coords = [cabang?.cabang?.latitude, cabang?.cabang?.longitude]
-    const coords = [isNaN(cabang?.cabang?.latitude) ? -6.241586 : cabang?.cabang?.latitude, isNaN(cabang?.cabang?.longitude) ? 106.992416 : cabang?.cabang?.longitude];
+    const coords = [isNaN(cabang?.cabang?.Latitude) ? -6.241586 : cabang?.cabang?.Latitude, isNaN(cabang?.cabang?.Longitude) ? 106.992416 : cabang?.cabang?.Longitude];
 
     const [draggable, setDraggable] = useState(false)
     const markerRef = useRef(null)
@@ -74,7 +66,7 @@ const CabangEdit = ({ history, match }) => {
                 const marker = markerRef.current?.getLatLng()
                 if (marker != null) {
                     // setPosition(marker.getLatLng())
-                    setData({ latitude: marker.lat, longitude: marker.lng })
+                    setData({ Latitude: marker.lat, Longitude: marker.lng })
                 }
             },
         }),
@@ -92,122 +84,89 @@ const CabangEdit = ({ history, match }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="kode">
+                        <Form.Group controlId="Branch_Code">
                             <Form.Label>Kode Cabang</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Cabang..."
-                                name="kode"
-                                value={data?.kode}
-                                onChange={(e) => setData({ ...data, kode: e.target.value })}
+                                name="Branch_Code"
+                                value={data?.Branch_Code}
+                                onChange={(e) => setData({ ...data, Branch_Code: e.target.value })}
                             // onChange={(e) => setKode(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Branch_Name">
                             <Form.Label>Nama Cabang</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Nama Cabang..."
-                                name="nama"
-                                value={data?.nama}
-                                onChange={(e) => setData({ ...data, nama: e.target.value })}
+                                name="Branch_Name"
+                                value={data?.Branch_Name}
+                                onChange={(e) => setData({ ...data, Branch_Name: e.target.value })}
                             // onChange={(e) => setNama(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="alamat">
+                        <Form.Group controlId="Address">
                             <Form.Label>Alamat</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Alamat..."
                                 as="textarea"
                                 rows={3}
-                                name="alamat"
-                                value={data?.alamat}
-                                onChange={(e) => setData({ ...data, alamat: e.target.value })}
+                                name="Address"
+                                value={data?.Address}
+                                onChange={(e) => setData({ ...data, Address: e.target.value })}
                             // onChange={(e) => setAlamat(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="status">
-                            <Form.Label>Status</Form.Label>
+                        <Form.Group controlId="Region_Code">
+                            <Form.Label>Kode Wilayah</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="status"
-                                value={data?.status}
-                                onChange={(e) => setData({ ...data, status: e.target.value })}
-                            // onChange={(e) => setStatus(e.target.value)}
+                                name="Region_Code"
+                                value={data?.Region_Code}
+                                onChange={(e) => setData({ ...data, Region_Code: e.target.value })}
+                            // onChange={(e) => setKodeWilayah(e.target.value)}
                             >
-                                <option value="">- Pilih Status -</option>
-                                <option value="Aktif" >Aktif</option>
-                                <option value="Tidak Aktif" >Tidak Aktif</option>
+                                <option value="">- Pilih Wilayah -</option>
+                                {wilayah.map((data) => (
+                                    <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="kodeWilayah">
-                                <Form.Label>Kode Wilayah</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    custom
-                                    name="kodeWilayah"
-                                    value={data?.kodeWilayah}
-                                    onChange={(e) => setData({ ...data, kodeWilayah: e.target.value })}
-                                // onChange={(e) => setKodeWilayah(e.target.value)}
-                                >
-                                    <option value="">- Pilih Wilayah -</option>
-                                    {wilayah.map((data) => (
-                                        <option value={data.kode} >{data.nama}</option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="kodepos">
-                                <Form.Label>Kodepos</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    custom
-                                    name="kodepos"
-                                    value={data?.kodepos}
-                                    onChange={(e) => setData({ ...data, kodepos: e.target.value })}
-                                // onChange={(e) => setKodePos(e.target.value)}
-                                >
-                                    <option value="">- Pilih Kodepos -</option>
-                                    {kodepos?.map((data) => (
-                                        <option value={data.kode} >{data.kode}</option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
-                        </Form.Row>
-                        <Form.Group controlId="biLocationCode">
+                        <Form.Group controlId="BI_Location_Code">
                             <Form.Label>BI Location Code</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan BI Location Code..."
-                                name="biLocationCode"
-                                value={data?.biLocationCode}
-                                onChange={(e) => setData({ ...data, biLocationCode: e.target.value })}
+                                name="BI_Location_Code"
+                                value={data?.BI_Location_Code}
+                                onChange={(e) => setData({ ...data, BI_Location_Code: e.target.value })}
                             // onChange={(e) => setBiLocationCode(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Row>
-                            <Form.Group as={Col} controlId="latitude">
+                            <Form.Group as={Col} controlId="Latitude">
                                 <Form.Label>Latitude</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Masukkan Latitude..."
-                                    name="latitude"
-                                    value={data?.latitude}
-                                    onChange={(e) => setData({ ...data, latitude: e.target.value })}
+                                    name="Latitude"
+                                    value={data?.Latitude}
+                                    onChange={(e) => setData({ ...data, Latitude: e.target.value })}
                                 // onChange={(e) => setLatitude(e.target.value)}
                                 />
                             </Form.Group>
 
-                            <Form.Group as={Col} controlId="longitude">
+                            <Form.Group as={Col} controlId="Longitude">
                                 <Form.Label>Longitude</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Masukkan Longitude..."
-                                    name="longitude"
-                                    value={data?.longitude}
-                                    onChange={(e) => setData({ ...data, longitude: e.target.value })}
+                                    name="Longitude"
+                                    value={data?.Longitude}
+                                    onChange={(e) => setData({ ...data, Longitude: e.target.value })}
                                 // onChange={(e) => setLongitude(e.target.value)}
                                 />
                             </Form.Group>

@@ -39,7 +39,6 @@ const ProvinsiTambah = ({ history }) => {
                             <Form.Label>Kode Provinsi</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Kode Provinsi..."
                                 value={kode}
                                 onChange={(e) => setKode(e.target.value)}
                             />
@@ -49,7 +48,6 @@ const ProvinsiTambah = ({ history }) => {
                             <Form.Label>Nama Provinsi</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Nama Provinsi..."
                                 value={nama}
                                 onChange={(e) => setNama(e.target.value)}
                             />
