@@ -28,19 +28,18 @@ const ProvinsiEdit = ({ history, match }) => {
             dispatch({ type: PROVINSI_UPDATE_RESET })
             history.push('/location/provinsi')
         } else {
-            // if (!provinsi.provinsi?.nama || provinsi.provinsi?.id !== provinsiId) {
-            // } else {
-            // }
-            dispatch(detailProvinsi(provinsiId));
-            setData(provinsi?.provinsi)
+            if (!provinsi.Provinsi_Name || provinsi.ID_Provinsi !== provinsiId) {
+                dispatch(detailProvinsi(provinsiId));
+            }
+            setData(provinsi)
         }
-    }, [dispatch, history, provinsiId, success])
+    }, [dispatch, history, provinsiId, provinsi.ID_Provinsi, success])
 
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(editProvinsi({ ...data }))
     }
-    console.log(data)
+
     return (
         <div className="home">
             <Card style={{ width: '25rem' }} className="mt-3" >

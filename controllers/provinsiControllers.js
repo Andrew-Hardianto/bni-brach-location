@@ -23,11 +23,9 @@ exports.getProvinsi = async (req, res) => {
 exports.getByIdProvinsi = async (req, res) => {
     try {
         const provinsi = await Provinsi.findByPk(req.params.id);
+        // const provinsi = await Provinsi.findOne({ where: { ID_Provinsi: req.params.id } });
 
-        res.status(200).json({
-            success: true,
-            provinsi
-        })
+        res.status(200).json(provinsi)
     } catch (err) {
         res.status(404).json({
             success: false,

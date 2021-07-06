@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+
 import { listKelurahan } from '../../actions/kelurahanActions';
 import { detailKodepos, editKodepos } from '../../actions/kodeposActions';
 
@@ -13,8 +16,14 @@ const initialState = { Kodepos_Code: '', Kelurahan_Code: '' }
 
 const KodeposEdit = ({ history, match }) => {
     const kodeposId = match.params.id;
+
     const [data, setData] = useState(initialState);
-    const [kode, setKode] = useState('');
+    const [Kodepos_Code, setKodeposCode] = useState('');
+    const [Kelurahan_Code, setKelurahanCode] = useState('');
+    const [Code, setCode] = useState('');
+    const [display, setDisplay] = useState(false);
+    const [options, setOptions] = useState([]);
+    const wrapperRef = useRef(null)
 
     const dispatch = useDispatch();
 
@@ -33,10 +42,41 @@ const KodeposEdit = ({ history, match }) => {
             dispatch({ type: KODEPOS_UPDATE_RESET })
             history.push('/location/kodepos')
         } else {
-            dispatch(detailKodepos(kodeposId));
-            setData(kodepos?.kodepos)
+            if (kodepos?.kodepos?.ID_Kodepos !== kodeposId) {
+                dispatch(detailKodepos(kodeposId));
+            }
+            // setData(kodepos?.kodepos)
+            setKelurahanCode(kodepos?.kodepos?.Kelurahan_Code)
+            // setCode(kodepos?.kodepos?.kelurahan?.Kelurahan_Name)
+            setKodeposCode(kodepos?.kodepos?.Kodepos_Code)
         }
-    }, [dispatch, history, kodeposId, success])
+    }, [dispatch, history, kodeposId, kodepos?.kodepos?.ID_Kodepos, success]);
+
+    useEffect(() => {
+        window.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
+    });
+
+    const handleClickOutside = event => {
+        const { current: wrap } = wrapperRef;
+        if (wrap && !wrap.contains(event.target)) {
+            setDisplay(false);
+        }
+    };
+
+    const updatePokeDex = val => {
+        setKelurahanCode(val);
+        setDisplay(false);
+    };
+
+    function filterBy(option, state) {
+        if (state.selected.length) {
+            return true;
+        }
+        return option?.Kelurahan_Name.toLowerCase().indexOf(state.text.toLowerCase()) > -1;
+    }
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
@@ -44,8 +84,12 @@ const KodeposEdit = ({ history, match }) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(editKodepos({ ...data }))
+        // dispatch(editKodepos({ ...data }))
+        dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code }))
     }
+
+    console.log(Kelurahan_Code)
+    console.log(Kodepos_Code)
 
     return (
         <div className="home">
@@ -61,13 +105,13 @@ const KodeposEdit = ({ history, match }) => {
                                 type="text"
                                 placeholder="Masukkan Kode Pos..."
                                 name="Kodepos_Code"
-                                value={data?.Kodepos_Code}
-                                onChange={handleChange}
+                                value={Kodepos_Code}
+                                onChange={(e) => setKodeposCode(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="Kelurahan_Code">
+                        <Form.Group controlId="Kelurahan_Code" ref={wrapperRef}>
                             <Form.Label>Kelurahan</Form.Label>
-                            <Form.Control
+                            {/* <Form.Control
                                 as="select"
                                 custom
                                 name="Kelurahan_Code"
@@ -78,7 +122,50 @@ const KodeposEdit = ({ history, match }) => {
                                 {kelurahan.map((data) => (
                                     <option key={data.ID_Kelurahan} value={data.Kelurahan_Code} >{data.Kelurahan_Name}</option>
                                 ))}
-                            </Form.Control>
+                            </Form.Control> */}
+                            <Form.Control
+                                type="text"
+                                onClick={() => setDisplay(!display)}
+                                placeholder="Masukkan Kode Kelurahan..."
+                                name="Kelurahan_Code"
+                                value={Kelurahan_Code}
+                                onChange={(e) => setKelurahanCode(e.target.value)}
+                                autocomplete="off"
+                            />
+                            {display && (
+                                <div className="autoContainer">
+                                    {kelurahan
+                                        ?.filter((kl) => kl.Kelurahan_Name?.indexOf(Kelurahan_Code.toLowerCase()) > -1)
+                                        .map((value, i) => {
+                                            return (
+                                                <div
+                                                    onClick={() => updatePokeDex(value.Kelurahan_Code)}
+                                                    className="option"
+                                                    key={i}
+                                                    tabIndex="0"
+                                                >
+                                                    <span>{value.Kelurahan_Name}</span>
+                                                </div>
+                                            );
+                                        })}
+                                </div>
+                            )}
+                            {/* <Typeahead
+                                filterBy={filterBy}
+                                id="Kelurahan_Code"
+                                labelKey="Kelurahan_Name"
+                                name="Kelurahan_Code"
+                                options={kelurahan}
+                                // onChange={handleChange}
+                                onChange={setKelurahanCode}
+                                selected={Kelurahan_Code.Kodepos_Code}
+                                defaultInputValue={Code}
+                                renderMenuItemChildren={(opt) => (
+                                    <div>
+                                        <p className="font-weight-bold">{opt.Kelurahan_Name}</p>
+                                    </div>
+                                )}
+                            /> */}
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit

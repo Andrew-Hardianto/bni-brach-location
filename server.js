@@ -25,6 +25,10 @@ db.sequelize.sync({ force: false }).then(() => {
 });
 
 const app = express();
+// app.use(function (req, res, next) {
+//     req.headers['if-none-match'] = 'no-match-for-this';
+//     next();
+// });
 
 // body-parser
 app.use(express.json());

@@ -33,23 +33,16 @@ const KelurahanEdit = ({ history, match }) => {
             dispatch({ type: KELURAHAN_UPDATE_RESET })
             history.push('/location/kelurahan')
         } else {
-            if (!kelurahan.kelurahan?.Kelurahan_Name || kelurahan.kelurahan?.ID_Kelurahan !== kelurahanId) {
+            if (!kelurahan?.kelurahan?.Kelurahan_Name || kelurahan?.kelurahan?.ID_Kelurahan !== kelurahanId) {
                 dispatch(detailKelurahan(kelurahanId));
             }
-            setData(kelurahan.kelurahan)
+            setData(kelurahan?.kelurahan)
         }
-    }, [dispatch, history, kelurahanId, success])
+    }, [dispatch, history, kelurahanId, kelurahan?.kelurahan?.ID_Kelurahan, success])
 
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(editKelurahan({ ...data }))
-    }
-
-    const handleFilter = () => {
-        kecamatan.filter((k) => k.Kecamatan_Code.toString().includes(data?.Kelurahan_Code.toString().substring(0, 7)))
-            .map((kc) => (
-                <option key={kc.ID_Kecamatan} value={kc.Kecamatan_Code} >{kc.Kecamatan_Name}</option>
-            ))
     }
 
     // console.log(data)
@@ -93,8 +86,7 @@ const KelurahanEdit = ({ history, match }) => {
                                 onChange={(e) => setData({ ...data, Kecamatan_Code: e.target.value })}
                             >
                                 <option value="">- Pilih Kecamatan -</option>
-                                {/* {handleFilter} */}
-                                {kecamatan
+                                {kecamatan.filter((kc) => kc.Kecamatan_Code.toString().includes(data?.Kelurahan_Code.toString().substring(0, 7)))
                                     .map((kc) => (
                                         <option key={kc.ID_Kecamatan} value={kc.Kecamatan_Code} >{kc.Kecamatan_Name}</option>
                                     ))}

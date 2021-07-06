@@ -16,3 +16,50 @@
 overflow: auto;
 table-layout: auto !important;
 }
+
+/* input {
+  padding: 10px;
+  height: 20px;
+  width: 500px;
+  border: 1px solid purple;
+  margin: 10px;
+  font-size: 18px;
+  text-transform: capitalize;
+} */
+
+
+.autoContainer {
+  position: absolute;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: rgb(204, 203, 203);
+  background-color: white;
+  border-radius: 0px 0px 8px 8px;
+  right: 0px;
+  left:20px;
+  top: 200px;
+  width: 357px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 250px;
+  padding: 5px;
+}
+
+.option,
+span {
+  font-size: 14px;
+  text-transform: capitalize;
+  width: 350px;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}

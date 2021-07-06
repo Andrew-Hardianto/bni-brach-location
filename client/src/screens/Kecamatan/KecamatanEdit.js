@@ -33,12 +33,12 @@ const KecamatanEdit = ({ match, history }) => {
             dispatch({ type: KECAMATAN_UPDATE_RESET })
             history.push('/location/kecamatan')
         } else {
-            if (!kecamatan.kecamatan?.Kecamatan_Name || kecamatan.kecamatan?.ID_Kecamatan !== kecamatanId) {
+            if (!kecamatan?.kecamatan?.Kecamatan_Name || kecamatan?.kecamatan?.ID_Kecamatan !== kecamatanId) {
                 dispatch(detailKecamatan(kecamatanId));
             }
-            setData(kecamatan.kecamatan)
+            setData(kecamatan?.kecamatan)
         }
-    }, [dispatch, history, kecamatanId, kecamatan, success])
+    }, [dispatch, history, kecamatanId, kecamatan.kecamatan?.ID_Kecamatan, success])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -84,9 +84,10 @@ const KecamatanEdit = ({ match, history }) => {
                                 onChange={(e) => setData({ ...data, Kabupaten_Code: e.target.value })}
                             >
                                 <option value="">- Pilih Kota -</option>
-                                {/* {kota?.map((data) => (
-                                    <option key={data.ID_Kabupaten} value={data.Kabupaten_Code} >{data.Kabupaten_Name}</option>
-                                ))} */}
+                                {kota?.filter((kt) => kt.Kabupaten_Code.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
+                                    .map((data) => (
+                                        <option key={data.ID_Kabupaten} value={data.Kabupaten_Code} >{data.Kabupaten_Name}</option>
+                                    ))}
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">

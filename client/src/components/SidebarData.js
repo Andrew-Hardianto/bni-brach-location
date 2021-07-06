@@ -25,7 +25,7 @@ export const SidebarData = [
         path: '/location/kelurahan',
       },
       {
-        title: 'Kode Pos',
+        title: 'Kodepos',
         path: '/location/kodepos',
       },
     ]

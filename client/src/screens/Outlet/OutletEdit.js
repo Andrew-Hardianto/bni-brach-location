@@ -42,12 +42,12 @@ const OutletEdit = ({ history, match }) => {
             dispatch({ type: OUTLET_UPDATE_RESET })
             history.push('/location/outlet')
         } else {
-            if (!outlet.outlet?.nama || outlet.outlet?.kode !== outletId) {
+            if (!outlet.outlet?.Outlet_Name || outlet.outlet?.ID_Outlet !== outletId) {
                 dispatch(detailOutlet(outletId));
             }
             setData(outlet?.outlet)
         }
-    }, [dispatch, history, outletId, success])
+    }, [dispatch, history, outletId, outlet.outlet?.ID_Outlet, success])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -125,9 +125,11 @@ const OutletEdit = ({ history, match }) => {
                                 onChange={(e) => setData({ ...data, Branch_Code: e.target.value })}
                             >
                                 <option value="">- Pilih Cabang -</option>
-                                {cabang.map((data) => (
-                                    <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
-                                ))}
+                                {cabang
+                                    .filter(cab => cab.Branch_Code.toString().includes(data.Outlet_Code.toString().substring(0, 4)))
+                                    .map((data) => (
+                                        <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
+                                    ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Row>

@@ -37,7 +37,7 @@ const ProvinsiDetail = ({ match }) => {
                                                 </td>
                                                 <td>
                                                     <Card.Text>
-                                                        : {provinsi.provinsi?.Provinsi_Code}
+                                                        : {provinsi.Provinsi_Code}
                                                     </Card.Text>
                                                 </td>
                                             </tr>
@@ -49,7 +49,7 @@ const ProvinsiDetail = ({ match }) => {
                                                 </td>
                                                 <td>
                                                     <Card.Text>
-                                                        : {provinsi.provinsi?.Provinsi_Name}
+                                                        : {provinsi.Provinsi_Name}
                                                     </Card.Text>
                                                 </td>
                                             </tr>

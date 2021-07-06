@@ -12,11 +12,11 @@ import { listProvinsi } from '../../actions/provinsiActions';
 const KotaEdit = ({ history, match }) => {
     const kotaId = match.params.id;
 
-    const [kode, setKode] = useState('');
-    const [nama, setNama] = useState('');
-    const [biCode, setBiCode] = useState('');
-    const [antasenaCode, setAntasenaCode] = useState('');
-    const [provinsiId, setProvinsiId] = useState('');
+    const [Kabupaten_Code, setKode] = useState('');
+    const [Kabupaten_Name, setNama] = useState('');
+    const [BI_Location_Code, setBiCode] = useState('');
+    const [Antasena_Code, setAntasenaCode] = useState('');
+    const [Provinsi_Code, setProvinsiId] = useState('');
 
     const dispatch = useDispatch();
 
@@ -44,11 +44,11 @@ const KotaEdit = ({ history, match }) => {
             setAntasenaCode(kota.kota?.Antasena_Code)
             setProvinsiId(kota.kota?.Provinsi_Code)
         }
-    }, [dispatch, history, kotaId, kota, success])
+    }, [dispatch, history, kotaId, kota.kota?.ID_Kabupaten, success])
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(editKota({ id: kotaId, kode, nama, biCode, antasenaCode, provinsiId }))
+        dispatch(editKota({ id: kotaId, Kabupaten_Code, Kabupaten_Name, BI_Location_Code, Antasena_Code, Provinsi_Code }))
     }
 
     return (
@@ -59,57 +59,61 @@ const KotaEdit = ({ history, match }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="id">
+                        <Form.Group controlId="Kabupaten_Code">
                             <Form.Label>Kode Kota</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Kode Kota..."
-                                value={kode}
+                                name="Kabupaten_Code"
+                                value={Kabupaten_Code}
                                 onChange={(e) => setKode(e.target.value)}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="nama">
+                        <Form.Group controlId="Kabupaten_Name">
                             <Form.Label>Nama Kota</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Nama Provinsi..."
-                                value={nama}
+                                name="Kabupaten_Name"
+                                value={Kabupaten_Name}
                                 onChange={(e) => setNama(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="biCode">
+                        <Form.Group controlId="BI_Location_Code">
                             <Form.Label>BI Code</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan BI Code..."
-                                value={biCode}
+                                name="BI_Location_Code"
+                                value={BI_Location_Code}
                                 onChange={(e) => setBiCode(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="antasenaCode">
+                        <Form.Group controlId="Antasena_Code">
                             <Form.Label>Antasena Code</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Masukkan Antasena Code..."
-                                value={antasenaCode}
+                                name="Antasena_Code"
+                                value={Antasena_Code}
                                 onChange={(e) => setAntasenaCode(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="provinsiId">
+                        <Form.Group controlId="Provinsi_Code">
                             <Form.Label>Provinsi</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="provinsiId"
-                                value={provinsiId}
+                                name="Provinsi_Code"
+                                value={Provinsi_Code}
                                 onChange={(e) => setProvinsiId(e.target.value)}
                             >
                                 {/* <option value="">- Pilih Provinsi -</option> */}
                                 {/* {provinsi.map((prov, index) => (
                                     <option key={index} value={prov?.Provinsi_Code} >{prov?.Provinsi_Name}</option>
                                 ))} */}
-                                {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(kode?.toString().substring(0, 2)))
+                                {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(Kabupaten_Code?.toString().substring(0, 2)))
                                     .map((prov) => (
                                         <option key={prov.ID_Provinsi} value={prov.Provinsi_Code} >{prov.Provinsi_Name}</option>
                                     ))}

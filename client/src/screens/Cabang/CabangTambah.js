@@ -79,6 +79,9 @@ const CabangTambah = ({ history }) => {
         setDraggable((d) => !d)
     }, []);
 
+    // console.log(Branch_Code)
+    // console.log(Region_Code)
+
     return (
         <div className="home">
             <Card style={{ width: '35rem' }} className="mt-3">
@@ -125,9 +128,11 @@ const CabangTambah = ({ history }) => {
                                 onChange={(e) => setKodeWilayah(e.target.value)}
                             >
                                 <option value="">- Pilih Wilayah -</option>
-                                {wilayah.map((data) => (
-                                    <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
-                                ))}
+                                {wilayah
+                                    .filter(wil => wil.Region_Code.toString().includes(Branch_Code.toString().substring(0, 2)))
+                                    .map((data) => (
+                                        <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
+                                    ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="biLocationCode">
@@ -161,29 +166,6 @@ const CabangTambah = ({ history }) => {
                                 />
                             </Form.Group>
                         </Form.Row>
-                        {/* <HPlatform
-                            apikey={"XSwg3E4JD32ffoFCRMywHymR_c0705ZdkiK7GOdw0Kw"}
-                            useCIT
-                            useHTTPS
-                            includeUI
-                            includePlaces
-                            interactive
-                        >
-                            <HMap
-                                useEvents
-                                mapEvents={{ pointerdown: (e) => console.log("Map Pointer Down", e) }}
-                                style={{
-                                    height: "400px",
-                                    width: "360px",
-                                }}
-                                mapOptions={{ center: { lat: -6.241586, lng: 106.992416 }, zoom: 14 }}
-                            >
-                                <HMapMarker coords={coords} icon={icon}
-                                    objectEvents={{
-                                        pointerdown: (e) => console.log('Marker Pointer Down', e)
-                                    }} />
-                            </HMap>
-                        </HPlatform> */}
                         <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
                                 attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'

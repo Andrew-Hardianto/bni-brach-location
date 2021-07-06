@@ -28,10 +28,12 @@ const WilayahEdit = ({ match, history }) => {
             dispatch({ type: WILAYAH_UPDATE_RESET })
             history.push('/location/region')
         } else {
-            dispatch(detailWilayah(wilayahId));
+            if (!wilayah?.wilayah?.Region_Name || wilayah?.wilayah?.ID_Region !== wilayahId) {
+                dispatch(detailWilayah(wilayahId));
+            }
             setData(wilayah.wilayah)
         }
-    }, [dispatch, wilayahId, history, success])
+    }, [dispatch, wilayahId, history, wilayah?.wilayah?.ID_Region, success])
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })

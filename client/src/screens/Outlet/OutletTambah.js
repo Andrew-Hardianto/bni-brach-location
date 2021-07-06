@@ -60,6 +60,7 @@ const OutletTambah = ({ history }) => {
     const coords = { lat: -6.241586, lng: 106.992416 };
 
     const [draggable, setDraggable] = useState(false)
+    const [position, setPosition] = useState(coords)
     const markerRef = useRef(null)
     const eventHandlers = useMemo(
         (e) => ({
@@ -126,9 +127,11 @@ const OutletTambah = ({ history }) => {
                                 onChange={(e) => setKodeCabang(e.target.value)}
                             >
                                 <option value="">- Pilih Cabang -</option>
-                                {cabang.map((data) => (
-                                    <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
-                                ))}
+                                {cabang
+                                    .filter(cab => cab.Branch_Code.toString().includes(Outlet_Code.toString().substring(0, 4)))
+                                    .map((data) => (
+                                        <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
+                                    ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Row>
@@ -160,7 +163,7 @@ const OutletTambah = ({ history }) => {
                             <Marker
                                 draggable={draggable}
                                 eventHandlers={eventHandlers}
-                                position={coords}
+                                position={position}
                                 ref={markerRef}>
                                 <Popup minWidth={90}>
                                     <span onClick={toggleDraggable}>

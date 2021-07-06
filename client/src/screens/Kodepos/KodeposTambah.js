@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+
 import { listKelurahan } from '../../actions/kelurahanActions';
 import { createKodepos } from '../../actions/kodeposActions';
 
@@ -12,6 +15,9 @@ const initialState = { Kodepos_Code: '', Kelurahan_Code: '' }
 
 const KodeposTambah = ({ history }) => {
     const [data, setData] = useState(initialState);
+    const [Kodepos_Code, setKodeposCode] = useState('');
+    const [Kelurahan_Code, setKelurahanCode] = useState('');
+
 
     const dispatch = useDispatch();
 
@@ -26,16 +32,29 @@ const KodeposTambah = ({ history }) => {
         if (success) {
             history.push('/location/kodepos')
         }
-    }, [history, success])
+    }, [history, success]);
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
+    function filterBy(option, state) {
+        if (state.selected.length) {
+            return true;
+        }
+        return option?.Kelurahan_Name.toLowerCase().indexOf(state.text.toLowerCase()) > -1;
+    }
+
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(createKodepos(data))
+        // dispatch(createKodepos(data))
+        dispatch(createKodepos({ Kodepos_Code, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code }))
     }
+
+    // console.log(data)
+    // console.log(Kodepos_Code)
+    // console.log(Kelurahan_Code)
+    // console.log(Kelurahan_Code[0]?.Kelurahan_Code)
 
     return (
         <div className="home">
@@ -49,26 +68,42 @@ const KodeposTambah = ({ history }) => {
                             <Form.Label>Kodepos</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Kode POS..."
+                                placeholder="Masukkan Kodepos..."
                                 name="Kodepos_Code"
                                 // value={nama}
-                                onChange={handleChange}
+                                // onChange={handleChange}
+                                onChange={(e) => setKodeposCode(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group controlId="Kelurahan_Code">
                             <Form.Label>Kelurahan</Form.Label>
-                            <Form.Control
+                            {/* <Form.Control
                                 as="select"
                                 custom
                                 name="Kelurahan_Code"
-                                // value={kecamatanId}
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Kelurahan -</option>
                                 {kelurahan.map((data) => (
                                     <option key={data.ID_Kelurahan} value={data.Kelurahan_Code} >{data.Kelurahan_Name}</option>
                                 ))}
-                            </Form.Control>
+                            </Form.Control> */}
+                            <Typeahead
+                                filterBy={filterBy}
+                                id="Kelurahan_Code"
+                                labelKey="Kelurahan_Name"
+                                name="Kelurahan_Code"
+                                options={kelurahan}
+                                placeholder="Masukkan Kode Kelurahan..."
+                                // onChange={handleChange}
+                                onChange={setKelurahanCode}
+                                selected={Kelurahan_Code}
+                                renderMenuItemChildren={(opt) => (
+                                    <div>
+                                        <p className="font-weight-bold">{opt.Kelurahan_Name}</p>
+                                    </div>
+                                )}
+                            />
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit

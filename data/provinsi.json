@@ -1,138 +1,138 @@
 [
   {
-    "kode": 11,
-    "nama": "Aceh"
+    "Provinsi_Code": 11,
+    "Provinsi_Name": "Aceh"
   },
   {
-    "kode": 12,
-    "nama": "Sumatera Utara"
+    "Provinsi_Code": 12,
+    "Provinsi_Name": "Sumatera Utara"
   },
   {
-    "kode": 13,
-    "nama": "Sumatera Barat"
+    "Provinsi_Code": 13,
+    "Provinsi_Name": "Sumatera Barat"
   },
   {
-    "kode": 14,
-    "nama": "Riau"
+    "Provinsi_Code": 14,
+    "Provinsi_Name": "Riau"
   },
   {
-    "kode": 15,
-    "nama": "Jambi"
+    "Provinsi_Code": 15,
+    "Provinsi_Name": "Jambi"
   },
   {
-    "kode": 16,
-    "nama": "Sumatera Selatan"
+    "Provinsi_Code": 16,
+    "Provinsi_Name": "Sumatera Selatan"
   },
   {
-    "kode": 17,
-    "nama": "Bengkulu"
+    "Provinsi_Code": 17,
+    "Provinsi_Name": "Bengkulu"
   },
   {
-    "kode": 18,
-    "nama": "Lampung"
+    "Provinsi_Code": 18,
+    "Provinsi_Name": "Lampung"
   },
   {
-    "kode": 19,
-    "nama": "Kepulauan Bangka Belitung"
+    "Provinsi_Code": 19,
+    "Provinsi_Name": "Kepulauan Bangka Belitung"
   },
   {
-    "kode": 21,
-    "nama": "Kepulauan Riau"
+    "Provinsi_Code": 21,
+    "Provinsi_Name": "Kepulauan Riau"
   },
   {
-    "kode": 31,
-    "nama": "DKI Jakarta"
+    "Provinsi_Code": 31,
+    "Provinsi_Name": "DKI Jakarta"
   },
   {
-    "kode": 32,
-    "nama": "Jawa Barat"
+    "Provinsi_Code": 32,
+    "Provinsi_Name": "Jawa Barat"
   },
   {
-    "kode": 33,
-    "nama": "Jawa Tengah"
+    "Provinsi_Code": 33,
+    "Provinsi_Name": "Jawa Tengah"
   },
   {
-    "kode": 34,
-    "nama": "DI Yogyakarta"
+    "Provinsi_Code": 34,
+    "Provinsi_Name": "DI Yogyakarta"
   },
   {
-    "kode": 35,
-    "nama": "Jawa Timur"
+    "Provinsi_Code": 35,
+    "Provinsi_Name": "Jawa Timur"
   },
   {
-    "kode": 36,
-    "nama": "Banten"
+    "Provinsi_Code": 36,
+    "Provinsi_Name": "Banten"
   },
   {
-    "kode": 51,
-    "nama": "Bali"
+    "Provinsi_Code": 51,
+    "Provinsi_Name": "Bali"
   },
   {
-    "kode": 52,
-    "nama": "Nusa Tenggara Barat"
+    "Provinsi_Code": 52,
+    "Provinsi_Name": "Nusa Tenggara Barat"
   },
   {
-    "kode": 53,
-    "nama": "Nusa Tenggara Timur"
+    "Provinsi_Code": 53,
+    "Provinsi_Name": "Nusa Tenggara Timur"
   },
   {
-    "kode": 61,
-    "nama": "Kalimantan Barat"
+    "Provinsi_Code": 61,
+    "Provinsi_Name": "Kalimantan Barat"
   },
   {
-    "kode": 62,
-    "nama": "Kalimantan Tengah"
+    "Provinsi_Code": 62,
+    "Provinsi_Name": "Kalimantan Tengah"
   },
   {
-    "kode": 63,
-    "nama": "Kalimantan Selatan"
+    "Provinsi_Code": 63,
+    "Provinsi_Name": "Kalimantan Selatan"
   },
   {
-    "kode": 64,
-    "nama": "Kalimantan Timur"
+    "Provinsi_Code": 64,
+    "Provinsi_Name": "Kalimantan Timur"
   },
   {
-    "kode": 65,
-    "nama": "Kalimantan Utara"
+    "Provinsi_Code": 65,
+    "Provinsi_Name": "Kalimantan Utara"
   },
   {
-    "kode": 71,
-    "nama": "Sulawesi Utara"
+    "Provinsi_Code": 71,
+    "Provinsi_Name": "Sulawesi Utara"
   },
   {
-    "kode": 72,
-    "nama": "Sulawesi Tengah"
+    "Provinsi_Code": 72,
+    "Provinsi_Name": "Sulawesi Tengah"
   },
   {
-    "kode": 73,
-    "nama": "Sulawesi Selatan"
+    "Provinsi_Code": 73,
+    "Provinsi_Name": "Sulawesi Selatan"
   },
   {
-    "kode": 74,
-    "nama": "Sulawesi Tenggara"
+    "Provinsi_Code": 74,
+    "Provinsi_Name": "Sulawesi Tenggara"
   },
   {
-    "kode": 75,
-    "nama": "Gorontalo"
+    "Provinsi_Code": 75,
+    "Provinsi_Name": "Gorontalo"
   },
   {
-    "kode": 76,
-    "nama": "Sulawesi Barat"
+    "Provinsi_Code": 76,
+    "Provinsi_Name": "Sulawesi Barat"
   },
   {
-    "kode": 81,
-    "nama": "Maluku"
+    "Provinsi_Code": 81,
+    "Provinsi_Name": "Maluku"
   },
   {
-    "kode": 82,
-    "nama": "Maluku Utara"
+    "Provinsi_Code": 82,
+    "Provinsi_Name": "Maluku Utara"
   },
   {
-    "kode": 91,
-    "nama": "Papua Barat"
+    "Provinsi_Code": 91,
+    "Provinsi_Name": "Papua Barat"
   },
   {
-    "kode": 94,
-    "nama": "Papua"
+    "Provinsi_Code": 94,
+    "Provinsi_Name": "Papua"
   }
 ]

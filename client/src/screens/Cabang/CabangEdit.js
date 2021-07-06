@@ -43,12 +43,12 @@ const CabangEdit = ({ history, match }) => {
             dispatch({ type: CABANG_UPDATE_RESET })
             history.push('/location/branch')
         } else {
-            if (!cabang?.cabang?.nama || cabang?.cabang?.kode !== cabangId) {
+            if (!cabang?.cabang?.Branch_Name || cabang?.cabang?.ID_Branch !== cabangId) {
                 dispatch(detailCabang(cabangId));
             }
             setData(cabang?.cabang)
         }
-    }, [dispatch, history, cabangId, success])
+    }, [dispatch, history, cabangId, cabang?.cabang?.ID_Branch, success])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -130,9 +130,11 @@ const CabangEdit = ({ history, match }) => {
                             // onChange={(e) => setKodeWilayah(e.target.value)}
                             >
                                 <option value="">- Pilih Wilayah -</option>
-                                {wilayah.map((data) => (
-                                    <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
-                                ))}
+                                {wilayah
+                                    .filter(wil => wil.Region_Code.toString().includes(data.Branch_Code.toString().substring(0, 2)))
+                                    .map((data) => (
+                                        <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
+                                    ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="BI_Location_Code">
