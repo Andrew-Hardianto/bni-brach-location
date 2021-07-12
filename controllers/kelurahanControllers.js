@@ -7,7 +7,8 @@ const fs = require('fs');
 // get all data
 exports.getKelurahan = async (req, res) => {
     try {
-        const kelurahan = await Kelurahan.findAll({ include: ["kota", "provinsi", "kecamatan"] });
+        // const kelurahan = await Kelurahan.findAll({ include: ["kota", "provinsi", "kecamatan"] });
+        const kelurahan = await Kelurahan.findAll();
 
         res.status(200).json({
             success: true,
@@ -51,9 +52,13 @@ exports.createKelurahan = async (req, res, next) => {
             }
         )
 
-        if (!Kelurahan_Code || !Kelurahan_Name) return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
+        if (!Kelurahan_Code || !Kelurahan_Name) {
+            return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
+        }
 
-        if (checkkode) return next(new Error('Kode Kelurahan sudah ada!'));
+        if (checkkode) {
+            return next(new Error('Kode Kelurahan sudah ada!'));
+        }
 
         const kecamatan = await Kecamatan.findOne({
             where: {
@@ -61,7 +66,9 @@ exports.createKelurahan = async (req, res, next) => {
             }
         });
 
-        if (!kecamatan) return next(new Error(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404))
+        if (!kecamatan) {
+            return next(new Error(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404))
+        }
 
         const kelurahan = await Kelurahan.create({
             Kelurahan_Code,
@@ -148,6 +155,53 @@ exports.deleteKelurahan = async (req, res, next) => {
         })
     } catch (err) {
         res.status(400).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+const getPagination = (page, size) => {
+    const limit = size ? +size : 90000;
+    const offset = page ? page * limit : 0;
+
+    return { limit, offset };
+};
+
+const getPagingData = (data, page, limit) => {
+    const { count: totalItems, rows: tutorials } = data;
+    const currentPage = page ? +page : 0;
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return { totalItems, tutorials, totalPages, currentPage };
+};
+
+// get all data
+exports.getListKelurahan = async (req, res) => {
+    try {
+        let page = parseInt(req.query.page);
+        let size = parseInt(req.query.size);
+        const Kelurahan_Name = req.query.name
+        var condition = Kelurahan_Name ? { Kelurahan_Name: { [Op.like]: `%${Kelurahan_Name}%` } } : null;
+
+        const { limit, offset } = getPagination(page, size);
+
+        // const offset = page ? page * limit : 0;
+        const kelurahan = await Kelurahan.findAll({
+            attributes: ['Kelurahan_Code', 'Kelurahan_Name'],
+            offset,
+            limit,
+            where: condition
+        });
+
+        // const kelurahan = getPagination(kel, limit, offset)
+
+        res.status(200).json({
+            success: true,
+            kelurahan
+        })
+    } catch (err) {
+        res.status(500).json({
             success: false,
             message: err.message
         })

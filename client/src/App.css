@@ -35,6 +35,7 @@ table-layout: auto !important;
   border-color: rgb(204, 203, 203);
   background-color: white;
   border-radius: 0px 0px 8px 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28);
   right: 0px;
   left:20px;
   top: 200px;
@@ -50,16 +51,9 @@ table-layout: auto !important;
 }
 
 .option,
-span {
+p {
   font-size: 14px;
   text-transform: capitalize;
   width: 350px;
-}
-
-.flex-container {
-  display: flex;
-}
-
-.flex-column {
-  flex-direction: column;
+  cursor: pointer;
 }

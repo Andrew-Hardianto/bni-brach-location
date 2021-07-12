@@ -35,17 +35,5 @@ module.exports = (sequelize, Sequelize) => {
         timestamps: false
     });
 
-    // Cabang.beforeSave(async function (next) {
-    //     const loc = await geocoder.geocode(
-    //         {
-    //             address: this.alamat,
-    //         }
-    //     );
-    //     console.log(this.alamat)
-    //     this.latitude = loc[0].latitude;
-    //     this.longitude = loc[0].longitude;
-    //     next()
-    // })
-
     return Cabang;
 }

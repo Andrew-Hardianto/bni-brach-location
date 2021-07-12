@@ -12,6 +12,9 @@ import {
     KELURAHAN_LIST_FAIL,
     KELURAHAN_LIST_REQUEST,
     KELURAHAN_LIST_SUCCESS,
+    KELURAHAN_ALL_FAIL,
+    KELURAHAN_ALL_REQUEST,
+    KELURAHAN_ALL_SUCCESS,
     KELURAHAN_UPDATE_FAIL,
     KELURAHAN_UPDATE_REQUEST,
     KELURAHAN_UPDATE_RESET,
@@ -87,5 +90,21 @@ export const kelurahanDeleteReducer = (state = {}, action) => {
             return { loading: false, error: action.payload }
         default:
             return state;
+    }
+}
+
+export const kelurahanAllReducer = (state = { kelurahan: [] }, action) => {
+    switch (action.type) {
+        case KELURAHAN_ALL_REQUEST:
+            return { loading: true, kelurahan: [] }
+        case KELURAHAN_ALL_SUCCESS:
+            return {
+                loading: false,
+                kelurahan: action.payload.kelurahan,
+            }
+        case KELURAHAN_ALL_FAIL:
+            return { loading: false, error: action.payload }
+        default:
+            return state
     }
 }

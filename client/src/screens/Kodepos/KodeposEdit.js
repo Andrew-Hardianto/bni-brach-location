@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { listKelurahan } from '../../actions/kelurahanActions';
+import { listKelurahan, allKelurahan } from '../../actions/kelurahanActions';
 import { detailKodepos, editKodepos } from '../../actions/kodeposActions';
 
 import Loader from '../../components/Loader';
@@ -20,9 +20,9 @@ const KodeposEdit = ({ history, match }) => {
     const [data, setData] = useState(initialState);
     const [Kodepos_Code, setKodeposCode] = useState('');
     const [Kelurahan_Code, setKelurahanCode] = useState('');
-    const [Code, setCode] = useState('');
+    const [Code, setCode] = useState();
+    const [nama, setNama] = useState('');
     const [display, setDisplay] = useState(false);
-    const [options, setOptions] = useState([]);
     const wrapperRef = useRef(null)
 
     const dispatch = useDispatch();
@@ -33,11 +33,12 @@ const KodeposEdit = ({ history, match }) => {
     const kodeposUpdate = useSelector(state => state.kodeposUpdate);
     const { loading, error, success } = kodeposUpdate;
 
-    const kelurahanList = useSelector(state => state.kelurahanList);
-    const { kelurahan } = kelurahanList;
+    const kelurahanAll = useSelector(state => state.kelurahanAll);
+    const { kelurahan } = kelurahanAll;
 
     useEffect(() => {
-        dispatch(listKelurahan())
+        // dispatch(listKelurahan())
+        dispatch(allKelurahan(Kelurahan_Code))
         if (success) {
             dispatch({ type: KODEPOS_UPDATE_RESET })
             history.push('/location/kodepos')
@@ -47,29 +48,30 @@ const KodeposEdit = ({ history, match }) => {
             }
             // setData(kodepos?.kodepos)
             setKelurahanCode(kodepos?.kodepos?.Kelurahan_Code)
-            // setCode(kodepos?.kodepos?.kelurahan?.Kelurahan_Name)
+            setNama(kodepos?.kodepos?.kelurahan?.Kelurahan_Name)
+            setCode(kodepos?.kodepos?.Kelurahan_Code)
             setKodeposCode(kodepos?.kodepos?.Kodepos_Code)
         }
     }, [dispatch, history, kodeposId, kodepos?.kodepos?.ID_Kodepos, success]);
 
-    useEffect(() => {
-        window.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            window.removeEventListener("mousedown", handleClickOutside);
-        };
-    });
+    // useEffect(() => {
+    //     window.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //         window.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // });
 
-    const handleClickOutside = event => {
-        const { current: wrap } = wrapperRef;
-        if (wrap && !wrap.contains(event.target)) {
-            setDisplay(false);
-        }
-    };
+    // const handleClickOutside = event => {
+    //     const { current: wrap } = wrapperRef;
+    //     if (wrap && !wrap.contains(event.target)) {
+    //         setDisplay(false);
+    //     }
+    // };
 
-    const updatePokeDex = val => {
-        setKelurahanCode(val);
-        setDisplay(false);
-    };
+    // const updatePokeDex = val => {
+    //     setKelurahanCode(val);
+    //     setDisplay(false);
+    // };
 
     function filterBy(option, state) {
         if (state.selected.length) {
@@ -78,19 +80,36 @@ const KodeposEdit = ({ history, match }) => {
         return option?.Kelurahan_Name.toLowerCase().indexOf(state.text.toLowerCase()) > -1;
     }
 
-    const handleChange = (e) => {
-        setData({ ...data, [e.target.name]: e.target.value })
-    }
+    // const handleChange = (e) => {
+    //     setData({ ...data, [e.target.name]: e.target.value })
+    // }
 
     const submitHandler = (e) => {
         e.preventDefault();
-        // dispatch(editKodepos({ ...data }))
-        dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code }))
+        if (Kelurahan_Code[0]?.Kelurahan_Code == undefined) {
+            dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code }))
+        }
+        dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code }))
+        console.log(Kelurahan_Code)
     }
 
-    console.log(Kelurahan_Code)
-    console.log(Kodepos_Code)
+    // console.log(Kelurahan_Code)
+    // console.log(Kodepos_Code)
+    // console.log(nama)
+    // console.log(Code)
 
+    // const MenuList = ({ children, ...props }) => {
+    //     return (
+    //         <components.MenuList {...props}>
+    //             {
+    //                 Array.isArray(children)
+    //                     ? children.slice(0, props.selectProps?.maxOptions)
+    //                     : children
+    //             }
+    //         </components.MenuList>
+    //     );
+    // };
+    // const initialOptions = options.slice(0, 10);
     return (
         <div className="home">
             <Card style={{ width: '25rem' }} className="mt-3" >
@@ -109,30 +128,18 @@ const KodeposEdit = ({ history, match }) => {
                                 onChange={(e) => setKodeposCode(e.target.value)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="Kelurahan_Code" ref={wrapperRef}>
+                        <Form.Group controlId="Kelurahan_Code" >
                             <Form.Label>Kelurahan</Form.Label>
                             {/* <Form.Control
-                                as="select"
-                                custom
-                                name="Kelurahan_Code"
-                                value={data?.Kelurahan_Code}
-                                onChange={handleChange}
-                            >
-                                <option value="">- Pilih Kelurahan -</option>
-                                {kelurahan.map((data) => (
-                                    <option key={data.ID_Kelurahan} value={data.Kelurahan_Code} >{data.Kelurahan_Name}</option>
-                                ))}
-                            </Form.Control> */}
-                            <Form.Control
                                 type="text"
                                 onClick={() => setDisplay(!display)}
                                 placeholder="Masukkan Kode Kelurahan..."
                                 name="Kelurahan_Code"
                                 value={Kelurahan_Code}
                                 onChange={(e) => setKelurahanCode(e.target.value)}
-                                autocomplete="off"
-                            />
-                            {display && (
+                                autoComplete="off"
+                            /> */}
+                            {/* {display && (
                                 <div className="autoContainer">
                                     {kelurahan
                                         ?.filter((kl) => kl.Kelurahan_Name?.indexOf(Kelurahan_Code.toLowerCase()) > -1)
@@ -144,28 +151,48 @@ const KodeposEdit = ({ history, match }) => {
                                                     key={i}
                                                     tabIndex="0"
                                                 >
-                                                    <span>{value.Kelurahan_Name}</span>
+                                                    <p>{value.Kelurahan_Name}</p>
                                                 </div>
                                             );
                                         })}
                                 </div>
-                            )}
-                            {/* <Typeahead
+                            )} */}
+
+                            {/* <Select
+                                name="Kelurahan_Code"
+                                // inputValue={Kelurahan_Code}
+                                onChange={(e) => setKelurahanCode(e.target.value)}
+                                options={kelurahan}
+                                getOptionValue={(option) => option.Kelurahan_Code}
+                                getOptionLabel={(option) => option.Kelurahan_Name}
+                                components={{ MenuList }}
+                                maxOptions={5}
+                                filterOption={createFilter({ ignoreAccents: false })}
+                            /> */}
+                            {/* <AsyncPaginate
+                                options={initialOptions}
+                                loadOptions={loadOptions}
+                                value={Kelurahan_Code}
+                                onChange={(e) => setKelurahanCode(e)}
+                                getOptionValue={(option) => option.Kelurahan_Code}
+                                getOptionLabel={(option) => option.Kelurahan_Name}
+                            /> */}
+                            <Typeahead
                                 filterBy={filterBy}
                                 id="Kelurahan_Code"
                                 labelKey="Kelurahan_Name"
                                 name="Kelurahan_Code"
                                 options={kelurahan}
-                                // onChange={handleChange}
+                                placeholder={nama}
                                 onChange={setKelurahanCode}
-                                selected={Kelurahan_Code.Kodepos_Code}
-                                defaultInputValue={Code}
+                                selected={Kelurahan_Code?.Kelurahan_Code}
+                                // defaultInputValue={Code}
                                 renderMenuItemChildren={(opt) => (
                                     <div>
-                                        <p className="font-weight-bold">{opt.Kelurahan_Name}</p>
+                                        <p className="font-weight-bold">{opt.Kelurahan_Code} - {opt.Kelurahan_Name}</p>
                                     </div>
                                 )}
-                            /> */}
+                            />
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit

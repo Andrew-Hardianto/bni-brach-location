@@ -5,11 +5,13 @@ const {
     createKelurahan,
     updateKelurahan,
     deleteKelurahan,
+    getListKelurahan,
 } = require('../controllers/kelurahanControllers');
 
 const router = express.Router();
 
 // router.post('/bulk', bulkCreateKelurahan)
+router.get('/list', getListKelurahan)
 
 router.route('/')
     .get(getKelurahan)

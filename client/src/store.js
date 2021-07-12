@@ -24,6 +24,7 @@ import {
     kecamatanUpdateReducer,
 } from './reducers/kecamatanReducers';
 import {
+    kelurahanAllReducer,
     kelurahanCreateReducer,
     kelurahanDeleteReducer,
     kelurahanDetailsReducer,
@@ -77,6 +78,7 @@ const reducer = combineReducers({
     kecamatanUpdate: kecamatanUpdateReducer,
     kecamatanDelete: kecamatanDeleteReducer,
     kelurahanList: kelurahanListReducer,
+    kelurahanAll: kelurahanAllReducer,
     kelurahanDetail: kelurahanDetailsReducer,
     kelurahanCreate: kelurahanCreateReducer,
     kelurahanUpdate: kelurahanUpdateReducer,

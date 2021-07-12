@@ -13,6 +13,9 @@ import {
     KELURAHAN_LIST_FAIL,
     KELURAHAN_LIST_REQUEST,
     KELURAHAN_LIST_SUCCESS,
+    KELURAHAN_ALL_FAIL,
+    KELURAHAN_ALL_REQUEST,
+    KELURAHAN_ALL_SUCCESS,
     KELURAHAN_UPDATE_FAIL,
     KELURAHAN_UPDATE_REQUEST,
     KELURAHAN_UPDATE_SUCCESS
@@ -144,6 +147,31 @@ export const deleteKelurahan = (id) => async (dispatch) => {
             payload: error.response && error.response.data.message
                 ? error.response.data.message
                 : error.message,
+        })
+    }
+}
+
+export const allKelurahan = () => async (
+    dispatch
+) => {
+    try {
+        dispatch({ type: KELURAHAN_ALL_REQUEST })
+
+        const { data } = await axios.get(
+            `/kelurahan/list`
+        )
+
+        dispatch({
+            type: KELURAHAN_ALL_SUCCESS,
+            payload: data,
+        })
+    } catch (error) {
+        dispatch({
+            type: KELURAHAN_ALL_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
         })
     }
 }
