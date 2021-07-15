@@ -98,7 +98,7 @@ const Wilayah = () => {
                                                             <Link to="/location/region/tambah" className="btn btn-primary">Tambah Region</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Wilayah..." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <Card.Title>Data Region</Card.Title>

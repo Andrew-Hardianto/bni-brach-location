@@ -27,7 +27,7 @@ const WilayahDetail = ({ match }) => {
                         <Card style={{ width: '30rem' }} className="shadow">
                             <Card.Body>
                                 <Card.Title className="text-center font-weight-bold">DETAIL WILAYAH</Card.Title>
-                                <table className="table table-borderless">
+                                <table className="table table-borderless table-striped">
                                     <tbody>
                                         <tr>
                                             <td>
@@ -49,7 +49,7 @@ const WilayahDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {wilayah.wilayah?.Region_Name}
+                                                    : {wilayah.wilayah?.Region_Subname}
                                                 </Card.Text>
                                             </td>
                                         </tr>
@@ -68,7 +68,7 @@ const WilayahDetail = ({ match }) => {
                                     </tbody>
                                 </table>
                                 <Link to={'/location/region'} className="btn btn-primary" >
-                                    <i className="fas fa-arrow-left"></i>
+                                    <i className="fas fa-arrow-left"></i> Kembali
                                 </Link>
                             </Card.Body>
                         </Card>

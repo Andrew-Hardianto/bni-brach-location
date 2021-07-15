@@ -97,7 +97,7 @@ const Provinsi = () => {
                                                             <Link to="/location/provinsi/tambah" className="btn btn-primary">Tambah Provinsi</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Provinsi..." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <hr />

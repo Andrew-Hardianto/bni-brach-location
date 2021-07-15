@@ -24,13 +24,13 @@ const KecamatanDetail = ({ match }) => {
             {loading ? <Loader />
                 : error ? (<Message variant="danger" >{error}</Message>)
                     : (
-                        <Card style={{ width: '30rem' }} className="shadow" >
+                        <Card style={{ width: '35rem' }} className="shadow" >
                             <Card.Body>
                                 <Card.Title className="text-center font-weight-bold">DETAIL KECAMATAN</Card.Title>
-                                <table className="table table-borderless">
+                                <table className="table table-borderless table-striped">
                                     <tbody>
                                         <tr>
-                                            <td>
+                                            <td style={{ width: '40%' }}>
                                                 <Card.Text>
                                                     Kode Kecamatan
                                                 </Card.Text>
@@ -104,7 +104,7 @@ const KecamatanDetail = ({ match }) => {
                                     </tbody>
                                 </table>
                                 <Link to={'/location/kecamatan'} className="btn btn-primary" >
-                                    <i className="fas fa-arrow-left"></i>
+                                    <i className="fas fa-arrow-left"></i> Kembali
                                 </Link>
                             </Card.Body>
                         </Card>

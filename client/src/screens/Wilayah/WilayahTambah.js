@@ -50,10 +50,10 @@ const WilayahTambah = ({ history }) => {
                             />
                         </Form.Group>
                         <Form.Group controlId="Region_Subname">
-                            <Form.Label>Sub Nama Wilayah</Form.Label>
+                            <Form.Label>Subname Wilayah</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Sub Nama Wilayah..."
+                                placeholder="Masukkan Subname Wilayah..."
                                 name="Region_Subname"
                                 onChange={handleChange}
                             />

@@ -37,7 +37,7 @@ const Kota = () => {
 
     const columns = [{
         dataField: 'Kabupaten_Code',
-        text: 'Kode Kota',
+        text: 'Kode Kota/Kabupaten',
         sort: true
     }, {
         dataField: 'Kabupaten_Name',
@@ -111,7 +111,7 @@ const Kota = () => {
                                                             <Link to="/location/kota/tambah" className="btn btn-primary">Tambah Kota</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Kota/Kabupaten..." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <hr />

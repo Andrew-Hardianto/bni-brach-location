@@ -102,7 +102,7 @@ const Kelurahan = () => {
                                                             <Link to="/location/kelurahan/tambah" className="btn btn-primary">Tambah Kelurahan</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Kelurahan..." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <hr />

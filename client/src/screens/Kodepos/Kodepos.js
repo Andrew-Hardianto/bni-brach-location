@@ -99,10 +99,10 @@ const Kodepos = () => {
                                                 <div>
                                                     <Row className="mb-3">
                                                         <Col sm={9} className="mb-2">
-                                                            <Link to="/location/kodepos/tambah" className="btn btn-primary">Tambah Kode POS</Link>
+                                                            <Link to="/location/kodepos/tambah" className="btn btn-primary">Tambah Kodepos</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Kodepos..." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <hr />

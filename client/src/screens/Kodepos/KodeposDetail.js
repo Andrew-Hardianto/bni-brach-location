@@ -27,7 +27,7 @@ const KodeposDetail = ({ match }) => {
                         <Card style={{ width: '40rem' }} className="shadow" >
                             <Card.Body>
                                 <Card.Title className="text-center font-weight-bold">DETAIL KODEPOS</Card.Title>
-                                <table className="table table-borderless">
+                                <table className="table table-borderless table-striped">
                                     <tbody>
                                         <tr>
                                             <td style={{ width: '30%' }}>
@@ -140,7 +140,7 @@ const KodeposDetail = ({ match }) => {
                                     </tbody>
                                 </table>
                                 <Link to={'/location/kodepos'} className="btn btn-primary" >
-                                    <i className="fas fa-arrow-left"></i>
+                                    <i className="fas fa-arrow-left"></i> Kembali
                                 </Link>
                             </Card.Body>
                         </Card>

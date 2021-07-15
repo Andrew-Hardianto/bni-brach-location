@@ -27,7 +27,7 @@ const KelurahanDetail = ({ match }) => {
                         <Card style={{ width: '40rem' }}>
                             <Card.Body>
                                 <Card.Title className="text-center font-weight-bold">DETAIL KELURAHAN</Card.Title>
-                                <table className="table table-borderless">
+                                <table className="table table-borderless table-striped">
                                     <tbody>
                                         <tr>
                                             <td style={{ width: '30%' }}>
@@ -128,7 +128,7 @@ const KelurahanDetail = ({ match }) => {
                                     </tbody>
                                 </table>
                                 <Link to={'/location/kelurahan'} className="btn btn-primary" >
-                                    <i className="fas fa-arrow-left"></i>
+                                    <i className="fas fa-arrow-left"></i> Kembali
                                 </Link>
                             </Card.Body>
                         </Card>

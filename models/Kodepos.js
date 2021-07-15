@@ -7,8 +7,7 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true
         },
         Kodepos_Code: {
-            type: Sequelize.BIGINT,
-            primaryKey: true,
+            type: Sequelize.INTEGER,
             allowNull: false,
         }
     }, {

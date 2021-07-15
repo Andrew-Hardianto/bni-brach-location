@@ -99,7 +99,7 @@ const Outlet = () => {
                                                             <Link to="/location/outlet/tambah" className="btn btn-primary">Tambah Outlet</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Outlet..." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <Card.Title>Data Outlet</Card.Title>

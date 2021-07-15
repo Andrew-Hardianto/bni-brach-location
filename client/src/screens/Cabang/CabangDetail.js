@@ -32,10 +32,10 @@ const CabangDetail = ({ match }) => {
                         <Card style={{ width: '40rem' }} className="shadow mt-3">
                             <Card.Body>
                                 <Link to={'/location/branch'} className="btn btn-primary mb-3" >
-                                    <i className="fas fa-arrow-left"></i>
+                                    <i className="fas fa-arrow-left"></i> Kembali
                                 </Link>
                                 <Card.Title className="text-center font-weight-bold" >Detail Branch</Card.Title>
-                                <Table hover borderless responsive>
+                                <Table hover borderless striped responsive>
                                     <tbody>
                                         <tr>
                                             <td width="150px">Kode Cabang</td>

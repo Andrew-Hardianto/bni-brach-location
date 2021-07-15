@@ -25,13 +25,13 @@ const KotaDetail = ({ match }) => {
             {loading ? <Loader />
                 : error ? (<Message variant="danger" >{error}</Message>)
                     : (
-                        <Card style={{ width: '20rem' }} className="shadow" >
+                        <Card style={{ width: '35rem' }} className="shadow" >
                             <Card.Body>
                                 <Card.Title className="text-center font-weight-bold">DETAIL KOTA</Card.Title>
-                                <table className="table table-borderless">
+                                <table className="table table-borderless table-striped">
                                     <tbody>
                                         <tr>
-                                            <td>
+                                            <td style={{ width: '30%' }}>
                                                 <Card.Text>
                                                     Kode Kota
                                                 </Card.Text>
@@ -105,7 +105,7 @@ const KotaDetail = ({ match }) => {
                                     </tbody>
                                 </table>
                                 <Link to={'/location/kota'} className="btn btn-primary" >
-                                    <i className="fas fa-arrow-left"></i>
+                                    <i className="fas fa-arrow-left"></i> Kembali
                                 </Link>
                             </Card.Body>
                         </Card>

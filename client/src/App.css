@@ -28,7 +28,7 @@ table-layout: auto !important;
 } */
 
 
-.autoContainer {
+/* .autoContainer {
   position: absolute;
   border-width: 0px 1px 1px 1px;
   border-style: solid;
@@ -56,4 +56,4 @@ p {
   text-transform: capitalize;
   width: 350px;
   cursor: pointer;
-}
+} */

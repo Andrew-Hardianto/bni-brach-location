@@ -103,7 +103,7 @@ const Kecamatan = () => {
                                                             <Link to="/location/kecamatan/tambah" className="btn btn-primary">Tambah Kecamatan</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Kecamatan..." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <hr />

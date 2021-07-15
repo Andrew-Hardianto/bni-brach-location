@@ -131,7 +131,7 @@ const CabangEdit = ({ history, match }) => {
                             >
                                 <option value="">- Pilih Wilayah -</option>
                                 {wilayah
-                                    .filter(wil => wil.Region_Code.toString().includes(data.Branch_Code.toString().substring(0, 2)))
+                                    .filter(wil => wil?.Region_Code.toString().includes(data?.Branch_Code.toString().substring(0, 2)))
                                     .map((data) => (
                                         <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
                                     ))}

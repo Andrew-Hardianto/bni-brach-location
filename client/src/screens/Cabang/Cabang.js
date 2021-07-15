@@ -104,7 +104,7 @@ const Cabang = () => {
                                                             <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <SearchBar placeholder="Cari ..." {...props.searchProps} />
+                                                            <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
                                                         </Col>
                                                     </Row>
                                                     <Card.Title>Data Branch</Card.Title>
