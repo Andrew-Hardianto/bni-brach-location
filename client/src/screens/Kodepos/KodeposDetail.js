@@ -19,6 +19,8 @@ const KodeposDetail = ({ match }) => {
         dispatch(detailKodepos(kodeposId));
     }, [dispatch, kodeposId])
 
+    console.log(kodepos?.kodepos)
+
     return (
         <div className="home">
             {loading ? <Loader />
@@ -61,7 +63,7 @@ const KodeposDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {kodepos.kodepos?.kelurahan.Kelurahan_Name}
+                                                    : {kodepos.kodepos?.kelurahan?.Kelurahan_Name}
                                                 </Card.Text>
                                             </td>
                                         </tr>
@@ -85,7 +87,7 @@ const KodeposDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {kodepos.kodepos?.kecamatan.Kecamatan_Name}
+                                                    : {kodepos.kodepos?.kecamatan?.Kecamatan_Name}
                                                 </Card.Text>
                                             </td>
                                         </tr>
@@ -109,7 +111,7 @@ const KodeposDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {kodepos.kodepos?.kota.Kabupaten_Name}
+                                                    : {kodepos.kodepos?.kota?.Kabupaten_Name}
                                                 </Card.Text>
                                             </td>
                                         </tr>
@@ -133,7 +135,7 @@ const KodeposDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {kodepos.kodepos?.provinsi.Provinsi_Name}
+                                                    : {kodepos.kodepos?.provinsi?.Provinsi_Name}
                                                 </Card.Text>
                                             </td>
                                         </tr>

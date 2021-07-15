@@ -18,9 +18,9 @@ const kodepos = JSON.parse(fs.readFileSync(`${__dirname}/data/Kodepos.json`, 'ut
 // Import data 
 const importData = async () => {
     try {
-        // await Provinsi.bulkCreate(provinsi)
-        // await Kota.bulkCreate(kota)
-        // await Kecamatan.bulkCreate(kecamatan)
+        await Provinsi.bulkCreate(provinsi)
+        await Kota.bulkCreate(kota)
+        await Kecamatan.bulkCreate(kecamatan)
         await Kelurahan.bulkCreate(kelurahan)
         await Kodepos.bulkCreate(kodepos)
 
