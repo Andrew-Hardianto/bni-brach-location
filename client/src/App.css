@@ -12,10 +12,10 @@
   justify-content: center;
 }
 
-.table{
-overflow: auto;
-table-layout: auto !important;
-}
+/* .table{
+  overflow: auto;
+  table-layout: auto !important;
+} */
 
 /* input {
   padding: 10px;
