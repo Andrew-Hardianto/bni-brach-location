@@ -13,7 +13,7 @@ import Message from '../../components/Message';
 import { CABANG_CREATE_RESET } from '../../constants/cabangConstants';
 import { deleteCabang, listCabang } from '../../actions/cabangActions';
 
-const Cabang = () => {
+const Cabang = ({ history }) => {
     const { SearchBar } = Search;
 
     const dispatch = useDispatch();
@@ -24,10 +24,16 @@ const Cabang = () => {
     const cabangDelete = useSelector(state => state.cabangDelete);
     const { loading: loadingDelete, error: errorDelete, success } = cabangDelete;
 
+    const { userInfo } = useSelector((state) => state.userLogin)
+
     useEffect(() => {
-        dispatch({ type: CABANG_CREATE_RESET })
-        dispatch(listCabang())
-    }, [dispatch, success])
+        if (userInfo) {
+            dispatch({ type: CABANG_CREATE_RESET })
+            dispatch(listCabang())
+        } else {
+            history.push('/login')
+        }
+    }, [dispatch, success, history])
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -62,7 +68,7 @@ const Cabang = () => {
                         </LinkContainer>
                         <LinkContainer to={`/location/branch/edit/${row.ID_Branch}`} className="ml-2">
                             <Button variant="success" size="sm">
-                                <i class="fas fa-edit"></i>
+                                <i className="fas fa-edit"></i>
                             </Button>
                         </LinkContainer>
                         <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(row.ID_Branch)}>
@@ -81,48 +87,50 @@ const Cabang = () => {
 
     return (
         <div className="home">
-            <Container>
-                {loading ? <Loader />
-                    : error ? (<Message variant="danger" >{error}</Message>)
-                        : (
-                            <Card lg="2" className="mt-3 shadow-lg" >
-                                <Card.Body>
-                                    {loadingDelete && <Loader />}
-                                    {errorDelete && <Message variant="danger" >{error}</Message>}
-                                    <ToolkitProvider
-                                        bootstrap4
-                                        keyField="id"
-                                        data={cabang}
-                                        columns={columns}
-                                        search
-                                    >
-                                        {
-                                            props => (
-                                                <div>
-                                                    <Row className="mb-3">
-                                                        <Col sm={9} className="mb-2">
-                                                            <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
-                                                        </Col>
-                                                    </Row>
-                                                    <Card.Title>Data Branch</Card.Title>
-                                                    <BootstrapTable
-                                                        {...props.baseProps}
-                                                        pagination={paginationFactory()}
-                                                        defaultSorted={defaultSortedBy}
-                                                        wrapperClasses="table-responsive"
-                                                        rowClasses="text-nowrap"
-                                                    />
-                                                </div>
-                                            )
-                                        }
-                                    </ToolkitProvider>
-                                </Card.Body>
-                            </Card>
-                        )}
-            </Container>
+            <div className="container-fluid">
+                <Container>
+                    {loading ? <Loader />
+                        : error ? (<Message variant="danger" >{error}</Message>)
+                            : (
+                                <Card lg="2" className="mt-3 shadow-lg" >
+                                    <Card.Body>
+                                        {loadingDelete && <Loader />}
+                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        <ToolkitProvider
+                                            bootstrap4
+                                            keyField="ID_Cabang"
+                                            data={cabang}
+                                            columns={columns}
+                                            search
+                                        >
+                                            {
+                                                props => (
+                                                    <div>
+                                                        <Row className="mb-3">
+                                                            <Col sm={9} className="mb-2">
+                                                                <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
+                                                            </Col>
+                                                            <Col sm={3}>
+                                                                <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
+                                                            </Col>
+                                                        </Row>
+                                                        <Card.Title>Data Branch</Card.Title>
+                                                        <BootstrapTable
+                                                            {...props.baseProps}
+                                                            pagination={paginationFactory()}
+                                                            defaultSorted={defaultSortedBy}
+                                                            wrapperClasses="table-responsive"
+                                                            rowClasses="text-nowrap"
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                        </ToolkitProvider>
+                                    </Card.Body>
+                                </Card>
+                            )}
+                </Container>
+            </div>
         </div>
     )
 }

@@ -30,6 +30,7 @@ db.Kodepos = require('../models/Kodepos')(sequelize, Sequelize);
 db.Wilayah = require('../models/Wilayah')(sequelize, Sequelize);
 db.Cabang = require('../models/Cabang')(sequelize, Sequelize);
 db.Outlet = require('../models/Outlet')(sequelize, Sequelize);
+db.User = require('../models/User')(sequelize, Sequelize);
 
 
 db.Provinsi.hasMany(db.Kota, { as: "kota", foreignKey: "Provinsi_Code", onDelete: "set null", onUpdate: "cascade", sourceKey: "Provinsi_Code" });

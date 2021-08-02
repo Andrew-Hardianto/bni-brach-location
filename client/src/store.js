@@ -59,6 +59,15 @@ import {
     outletListReducer,
     outletUpdateReducer,
 } from './reducers/outletReducers';
+import {
+    userCreateReducer,
+    userDeleteReducer,
+    userDetailsReducer,
+    userListReducer,
+    userLoginReducer,
+    userProfileReducer,
+    userUpdateReducer
+} from './reducers/authReducers';
 
 const reducer = combineReducers({
     provinsiList: provinsiListReducer,
@@ -103,9 +112,22 @@ const reducer = combineReducers({
     outletCreate: outletCreateReducer,
     outletUpdate: outletUpdateReducer,
     outletDelete: outletDeleteReducer,
+    userLogin: userLoginReducer,
+    userCreate: userCreateReducer,
+    userList: userListReducer,
+    userDelete: userDeleteReducer,
+    userUpdate: userUpdateReducer,
+    userDetails: userDetailsReducer,
+    userProfile: userProfileReducer
 })
 
-const initialState = {}
+const userInfoFromStorage = localStorage.getItem('userInfo')
+    ? JSON.parse(localStorage.getItem('userInfo'))
+    : null
+
+const initialState = {
+    userLogin: { userInfo: userInfoFromStorage }
+}
 
 const middleware = [thunk]
 

@@ -13,21 +13,25 @@ import Message from '../../components/Message';
 import { deleteKelurahan, listKelurahan } from '../../actions/kelurahanActions';
 import { KELURAHAN_CREATE_RESET } from '../../constants/kelurahanConstants';
 
-const Kelurahan = () => {
+const Kelurahan = ({ history }) => {
     const { SearchBar } = Search;
 
     const dispatch = useDispatch();
 
-    const kelurahanList = useSelector(state => state.kelurahanList);
-    const { loading, error, kelurahan } = kelurahanList;
+    const { loading, error, kelurahan } = useSelector(state => state.kelurahanList);
 
-    const kelurahanDelete = useSelector(state => state.kelurahanDelete);
-    const { loading: loadingDelete, error: errorDelete, success } = kelurahanDelete;
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kelurahanDelete);
+
+    const { userInfo } = useSelector((state) => state.userLogin)
 
     useEffect(() => {
-        dispatch({ type: KELURAHAN_CREATE_RESET })
-        dispatch(listKelurahan())
-    }, [dispatch, success])
+        if (userInfo) {
+            dispatch({ type: KELURAHAN_CREATE_RESET })
+            dispatch(listKelurahan())
+        } else {
+            history.push('/login')
+        }
+    }, [dispatch, success, history])
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -57,7 +61,7 @@ const Kelurahan = () => {
                     </LinkContainer>
                     <LinkContainer to={`/location/kelurahan/edit/${row.ID_Kelurahan}`} className="ml-2">
                         <Button variant="success" className="btn-sm">
-                            <i class="fas fa-edit"></i>
+                            <i className="fas fa-edit"></i>
                         </Button>
                     </LinkContainer>
                     <Button
@@ -79,50 +83,52 @@ const Kelurahan = () => {
 
     return (
         <div className="home">
-            <Container>
-                {loading ? <Loader />
-                    : error ? (<Message variant="danger" >{error}</Message>)
-                        : (
-                            <Card lg="2" className="mt-3 shadow-lg" >
-                                <Card.Body>
-                                    {loadingDelete && <Loader />}
-                                    {errorDelete && <Message variant="danger" >{error}</Message>}
-                                    <ToolkitProvider
-                                        bootstrap4
-                                        keyField="id"
-                                        data={kelurahan}
-                                        columns={columns}
-                                        search
-                                    >
-                                        {
-                                            props => (
-                                                <div>
-                                                    <Row className="mb-3">
-                                                        <Col sm={9} className="mb-2">
-                                                            <Link to="/location/kelurahan/tambah" className="btn btn-primary">Tambah Kelurahan</Link>
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <SearchBar placeholder="Cari Kelurahan..." {...props.searchProps} />
-                                                        </Col>
-                                                    </Row>
-                                                    <hr />
-                                                    <Card.Title>Data Kelurahan</Card.Title>
-                                                    <BootstrapTable
-                                                        {...props.baseProps}
-                                                        pagination={paginationFactory()}
-                                                        defaultSorted={defaultSortedBy}
-                                                        wrapperClasses="table-responsive"
-                                                        rowClasses="text-nowrap"
-                                                    />
-                                                </div>
-                                            )
-                                        }
-                                    </ToolkitProvider>
-                                </Card.Body>
-                            </Card>
-                        )}
-            </Container >
-        </div >
+            <div className="container-fluid">
+                <Container>
+                    {loading ? <Loader />
+                        : error ? (<Message variant="danger" >{error}</Message>)
+                            : (
+                                <Card lg="2" className="mt-3 shadow-lg" >
+                                    <Card.Body>
+                                        {loadingDelete && <Loader />}
+                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        <ToolkitProvider
+                                            bootstrap4
+                                            keyField="ID_Kelurahan"
+                                            data={kelurahan}
+                                            columns={columns}
+                                            search
+                                        >
+                                            {
+                                                props => (
+                                                    <div>
+                                                        <Row className="mb-3">
+                                                            <Col sm={9} className="mb-2">
+                                                                <Link to="/location/kelurahan/tambah" className="btn btn-primary">Tambah Kelurahan</Link>
+                                                            </Col>
+                                                            <Col sm={3}>
+                                                                <SearchBar placeholder="Cari Kelurahan..." {...props.searchProps} />
+                                                            </Col>
+                                                        </Row>
+                                                        <hr />
+                                                        <Card.Title>Data Kelurahan</Card.Title>
+                                                        <BootstrapTable
+                                                            {...props.baseProps}
+                                                            pagination={paginationFactory()}
+                                                            defaultSorted={defaultSortedBy}
+                                                            wrapperClasses="table-responsive"
+                                                            rowClasses="text-nowrap"
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                        </ToolkitProvider>
+                                    </Card.Body>
+                                </Card>
+                            )}
+                </Container >
+            </div >
+        </div>
     )
 }
 

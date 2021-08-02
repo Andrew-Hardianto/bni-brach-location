@@ -14,6 +14,7 @@ const kodeposRoutes = require('./routes/kodeposRoute');
 const wilayahRoutes = require('./routes/wilayahRoute');
 const cabangRoutes = require('./routes/cabangRoute');
 const outletRoutes = require('./routes/outletRoute');
+const authRoutes = require('./routes/authRoute');
 
 // Load env vars
 dotenv.config();
@@ -49,6 +50,7 @@ app.use('/kodepos', kodeposRoutes);
 app.use('/wilayah', wilayahRoutes);
 app.use('/cabang', cabangRoutes);
 app.use('/outlet', outletRoutes);
+app.use('/auth', authRoutes);
 
 app.use(notFound)
 app.use(errorHandler)

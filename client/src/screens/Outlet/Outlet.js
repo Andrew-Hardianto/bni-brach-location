@@ -13,21 +13,25 @@ import Message from '../../components/Message';
 import { deleteOutlet, listOutlet } from '../../actions/outletActions';
 import { OUTLET_CREATE_RESET } from '../../constants/outletConstants';
 
-const Outlet = () => {
+const Outlet = ({ history }) => {
     const { SearchBar } = Search;
 
     const dispatch = useDispatch();
 
-    const outletList = useSelector(state => state.outletList);
-    const { loading, error, outlet } = outletList;
+    const { loading, error, outlet } = useSelector(state => state.outletList);
 
-    const outletDelete = useSelector(state => state.outletDelete);
-    const { loading: loadingDelete, error: errorDelete, success } = outletDelete;
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.outletDelete);
+
+    const { userInfo } = useSelector((state) => state.userLogin)
 
     useEffect(() => {
-        dispatch({ type: OUTLET_CREATE_RESET })
-        dispatch(listOutlet())
-    }, [dispatch, success])
+        if (userInfo) {
+            dispatch({ type: OUTLET_CREATE_RESET })
+            dispatch(listOutlet())
+        } else {
+            history.push('/login')
+        }
+    }, [dispatch, success, history])
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -62,7 +66,7 @@ const Outlet = () => {
                         </LinkContainer>
                         <LinkContainer to={`/location/outlet/edit/${row.ID_Outlet}`} className="ml-2">
                             <Button variant="success" className="btn-sm">
-                                <i class="fas fa-edit"></i>
+                                <i className="fas fa-edit"></i>
                             </Button>
                         </LinkContainer>
                         <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Outlet)}>
@@ -76,47 +80,49 @@ const Outlet = () => {
 
     return (
         <div className="home">
-            <Container>
-                {loading ? <Loader />
-                    : error ? (<Message variant="danger" >{error}</Message>)
-                        : (
-                            <Card lg="2" className="mt-3 shadow-lg" >
-                                <Card.Body>
-                                    {loadingDelete && <Loader />}
-                                    {errorDelete && <Message variant="danger" >{error}</Message>}
-                                    <ToolkitProvider
-                                        bootstrap4
-                                        keyField="id"
-                                        data={outlet}
-                                        columns={columns}
-                                        search
-                                    >
-                                        {
-                                            props => (
-                                                <div>
-                                                    <Row className="mb-3">
-                                                        <Col sm={9} className="mb-2">
-                                                            <Link to="/location/outlet/tambah" className="btn btn-primary">Tambah Outlet</Link>
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <SearchBar placeholder="Cari Outlet..." {...props.searchProps} />
-                                                        </Col>
-                                                    </Row>
-                                                    <Card.Title>Data Outlet</Card.Title>
-                                                    <BootstrapTable
-                                                        {...props.baseProps}
-                                                        pagination={paginationFactory()}
-                                                        wrapperClasses="table-responsive"
-                                                        rowClasses="text-nowrap"
-                                                    />
-                                                </div>
-                                            )
-                                        }
-                                    </ToolkitProvider>
-                                </Card.Body>
-                            </Card>
-                        )}
-            </Container>
+            <div className="container-fluid">
+                <Container>
+                    {loading ? <Loader />
+                        : error ? (<Message variant="danger" >{error}</Message>)
+                            : (
+                                <Card lg="2" className="mt-3 shadow-lg" >
+                                    <Card.Body>
+                                        {loadingDelete && <Loader />}
+                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        <ToolkitProvider
+                                            bootstrap4
+                                            keyField="ID_Outlet"
+                                            data={outlet}
+                                            columns={columns}
+                                            search
+                                        >
+                                            {
+                                                props => (
+                                                    <div>
+                                                        <Row className="mb-3">
+                                                            <Col sm={9} className="mb-2">
+                                                                <Link to="/location/outlet/tambah" className="btn btn-primary">Tambah Outlet</Link>
+                                                            </Col>
+                                                            <Col sm={3}>
+                                                                <SearchBar placeholder="Cari Outlet..." {...props.searchProps} />
+                                                            </Col>
+                                                        </Row>
+                                                        <Card.Title>Data Outlet</Card.Title>
+                                                        <BootstrapTable
+                                                            {...props.baseProps}
+                                                            pagination={paginationFactory()}
+                                                            wrapperClasses="table-responsive"
+                                                            rowClasses="text-nowrap"
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                        </ToolkitProvider>
+                                    </Card.Body>
+                                </Card>
+                            )}
+                </Container>
+            </div>
         </div>
     )
 }

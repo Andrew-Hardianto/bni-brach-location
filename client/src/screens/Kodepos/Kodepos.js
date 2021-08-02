@@ -13,21 +13,25 @@ import Message from '../../components/Message';
 import { deleteKodepos, listKodepos } from '../../actions/kodeposActions';
 import { KODEPOS_CREATE_RESET } from '../../constants/kodeposConstants';
 
-const Kodepos = () => {
+const Kodepos = ({ history }) => {
     const { SearchBar } = Search;
 
     const dispatch = useDispatch();
 
-    const kodeposList = useSelector(state => state.kodeposList);
-    const { loading, error, kodepos } = kodeposList;
+    const { loading, error, kodepos } = useSelector(state => state.kodeposList);
 
-    const kelurahanDelete = useSelector(state => state.kelurahanDelete);
-    const { loading: loadingDelete, error: errorDelete, success } = kelurahanDelete;
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kelurahanDelete);
+
+    const { userInfo } = useSelector((state) => state.userLogin)
 
     useEffect(() => {
-        dispatch({ type: KODEPOS_CREATE_RESET })
-        dispatch(listKodepos())
-    }, [dispatch, success])
+        if (userInfo) {
+            dispatch({ type: KODEPOS_CREATE_RESET })
+            dispatch(listKodepos())
+        } else {
+            history.push('/login')
+        }
+    }, [dispatch, success, history])
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -57,7 +61,7 @@ const Kodepos = () => {
                         </LinkContainer>
                         <LinkContainer to={`/location/kodepos/edit/${row.ID_Kodepos}`} className="ml-2">
                             <Button variant="success" className="btn-sm">
-                                <i class="fas fa-edit"></i>
+                                <i className="fas fa-edit"></i>
                             </Button>
                         </LinkContainer>
                         <Button
@@ -79,49 +83,51 @@ const Kodepos = () => {
 
     return (
         <div className="home">
-            <Container>
-                {loading ? <Loader />
-                    : error ? (<Message variant="danger" >{error}</Message>)
-                        : (
-                            <Card lg="2" className="mt-3 shadow-lg" >
-                                <Card.Body>
-                                    {loadingDelete && <Loader />}
-                                    {errorDelete && <Message variant="danger" >{error}</Message>}
-                                    <ToolkitProvider
-                                        bootstrap4
-                                        keyField="id"
-                                        data={kodepos}
-                                        columns={columns}
-                                        search
-                                    >
-                                        {
-                                            props => (
-                                                <div>
-                                                    <Row className="mb-3">
-                                                        <Col sm={9} className="mb-2">
-                                                            <Link to="/location/kodepos/tambah" className="btn btn-primary">Tambah Kodepos</Link>
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <SearchBar placeholder="Cari Kodepos..." {...props.searchProps} />
-                                                        </Col>
-                                                    </Row>
-                                                    <hr />
-                                                    <Card.Title>Data Kodepos</Card.Title>
-                                                    <BootstrapTable
-                                                        {...props.baseProps}
-                                                        pagination={paginationFactory()}
-                                                        defaultSorted={defaultSortedBy}
-                                                        wrapperClasses="table-responsive"
-                                                        rowClasses="text-nowrap"
-                                                    />
-                                                </div>
-                                            )
-                                        }
-                                    </ToolkitProvider>
-                                </Card.Body>
-                            </Card>
-                        )}
-            </Container>
+            <div className="container-fluid">
+                <Container>
+                    {loading ? <Loader />
+                        : error ? (<Message variant="danger" >{error}</Message>)
+                            : (
+                                <Card lg="2" className="mt-3 shadow-lg" >
+                                    <Card.Body>
+                                        {loadingDelete && <Loader />}
+                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        <ToolkitProvider
+                                            bootstrap4
+                                            keyField="ID_Kodepos"
+                                            data={kodepos}
+                                            columns={columns}
+                                            search
+                                        >
+                                            {
+                                                props => (
+                                                    <div>
+                                                        <Row className="mb-3">
+                                                            <Col sm={9} className="mb-2">
+                                                                <Link to="/location/kodepos/tambah" className="btn btn-primary">Tambah Kodepos</Link>
+                                                            </Col>
+                                                            <Col sm={3}>
+                                                                <SearchBar placeholder="Cari Kodepos..." {...props.searchProps} />
+                                                            </Col>
+                                                        </Row>
+                                                        <hr />
+                                                        <Card.Title>Data Kodepos</Card.Title>
+                                                        <BootstrapTable
+                                                            {...props.baseProps}
+                                                            pagination={paginationFactory()}
+                                                            defaultSorted={defaultSortedBy}
+                                                            wrapperClasses="table-responsive"
+                                                            rowClasses="text-nowrap"
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                        </ToolkitProvider>
+                                    </Card.Body>
+                                </Card>
+                            )}
+                </Container>
+            </div>
         </div>
     )
 }
