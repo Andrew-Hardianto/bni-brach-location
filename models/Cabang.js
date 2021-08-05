@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
         Branch_Code: {
             type: Sequelize.BIGINT,
             primaryKey: true,
-            allowNull: false,
+            unique: true,
         },
         Branch_Name: {
             type: Sequelize.STRING(100),
@@ -29,7 +29,16 @@ module.exports = (sequelize, Sequelize) => {
         },
         Longitude: {
             type: Sequelize.STRING(100)
-        }
+        },
+        Region_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Region',
+                key: 'Region_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
     }, {
         tableName: 'Branch',
         timestamps: false

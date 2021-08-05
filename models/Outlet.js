@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
         Outlet_Code: {
             type: Sequelize.BIGINT,
             primaryKey: true,
-            allowNull: false,
+            unique: true,
         },
         Outlet_Name: {
             type: Sequelize.STRING(100),
@@ -24,7 +24,25 @@ module.exports = (sequelize, Sequelize) => {
         },
         Longitude: {
             type: Sequelize.STRING(100)
-        }
+        },
+        Region_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Region',
+                key: 'Region_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
+        Branch_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Branch',
+                key: 'Branch_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
     }, {
         tableName: 'Outlet',
         timestamps: false

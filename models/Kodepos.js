@@ -9,7 +9,43 @@ module.exports = (sequelize, Sequelize) => {
         Kodepos_Code: {
             type: Sequelize.INTEGER,
             allowNull: false,
-        }
+        },
+        Provinsi_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Master_Provinsi',
+                key: 'Provinsi_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
+        Kabupaten_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Master_Kabupaten_Kota',
+                key: 'Kabupaten_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
+        Kecamatan_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Master_Kecamatan',
+                key: 'Kecamatan_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
+        Kelurahan_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Master_Kelurahan',
+                key: 'Kelurahan_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
     }, {
         tableName: 'Master_Kodepos',
         timestamps: false

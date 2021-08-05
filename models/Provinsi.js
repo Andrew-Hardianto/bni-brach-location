@@ -1,3 +1,4 @@
+'use strict';
 module.exports = (sequelize, Sequelize) => {
     const Provinsi = sequelize.define("Master_Provinsi", {
         ID_Provinsi: {
@@ -9,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
         Provinsi_Code: {
             type: Sequelize.BIGINT,
             primaryKey: true,
-            allowNull: false,
+            unique: true,
         },
         Provinsi_Name: {
             type: Sequelize.STRING(100),
@@ -19,6 +20,14 @@ module.exports = (sequelize, Sequelize) => {
         tableName: 'Master_Provinsi',
         timestamps: false
     });
+
+    Provinsi.associate = function (models) {
+        Provinsi.hasMany(models.Kota, {
+            foreignKey: 'Provinsi_Code',
+            as: 'kota'
+        });
+
+    };
 
     return Provinsi;
 }

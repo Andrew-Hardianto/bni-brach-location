@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
         Region_Code: {
             type: Sequelize.BIGINT,
             primaryKey: true,
-            allowNull: false,
+            unique: true,
         },
         Region_Subname: {
             type: Sequelize.STRING(100),

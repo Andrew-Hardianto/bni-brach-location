@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
         Kabupaten_Code: {
             type: Sequelize.BIGINT,
             primaryKey: true,
-            allowNull: false,
+            unique: true,
         },
         Kabupaten_Name: {
             type: Sequelize.STRING(100),
@@ -20,11 +20,29 @@ module.exports = (sequelize, Sequelize) => {
         },
         Antasena_Code: {
             type: Sequelize.INTEGER,
-        }
+        },
+        Provinsi_Code: {
+            type: Sequelize.BIGINT,
+            references: {
+                model: 'Master_Provinsi',
+                key: 'Provinsi_Code'
+            },
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE'
+        },
     }, {
         tableName: 'Master_Kabupaten_Kota',
         timestamps: false
     });
+
+    Kota.associate = function (models) {
+        Kota.belongsTo(models.Provinsi, {
+            foreignKey: 'Provinsi_Code',
+            as: 'provinsi',
+            hooks: true
+        });
+
+    };
 
     return Kota;
 }

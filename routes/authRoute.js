@@ -9,7 +9,8 @@ router.get('/me', protect, getMe)
 
 router.route('/')
     .get(protect, getAllUser)
-    .post(protect, createUser)
+    // .post(protect, createUser)
+    .post(createUser)
 
 router.route('/:id')
     .get(protect, getUser)
