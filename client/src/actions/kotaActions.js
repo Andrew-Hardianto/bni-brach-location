@@ -111,7 +111,7 @@ export const editKota = (kota) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/kota/${kota.ID_Kabupaten}`, kota, config);
+        const { dataPost } = await axios.put(`/kota/${kota.id}`, kota, config);
 
         dispatch({
             type: KOTA_UPDATE_SUCCESS,

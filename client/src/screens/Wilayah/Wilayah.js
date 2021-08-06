@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
@@ -12,9 +12,15 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { listWilayah, deleteWilayah } from '../../actions/wilayahActions';
 import { WILAYAH_CREATE_RESET } from '../../constants/wilayahConstants';
+import ModalDetailRegion from './ModalDetailRegion';
+import ModalEditRegion from './ModalEditRegion';
 
 const Wilayah = ({ history }) => {
     const { SearchBar } = Search;
+
+    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [wilayahId, setWilayahId] = useState();
 
     const dispatch = useDispatch();
 
@@ -23,6 +29,19 @@ const Wilayah = ({ history }) => {
     const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.wilayahDelete);
 
     const { userInfo } = useSelector((state) => state.userLogin)
+
+    const handleClose = () => setShow(false);
+    const handleCloseEdit = () => setShowEdit(false);
+
+    const handleShow = useCallback(data => {
+        setWilayahId(data);
+        setShow(true);
+    });
+
+    const handleShowEdit = useCallback(data => {
+        setWilayahId(data);
+        setShowEdit(true);
+    });
 
     useEffect(() => {
         if (userInfo) {
@@ -54,7 +73,7 @@ const Wilayah = ({ history }) => {
         formatter: (rowContent, row) => {
             return (
                 <div className="">
-                    <LinkContainer to={`/location/region/detail/${row.ID_Region}`}>
+                    {/* <LinkContainer to={`/location/region/detail/${row.ID_Region}`}>
                         <Button variant="info" className="btn-sm">
                             <i className="fas fa-info"></i>
                         </Button>
@@ -63,7 +82,13 @@ const Wilayah = ({ history }) => {
                         <Button variant="success" className="btn-sm">
                             <i className="fas fa-edit"></i>
                         </Button>
-                    </LinkContainer>
+                    </LinkContainer> */}
+                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Region)}>
+                        <i className="fas fa-info"></i>
+                    </Button>
+                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Region)}>
+                        <i className="fas fa-edit"></i>
+                    </Button>
                     <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Region)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
@@ -86,6 +111,7 @@ const Wilayah = ({ history }) => {
                             : (
                                 <Card lg="2" className="mt-3 shadow-lg" >
                                     <Card.Body>
+                                        <Card.Title className="font-weight-bold text-center">Data Region</Card.Title>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -106,7 +132,7 @@ const Wilayah = ({ history }) => {
                                                                 <SearchBar placeholder="Cari Wilayah..." {...props.searchProps} />
                                                             </Col>
                                                         </Row>
-                                                        <Card.Title>Data Region</Card.Title>
+
                                                         <BootstrapTable
                                                             {...props.baseProps}
                                                             pagination={paginationFactory()}
@@ -119,6 +145,12 @@ const Wilayah = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
+                    <Modal size="md" show={show} onHide={handleClose}>
+                        <ModalDetailRegion onClick={handleClose} wilayahId={wilayahId} />
+                    </Modal>
+                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                        <ModalEditRegion onClick={handleCloseEdit} wilayahId={wilayahId} />
+                    </Modal>
                 </Container>
             </div>
         </div>

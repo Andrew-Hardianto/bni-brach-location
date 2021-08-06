@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -12,17 +12,36 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { deleteKodepos, listKodepos } from '../../actions/kodeposActions';
 import { KODEPOS_CREATE_RESET } from '../../constants/kodeposConstants';
+import ModalDetailKodepos from './ModalDetailKodepos';
+import ModalEditKodepos from './ModalEditKodepos';
 
 const Kodepos = ({ history }) => {
     const { SearchBar } = Search;
+
+    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [kodeposId, setKodeposId] = useState();
 
     const dispatch = useDispatch();
 
     const { loading, error, kodepos } = useSelector(state => state.kodeposList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kelurahanDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kodeposDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin)
+    const { userInfo } = useSelector((state) => state.userLogin);
+
+    const handleClose = () => setShow(false);
+    const handleCloseEdit = () => setShowEdit(false);
+
+    const handleShow = useCallback(data => {
+        setKodeposId(data);
+        setShow(true);
+    });
+
+    const handleShowEdit = useCallback(data => {
+        setKodeposId(data);
+        setShowEdit(true);
+    });
 
     useEffect(() => {
         if (userInfo) {
@@ -54,7 +73,7 @@ const Kodepos = ({ history }) => {
             formatter: (rowContent, row) => {
                 return (
                     <div>
-                        <LinkContainer to={`/location/kodepos/detail/${row.ID_Kodepos}`}>
+                        {/* <LinkContainer to={`/location/kodepos/detail/${row.ID_Kodepos}`}>
                             <Button variant="info" className="btn-sm">
                                 <i className="fas fa-info"></i>
                             </Button>
@@ -63,7 +82,13 @@ const Kodepos = ({ history }) => {
                             <Button variant="success" className="btn-sm">
                                 <i className="fas fa-edit"></i>
                             </Button>
-                        </LinkContainer>
+                        </LinkContainer> */}
+                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Kodepos)}>
+                            <i className="fas fa-info"></i>
+                        </Button>
+                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Kodepos)}>
+                            <i className="fas fa-edit"></i>
+                        </Button>
                         <Button
                             variant="danger"
                             className="btn-sm ml-2"
@@ -90,6 +115,7 @@ const Kodepos = ({ history }) => {
                             : (
                                 <Card lg="2" className="mt-3 shadow-lg" >
                                     <Card.Body>
+                                        <Card.Title className="font-weight-bold text-center">DATA KODEPOS</Card.Title>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -110,8 +136,6 @@ const Kodepos = ({ history }) => {
                                                                 <SearchBar placeholder="Cari Kodepos..." {...props.searchProps} />
                                                             </Col>
                                                         </Row>
-                                                        <hr />
-                                                        <Card.Title>Data Kodepos</Card.Title>
                                                         <BootstrapTable
                                                             {...props.baseProps}
                                                             pagination={paginationFactory()}
@@ -126,6 +150,12 @@ const Kodepos = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
+                    <Modal size="md" show={show} onHide={handleClose}>
+                        <ModalDetailKodepos onClick={handleClose} kodeposId={kodeposId} />
+                    </Modal>
+                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                        <ModalEditKodepos onClick={handleCloseEdit} kodeposId={kodeposId} />
+                    </Modal>
                 </Container>
             </div>
         </div>

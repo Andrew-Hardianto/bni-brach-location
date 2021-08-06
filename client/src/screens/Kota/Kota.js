@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
@@ -11,10 +11,15 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { deleteKota, listKota } from '../../actions/kotaActions';
-import { KOTA_CREATE_RESET } from '../../constants/kotaConstants';
+import { KOTA_CREATE_RESET, KOTA_UPDATE_RESET } from '../../constants/kotaConstants';
+import ModalDetailKota from './ModalDetailKota';
+import ModalEditKota from './ModalEditKota';
 
 const Kota = ({ history }) => {
     const { SearchBar } = Search;
+    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [kotaId, setKotaId] = useState();
 
     const dispatch = useDispatch();
 
@@ -24,9 +29,23 @@ const Kota = ({ history }) => {
 
     const { userInfo } = useSelector((state) => state.userLogin)
 
+    const handleClose = () => setShow(false);
+    const handleCloseEdit = () => setShowEdit(false);
+
+    const handleShow = useCallback(data => {
+        setKotaId(data);
+        setShow(true);
+    });
+
+    const handleShowEdit = useCallback(data => {
+        setKotaId(data);
+        setShowEdit(true);
+    });
+
     useEffect(() => {
         if (userInfo) {
             dispatch({ type: KOTA_CREATE_RESET })
+            dispatch({ type: KOTA_UPDATE_RESET })
             dispatch(listKota())
         } else {
             history.push('/login')
@@ -61,7 +80,7 @@ const Kota = ({ history }) => {
         formatter: (rowContent, row) => {
             return (
                 <div className="">
-                    <LinkContainer to={`/location/kota/detail/${row.ID_Kabupaten}`}>
+                    {/* <LinkContainer to={`/location/kota/detail/${row.ID_Kabupaten}`}>
                         <Button variant="info" className="btn-sm">
                             <i className="fas fa-info"></i>
                         </Button>
@@ -70,7 +89,13 @@ const Kota = ({ history }) => {
                         <Button variant="success" className="btn-sm">
                             <i className="fas fa-edit"></i>
                         </Button>
-                    </LinkContainer>
+                    </LinkContainer> */}
+                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Kabupaten)}>
+                        <i className="fas fa-info"></i>
+                    </Button>
+                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Kabupaten)}>
+                        <i className="fas fa-edit"></i>
+                    </Button>
                     <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Kabupaten)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
@@ -99,6 +124,7 @@ const Kota = ({ history }) => {
                             : (
                                 <Card lg="2" className="mt-3 shadow-lg" >
                                     <Card.Body>
+                                        <Card.Title className="text-center font-weight-bold">DATA KOTA/KABUPATEN</Card.Title>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -119,9 +145,6 @@ const Kota = ({ history }) => {
                                                                 <SearchBar placeholder="Cari Kota/Kabupaten..." {...props.searchProps} />
                                                             </Col>
                                                         </Row>
-                                                        <hr />
-                                                        <Card.Title>Data Kota</Card.Title>
-                                                        <hr />
                                                         <BootstrapTable
                                                             {...props.baseProps}
                                                             pagination={paginationFactory()}
@@ -136,6 +159,12 @@ const Kota = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
+                    <Modal size="md" show={show} onHide={handleClose}>
+                        <ModalDetailKota onClick={handleClose} kotaId={kotaId} />
+                    </Modal>
+                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                        <ModalEditKota onClick={handleCloseEdit} kotaId={kotaId} />
+                    </Modal>
                 </Container>
             </div>
         </div>

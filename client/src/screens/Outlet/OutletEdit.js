@@ -73,7 +73,6 @@ const OutletEdit = ({ history, match }) => {
         setDraggable((d) => !d)
     }, [])
 
-    console.log(data)
 
     return (
         <div className="home">

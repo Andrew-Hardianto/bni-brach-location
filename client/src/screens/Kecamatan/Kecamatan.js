@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -11,10 +11,16 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { deleteKecamatan, listKecamatan } from '../../actions/kecamatanActions';
-import { KECAMATAN_CREATE_RESET } from '../../constants/kecamatanConstants';
+import { KECAMATAN_CREATE_RESET, KECAMATAN_UPDATE_RESET } from '../../constants/kecamatanConstants';
+import ModalDetailKecamatan from './ModalDetailKecamatan';
+import ModalEditKecamatan from './ModalEditKecamatan';
 
 const Kecamatan = ({ history }) => {
     const { SearchBar } = Search;
+
+    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [kecamatanId, setKecamatanId] = useState();
 
     const dispatch = useDispatch();
 
@@ -24,9 +30,23 @@ const Kecamatan = ({ history }) => {
 
     const { userInfo } = useSelector((state) => state.userLogin)
 
+    const handleClose = () => setShow(false);
+    const handleCloseEdit = () => setShowEdit(false);
+
+    const handleShow = useCallback(data => {
+        setKecamatanId(data);
+        setShow(true);
+    });
+
+    const handleShowEdit = useCallback(data => {
+        setKecamatanId(data);
+        setShowEdit(true);
+    });
+
     useEffect(() => {
         if (userInfo) {
             dispatch({ type: KECAMATAN_CREATE_RESET })
+            dispatch({ type: KECAMATAN_UPDATE_RESET })
             dispatch(listKecamatan())
         } else {
             history.push('/login')
@@ -55,7 +75,7 @@ const Kecamatan = ({ history }) => {
         formatter: (rowContent, row) => {
             return (
                 <div className="">
-                    <LinkContainer to={`/location/kecamatan/detail/${row.ID_Kecamatan}`}>
+                    {/* <LinkContainer to={`/location/kecamatan/detail/${row.ID_Kecamatan}`}>
                         <Button variant="info" className="btn-sm">
                             <i className="fas fa-info"></i>
                         </Button>
@@ -64,7 +84,13 @@ const Kecamatan = ({ history }) => {
                         <Button variant="success" className="btn-sm">
                             <i className="fas fa-edit"></i>
                         </Button>
-                    </LinkContainer>
+                    </LinkContainer> */}
+                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Kecamatan)}>
+                        <i className="fas fa-info"></i>
+                    </Button>
+                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Kecamatan)}>
+                        <i className="fas fa-edit"></i>
+                    </Button>
                     <Button
                         variant="danger"
                         className="btn-sm ml-2"
@@ -127,6 +153,12 @@ const Kecamatan = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
+                    <Modal size="md" show={show} onHide={handleClose}>
+                        <ModalDetailKecamatan onClick={handleClose} kecamatanId={kecamatanId} />
+                    </Modal>
+                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                        <ModalEditKecamatan onClick={handleCloseEdit} kecamatanId={kecamatanId} />
+                    </Modal>
                 </Container >
             </div >
         </div>

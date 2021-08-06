@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
@@ -12,9 +12,15 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { USER_CREATE_RESET } from '../../constants/authConstants';
 import { deleteUser, listUsers } from '../../actions/authActions';
+import ModalDetailUser from './ModalDetailUser';
+import ModalEditUser from './ModalEditUser';
 
 const User = () => {
     const { SearchBar } = Search;
+
+    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [userId, setUserId] = useState();
 
     const dispatch = useDispatch();
 
@@ -22,6 +28,19 @@ const User = () => {
     const { userInfo } = useSelector(state => state.userLogin);
 
     const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.userDelete);
+
+    const handleClose = () => setShow(false);
+    const handleCloseEdit = () => setShowEdit(false);
+
+    const handleShow = useCallback(data => {
+        setUserId(data);
+        setShow(true);
+    });
+
+    const handleShowEdit = useCallback(data => {
+        setUserId(data);
+        setShowEdit(true);
+    });
 
     useEffect(() => {
 
@@ -49,7 +68,7 @@ const User = () => {
                         {
                             userInfo.user.Username !== row.Username ? (
                                 <>
-                                    <LinkContainer to={`/user/detail/${row.ID_User}`}>
+                                    {/* <LinkContainer to={`/user/detail/${row.ID_User}`}>
                                         <Button variant="info" size="sm">
                                             <i className="fas fa-info"></i>
                                         </Button>
@@ -58,18 +77,27 @@ const User = () => {
                                         <Button variant="success" size="sm">
                                             <i className="fas fa-edit"></i>
                                         </Button>
-                                    </LinkContainer>
+                                    </LinkContainer> */}
+                                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_User)}>
+                                        <i className="fas fa-info"></i>
+                                    </Button>
+                                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_User)}>
+                                        <i className="fas fa-edit"></i>
+                                    </Button>
                                     <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(row.ID_User)}>
                                         <i className="fas fa-trash-alt"></i>
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <LinkContainer to={`/user/detail/${row.ID_User}`}>
+                                    {/* <LinkContainer to={`/user/detail/${row.ID_User}`}>
                                         <Button variant="info" size="sm">
                                             <i className="fas fa-info"></i>
                                         </Button>
-                                    </LinkContainer>
+                                    </LinkContainer> */}
+                                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_User)}>
+                                        <i className="fas fa-info"></i>
+                                    </Button>
                                 </>
                             )
                         }
@@ -128,6 +156,12 @@ const User = () => {
                                     </Card.Body>
                                 </Card>
                             )}
+                    <Modal size="md" show={show} onHide={handleClose}>
+                        <ModalDetailUser onClick={handleClose} userId={userId} />
+                    </Modal>
+                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                        <ModalEditUser onClick={handleCloseEdit} userId={userId} />
+                    </Modal>
                 </Container>
             </div>
         </div>

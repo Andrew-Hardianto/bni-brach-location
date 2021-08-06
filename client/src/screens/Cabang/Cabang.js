@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
@@ -12,19 +12,36 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { CABANG_CREATE_RESET } from '../../constants/cabangConstants';
 import { deleteCabang, listCabang } from '../../actions/cabangActions';
+import ModalDetailBranch from './ModalDetailBranch';
+import ModalEditBranch from './ModalEditBranch';
 
 const Cabang = ({ history }) => {
     const { SearchBar } = Search;
 
+    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [cabangId, setCabangId] = useState();
+
     const dispatch = useDispatch();
 
-    const cabangList = useSelector(state => state.cabangList);
-    const { loading, error, cabang } = cabangList;
+    const { loading, error, cabang } = useSelector(state => state.cabangList);
 
-    const cabangDelete = useSelector(state => state.cabangDelete);
-    const { loading: loadingDelete, error: errorDelete, success } = cabangDelete;
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.cabangDelete);
 
     const { userInfo } = useSelector((state) => state.userLogin)
+
+    const handleClose = () => setShow(false);
+    const handleCloseEdit = () => setShowEdit(false);
+
+    const handleShow = useCallback(data => {
+        setCabangId(data);
+        setShow(true);
+    });
+
+    const handleShowEdit = useCallback(data => {
+        setCabangId(data);
+        setShowEdit(true);
+    });
 
     useEffect(() => {
         if (userInfo) {
@@ -61,7 +78,7 @@ const Cabang = ({ history }) => {
             formatter: (rowContent, row) => {
                 return (
                     <div className="">
-                        <LinkContainer to={`/location/branch/detail/${row.ID_Branch}`}>
+                        {/* <LinkContainer to={`/location/branch/detail/${row.ID_Branch}`}>
                             <Button variant="info" size="sm">
                                 <i className="fas fa-info"></i>
                             </Button>
@@ -70,7 +87,13 @@ const Cabang = ({ history }) => {
                             <Button variant="success" size="sm">
                                 <i className="fas fa-edit"></i>
                             </Button>
-                        </LinkContainer>
+                        </LinkContainer> */}
+                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Branch)}>
+                            <i className="fas fa-info"></i>
+                        </Button>
+                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Branch)}>
+                            <i className="fas fa-edit"></i>
+                        </Button>
                         <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(row.ID_Branch)}>
                             <i className="fas fa-trash-alt"></i>
                         </Button>
@@ -94,6 +117,7 @@ const Cabang = ({ history }) => {
                             : (
                                 <Card lg="2" className="mt-3 shadow-lg" >
                                     <Card.Body>
+                                        <Card.Title className="font-weight-bold text-center">Data Branch</Card.Title>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -114,7 +138,6 @@ const Cabang = ({ history }) => {
                                                                 <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
                                                             </Col>
                                                         </Row>
-                                                        <Card.Title>Data Branch</Card.Title>
                                                         <BootstrapTable
                                                             {...props.baseProps}
                                                             pagination={paginationFactory()}
@@ -129,6 +152,12 @@ const Cabang = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
+                    <Modal size="lg" show={show} onHide={handleClose}>
+                        <ModalDetailBranch onClick={handleClose} cabangId={cabangId} />
+                    </Modal>
+                    <Modal size="lg" show={showEdit} onHide={handleCloseEdit}>
+                        <ModalEditBranch onClick={handleCloseEdit} cabangId={cabangId} />
+                    </Modal>
                 </Container>
             </div>
         </div>
