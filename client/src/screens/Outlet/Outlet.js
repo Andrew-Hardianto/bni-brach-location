@@ -68,6 +68,10 @@ const Outlet = ({ history }) => {
             text: 'Nama Outlet'
         },
         {
+            dataField: 'cabang.Branch_Name',
+            text: 'Nama Branch'
+        },
+        {
             dataField: 'Address',
             text: 'Alamat',
             style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }

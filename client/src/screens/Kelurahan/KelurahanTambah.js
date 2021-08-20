@@ -8,7 +8,7 @@ import Message from '../../components/Message';
 import { createKelurahan } from '../../actions/kelurahanActions';
 import { listKecamatan } from '../../actions/kecamatanActions';
 
-const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '' }
+const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '', Status: '' }
 
 const KelurahanTambah = ({ history }) => {
 
@@ -81,6 +81,19 @@ const KelurahanTambah = ({ history }) => {
                                     .map((data) => (
                                         <option key={data.ID_Kecamatan} value={data.Kecamatan_Code} >{data.Kecamatan_Name}</option>
                                     ))}
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                onChange={handleChange}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">

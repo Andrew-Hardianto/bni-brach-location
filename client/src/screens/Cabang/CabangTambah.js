@@ -30,6 +30,7 @@ const CabangTambah = ({ history }) => {
     const [Region_Code, setKodeWilayah] = useState('');
     const [Latitude, setLatitude] = useState('');
     const [Longitude, setLongitude] = useState('');
+    const [Status, setStatus] = useState('');
     const [BI_Location_Code, setBiLocationCode] = useState('');
 
     const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const CabangTambah = ({ history }) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(createCabang(Branch_Code, Branch_Name, BI_Location_Code, Address, Region_Code, Latitude, Longitude))
+        dispatch(createCabang(Branch_Code, Branch_Name, BI_Location_Code, Address, Region_Code, Latitude, Longitude, Status))
     }
 
     const coords = { lat: -6.241586, lng: 106.992416 };
@@ -128,11 +129,9 @@ const CabangTambah = ({ history }) => {
                                 onChange={(e) => setKodeWilayah(e.target.value)}
                             >
                                 <option value="">- Pilih Wilayah -</option>
-                                {wilayah
-                                    .filter(wil => wil.Region_Code.toString().includes(Branch_Code.toString().substring(0, 2)))
-                                    .map((data) => (
-                                        <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
-                                    ))}
+                                {wilayah.map((data) => (
+                                    <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="biLocationCode">
@@ -166,6 +165,20 @@ const CabangTambah = ({ history }) => {
                                 />
                             </Form.Group>
                         </Form.Row>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                value={Status}
+                                onChange={(e) => setStatus(e.target.value)}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
+                            </Form.Control>
+                        </Form.Group>
                         <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
                                 attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'

@@ -57,6 +57,30 @@ const KotaDetail = ({ match }) => {
                                         <tr>
                                             <td>
                                                 <Card.Text>
+                                                    Jenis Kabupaten/Kotamadya
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.Kabkota_Flag}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
+                                                    Status
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kota.kota?.Status}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
                                                     Kode Provinsi
                                                 </Card.Text>
                                             </td>

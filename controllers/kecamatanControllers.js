@@ -42,7 +42,7 @@ exports.getByIdKecamatan = async (req, res) => {
 // add kecamatan
 exports.createKecamatan = async (req, res, next) => {
     try {
-        const { Kecamatan_Code, Kecamatan_Name, Kabupaten_Code, BI_Location_Code, Antasena_Code } = req.body;
+        const { Kecamatan_Code, Kecamatan_Name, Kabkota_Code, BI_Location_Code, Antasena_Code, Status } = req.body;
 
         const checkkode = await Kecamatan.findOne(
             {
@@ -58,20 +58,21 @@ exports.createKecamatan = async (req, res, next) => {
         const kota = await Kota.findOne(
             {
                 where: {
-                    Kabupaten_Code
+                    Kabkota_Code
                 }
             }
         )
 
-        if (!kota) return next(new Error(`Kota/kabupaten dengan kode ${Kabupaten_Code} tidak ditemukan!`, 404))
+        if (!kota) return next(new Error(`Kota/kabupaten dengan kode ${Kabkota_Code} tidak ditemukan!`, 404))
 
         const kecamatan = await Kecamatan.create({
             Kecamatan_Code,
             Kecamatan_Name,
-            Kabupaten_Code,
+            Kabkota_Code,
             Provinsi_Code: kota.Provinsi_Code,
             BI_Location_Code,
-            Antasena_Code
+            Antasena_Code,
+            Status
         });
 
         res.status(201).json({
@@ -89,28 +90,29 @@ exports.createKecamatan = async (req, res, next) => {
 // update kecamatan
 exports.updateKecamatan = async (req, res, next) => {
     try {
-        const { Kecamatan_Code, Kecamatan_Name, Kabupaten_Code, BI_Location_Code, Antasena_Code } = req.body;
+        const { Kecamatan_Code, Kecamatan_Name, Kabkota_Code, BI_Location_Code, Antasena_Code, Status } = req.body;
 
         if (!Kecamatan_Code || !Kecamatan_Name) return next(new Error('Kode Kecamatan/Nama Kecamatan harus diisi!'));
 
         const kota = await Kota.findOne(
             {
                 where: {
-                    Kabupaten_Code
+                    Kabkota_Code
                 }
             }
         )
 
-        if (!kota) return next(new Error(`Kota/kabupaten dengan kode ${Kabupaten_Code} tidak ditemukan!`, 404))
+        if (!kota) return next(new Error(`Kota/kabupaten dengan kode ${Kabkota_Code} tidak ditemukan!`, 404))
 
         const kecamatan = await Kecamatan.update(
             {
                 Kecamatan_Code,
                 Kecamatan_Name,
-                Kabupaten_Code,
+                Kabkota_Code,
                 Provinsi_Code: kota.Provinsi_Code,
                 BI_Location_Code,
-                Antasena_Code
+                Antasena_Code,
+                Status
             }, {
             where: {
                 ID_Kecamatan: req.params.id

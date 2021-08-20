@@ -59,6 +59,18 @@ const ModalDetailRegion = ({ onClick, wilayahId }) => {
                                 </Card.Text>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <Card.Text>
+                                    Status
+                                </Card.Text>
+                            </td>
+                            <td>
+                                <Card.Text className="font-weight-bold">
+                                    : {wilayah.wilayah?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                </Card.Text>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </Modal.Body>

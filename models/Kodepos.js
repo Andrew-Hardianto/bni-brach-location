@@ -1,12 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
     const Kodepos = sequelize.define("Master_Kodepos", {
-        ID_Kodepos: {
+        ID_Postcode: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true
         },
-        Kodepos_Code: {
+        Postcode: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },
@@ -19,11 +19,11 @@ module.exports = (sequelize, Sequelize) => {
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
         },
-        Kabupaten_Code: {
+        Kabkota_Code: {
             type: Sequelize.BIGINT,
             references: {
                 model: 'Master_Kabupaten_Kota',
-                key: 'Kabupaten_Code'
+                key: 'Kabkota_Code'
             },
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
@@ -46,6 +46,11 @@ module.exports = (sequelize, Sequelize) => {
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
         },
+        Status: {
+            type: Sequelize.STRING(1),
+            enum: ['Y', 'N'],
+            defaultValue: 'Y'
+        }
     }, {
         tableName: 'Master_Kodepos',
         timestamps: false

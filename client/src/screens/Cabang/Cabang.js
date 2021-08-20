@@ -68,6 +68,10 @@ const Cabang = ({ history }) => {
             text: 'Nama Cabang'
         },
         {
+            dataField: 'wilayah.Region_Name',
+            text: 'Nama Region'
+        },
+        {
             dataField: 'Address',
             text: 'Alamat',
             style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }

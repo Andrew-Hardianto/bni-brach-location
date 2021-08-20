@@ -59,11 +59,11 @@ const Kota = ({ history }) => {
     }
 
     const columns = [{
-        dataField: 'Kabupaten_Code',
+        dataField: 'Kabkota_Code',
         text: 'Kode Kota/Kabupaten',
         sort: true
     }, {
-        dataField: 'Kabupaten_Name',
+        dataField: 'Kabkota_Name',
         text: 'Nama Kota'
     }, {
         dataField: 'BI_Location_Code',
@@ -72,8 +72,8 @@ const Kota = ({ history }) => {
         dataField: 'Antasena_Code',
         text: 'Antasena Code'
     }, {
-        dataField: 'Provinsi_Code',
-        text: 'Kode Provinsi'
+        dataField: 'provinsi.Provinsi_Name',
+        text: 'Nama Provinsi'
     }, {
         dataField: "link",
         text: 'Aksi',
@@ -90,13 +90,13 @@ const Kota = ({ history }) => {
                             <i className="fas fa-edit"></i>
                         </Button>
                     </LinkContainer> */}
-                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Kabupaten)}>
+                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Kabkota)}>
                         <i className="fas fa-info"></i>
                     </Button>
-                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Kabupaten)}>
+                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Kabkota)}>
                         <i className="fas fa-edit"></i>
                     </Button>
-                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Kabupaten)}>
+                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Kabkota)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
                 </div>
@@ -129,7 +129,7 @@ const Kota = ({ history }) => {
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
-                                            keyField="ID_Kabupaten"
+                                            keyField="ID_Kabkota"
                                             data={kota}
                                             columns={columns}
                                             search

@@ -67,7 +67,7 @@ export const detailProvinsi = (id) => async (dispatch) => {
     }
 }
 
-export const createProvinsi = (Provinsi_Code, Provinsi_Name) => async (dispatch) => {
+export const createProvinsi = (Provinsi_Code, Provinsi_Name, BI_Location_Code, Status) => async (dispatch) => {
     try {
         dispatch({ type: PROVINSI_CREATE_REQUEST })
 
@@ -79,7 +79,7 @@ export const createProvinsi = (Provinsi_Code, Provinsi_Name) => async (dispatch)
 
         const { data } = await axios.post(
             '/provinsi',
-            { Provinsi_Code, Provinsi_Name },
+            { Provinsi_Code, Provinsi_Name, BI_Location_Code, Status },
             config
         )
 

@@ -9,8 +9,7 @@ exports.getAllOutlet = async (req, res) => {
     try {
         const outlet = await Outlet.findAll({
             include: [
-                "cabang",
-                "wilayah"
+                "cabang"
             ]
         });
 
@@ -51,7 +50,7 @@ exports.getByIdOutlet = async (req, res) => {
 // add outlet
 exports.createOutlet = async (req, res, next) => {
     try {
-        const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude } = req.body;
+        const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude, Status } = req.body;
 
         const checkId = await Outlet.findOne(
             {
@@ -78,6 +77,7 @@ exports.createOutlet = async (req, res, next) => {
             Region_Code: cabang.Region_Code,
             Latitude,
             Longitude,
+            Status
         })
 
         res.status(201).json({
@@ -95,7 +95,7 @@ exports.createOutlet = async (req, res, next) => {
 // update outlet
 exports.updateOutlet = async (req, res, next) => {
     try {
-        const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude } = req.body;
+        const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude, Status, Outlet_level } = req.body;
 
         if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
         if (!Outlet_Code) return next(new Error('Field Outlet code tidak boleh kosong!'));
@@ -112,6 +112,8 @@ exports.updateOutlet = async (req, res, next) => {
             Region_Code: cabang.Region_Code,
             Latitude,
             Longitude,
+            Outlet_level,
+            Status
         }, {
             where: {
                 ID_Outlet: req.params.id

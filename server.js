@@ -23,7 +23,7 @@ dotenv.config();
 // db.sequelize.sync();
 db.sequelize.sync({ force: false }).then(() => {
     console.log('Drop and Resync');
-});
+})
 
 const app = express();
 // app.use(function (req, res, next) {

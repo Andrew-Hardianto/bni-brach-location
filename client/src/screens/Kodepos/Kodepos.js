@@ -60,7 +60,7 @@ const Kodepos = ({ history }) => {
 
     const columns = [
         {
-            dataField: 'Kodepos_Code',
+            dataField: 'Postcode',
             text: 'Kode Pos'
         },
         {
@@ -83,16 +83,16 @@ const Kodepos = ({ history }) => {
                                 <i className="fas fa-edit"></i>
                             </Button>
                         </LinkContainer> */}
-                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Kodepos)}>
+                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Postcode)}>
                             <i className="fas fa-info"></i>
                         </Button>
-                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Kodepos)}>
+                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Postcode)}>
                             <i className="fas fa-edit"></i>
                         </Button>
                         <Button
                             variant="danger"
                             className="btn-sm ml-2"
-                            onClick={() => deletehandler(row.ID_Kodepos)}
+                            onClick={() => deletehandler(row.ID_Postcode)}
                         >
                             <i className="fas fa-trash-alt"></i>
                         </Button>
@@ -120,7 +120,7 @@ const Kodepos = ({ history }) => {
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
-                                            keyField="ID_Kodepos"
+                                            keyField="ID_Postcode"
                                             data={kodepos}
                                             columns={columns}
                                             search

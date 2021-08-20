@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+// import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -67,8 +67,8 @@ const Kecamatan = ({ history }) => {
         dataField: 'Kecamatan_Name',
         text: 'Nama Kecamatan'
     }, {
-        dataField: 'Kabupaten_Code',
-        text: 'Kode Kota'
+        dataField: 'kota.Kabkota_Name',
+        text: 'Nama Kota/Kabupaten'
     }, {
         dataField: "link",
         text: 'Aksi',

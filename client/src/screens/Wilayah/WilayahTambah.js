@@ -7,7 +7,7 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import { createWilayah } from '../../actions/wilayahActions';
 
-const initialState = { Region_Code: '', Region_Subname: '', Region_Name: '' }
+const initialState = { Region_Code: '', Region_Subname: '', Region_Name: '', Status: '' }
 
 const WilayahTambah = ({ history }) => {
     const [data, setData] = useState(initialState)
@@ -66,6 +66,19 @@ const WilayahTambah = ({ history }) => {
                                 name="Region_Name"
                                 onChange={handleChange}
                             />
+                        </Form.Group>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                onChange={handleChange}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
+                            </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit

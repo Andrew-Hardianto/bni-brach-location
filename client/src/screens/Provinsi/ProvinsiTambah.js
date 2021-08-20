@@ -10,6 +10,8 @@ import Message from '../../components/Message';
 const ProvinsiTambah = ({ history }) => {
     const [kode, setKode] = useState('');
     const [nama, setNama] = useState('');
+    const [biLocationCode, setBiLocationCode] = useState('');
+    const [Status, setStatus] = useState('');
 
     const dispatch = useDispatch();
 
@@ -24,7 +26,7 @@ const ProvinsiTambah = ({ history }) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(createProvinsi(kode, nama))
+        dispatch(createProvinsi(kode, nama, biLocationCode, Status))
     }
 
     return (
@@ -51,6 +53,29 @@ const ProvinsiTambah = ({ history }) => {
                                 value={nama}
                                 onChange={(e) => setNama(e.target.value)}
                             />
+                        </Form.Group>
+                        <Form.Group controlId="biLocationCode">
+                            <Form.Label>BI Location Code</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="biLocationCode"
+                                value={biLocationCode}
+                                onChange={(e) => setBiLocationCode(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                value={Status}
+                                onChange={(e) => setStatus(e.target.value)}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
+                            </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit

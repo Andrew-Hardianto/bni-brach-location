@@ -18,7 +18,8 @@ const initialState = {
     BI_Location_Code: '',
     Region_Code: '',
     Latitude: '',
-    Longitude: ''
+    Longitude: '',
+    Status: ''
 }
 
 const ModalEditBranch = ({ onClick, cabangId }) => {
@@ -55,7 +56,6 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
         dispatch(editCabang({ ...data }))
     }
 
-    // const coords = [cabang?.cabang?.latitude, cabang?.cabang?.longitude]
     const coords = [isNaN(cabang?.cabang?.Latitude) ? -6.241586 : cabang?.cabang?.Latitude, isNaN(cabang?.cabang?.Longitude) ? 106.992416 : cabang?.cabang?.Longitude];
 
     const [draggable, setDraggable] = useState(false)
@@ -174,6 +174,20 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             />
                         </Form.Group>
                     </Form.Row>
+                    <Form.Group controlId="Status">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Control
+                            as="select"
+                            custom
+                            name="Status"
+                            value={data?.Status}
+                            onChange={(e) => setData({ ...data, Status: e.target.value })}
+                        >
+                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value="Y" >Aktif</option>
+                            <option value="N" >Tidak Aktif</option>
+                        </Form.Control>
+                    </Form.Group>
                     <MapContainer style={{ width: "550px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                         <TileLayer
                             attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'

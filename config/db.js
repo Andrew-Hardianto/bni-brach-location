@@ -9,6 +9,11 @@ const sequelize = new Sequelize(env.database,
     dialect: env.dialect,
     port: env.port,
     operatorsAliases: false,
+    dialectOptions: {
+      options: {
+        requestTimeout: 150000000
+      }
+    },
     pool: {
       max: env.max,
       min: env.pool.min,
@@ -58,23 +63,23 @@ db.Kodepos.belongsTo(db.Provinsi, {
   as: "provinsi",
   targetKey: "Provinsi_Code"
 });
-db.Kota.hasMany(db.Kecamatan, { as: "kecamatan", foreignKey: "Kabupaten_Code", onDelete: 'SET NULL', onUpdate: 'CASCADE', sourceKey: "Kabupaten_Code" });
+db.Kota.hasMany(db.Kecamatan, { as: "kecamatan", foreignKey: "Kabkota_Code", onDelete: 'SET NULL', onUpdate: 'CASCADE', sourceKey: "Kabkota_Code" });
 db.Kecamatan.belongsTo(db.Kota, {
-  foreignKey: "Kabupaten_Code",
+  foreignKey: "Kabkota_Code",
   as: "kota",
-  targetKey: "Kabupaten_Code"
+  targetKey: "Kabkota_Code"
 });
-db.Kota.hasMany(db.Kelurahan, { as: "kelurahan", foreignKey: "Kabupaten_Code", onDelete: 'SET NULL', onUpdate: 'CASCADE', sourceKey: "Kabupaten_Code" });
+db.Kota.hasMany(db.Kelurahan, { as: "kelurahan", foreignKey: "Kabkota_Code", onDelete: 'SET NULL', onUpdate: 'CASCADE', sourceKey: "Kabkota_Code" });
 db.Kelurahan.belongsTo(db.Kota, {
-  foreignKey: "Kabupaten_Code",
+  foreignKey: "Kabkota_Code",
   as: "kota",
-  targetKey: "Kabupaten_Code"
+  targetKey: "Kabkota_Code"
 });
-db.Kota.hasMany(db.Kodepos, { as: "kodepos", foreignKey: "Kabupaten_Code", onDelete: 'SET NULL', onUpdate: 'CASCADE', sourceKey: "Kabupaten_Code" });
+db.Kota.hasMany(db.Kodepos, { as: "kodepos", foreignKey: "Kabkota_Code", onDelete: 'SET NULL', onUpdate: 'CASCADE', sourceKey: "Kabkota_Code" });
 db.Kodepos.belongsTo(db.Kota, {
-  foreignKey: "Kabupaten_Code",
+  foreignKey: "Kabkota_Code",
   as: "kota",
-  targetKey: "Kabupaten_Code"
+  targetKey: "Kabkota_Code"
 });
 db.Kecamatan.hasMany(db.Kelurahan, { as: "kelurahan", foreignKey: "Kecamatan_Code", onDelete: 'SET NULL', onUpdate: 'CASCADE', sourceKey: "Kecamatan_Code" });
 db.Kelurahan.belongsTo(db.Kecamatan, {

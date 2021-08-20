@@ -11,7 +11,7 @@ const ModalDetail = ({ onClick, provinsiId }) => {
     useEffect(() => {
         dispatch(detailProvinsi(provinsiId));
     }, [dispatch,])
-    console.log(provinsi)
+
     return (
         <div>
             <Modal.Header closeButton>
@@ -41,6 +41,30 @@ const ModalDetail = ({ onClick, provinsiId }) => {
                             <td>
                                 <Card.Text className="font-weight-bold">
                                     : {provinsi?.Provinsi_Name}
+                                </Card.Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Card.Text>
+                                    BI Location Code
+                                </Card.Text>
+                            </td>
+                            <td>
+                                <Card.Text className="font-weight-bold">
+                                    : {provinsi?.BI_Location_Code}
+                                </Card.Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Card.Text>
+                                    Status
+                                </Card.Text>
+                            </td>
+                            <td>
+                                <Card.Text className="font-weight-bold">
+                                    : {provinsi?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>

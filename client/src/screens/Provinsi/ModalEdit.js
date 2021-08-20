@@ -7,7 +7,7 @@ import { detailProvinsi, editProvinsi } from '../../actions/provinsiActions';
 import { PROVINSI_UPDATE_RESET } from '../../constants/provinsiConstants';
 import Message from '../../components/Message';
 
-const initialState = { Provinsi_Code: '', Provinsi_Name: '' }
+const initialState = { Provinsi_Code: '', Provinsi_Name: '', BI_Location_Code: '', Status: '' }
 
 const ModalEdit = ({ onClick, provinsiId }) => {
     const dispatch = useDispatch();
@@ -63,6 +63,29 @@ const ModalEdit = ({ onClick, provinsiId }) => {
                             value={data?.Provinsi_Name}
                             onChange={(e) => setData({ ...data, Provinsi_Name: e.target.value })}
                         />
+                    </Form.Group>
+                    <Form.Group controlId="BI_Location_Code">
+                        <Form.Label>BI Location Code</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="BI_Location_Code"
+                            value={data?.BI_Location_Code}
+                            onChange={(e) => setData({ ...data, BI_Location_Code: e.target.value })}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="Status">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Control
+                            as="select"
+                            custom
+                            name="Status"
+                            value={data?.Status}
+                            onChange={(e) => setData({ ...data, Status: e.target.value })}
+                        >
+                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value="Y" >Aktif</option>
+                            <option value="N" >Tidak Aktif</option>
+                        </Form.Control>
                     </Form.Group>
                 </Form>
             </Modal.Body>

@@ -56,6 +56,18 @@ const KecamatanDetail = ({ match }) => {
                                         <tr>
                                             <td>
                                                 <Card.Text>
+                                                    Status
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kecamatan.kecamatan?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Card.Text>
                                                     Kode Kota/ Kabupaten
                                                 </Card.Text>
                                             </td>

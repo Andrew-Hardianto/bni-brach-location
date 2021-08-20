@@ -1,25 +1,25 @@
 module.exports = (sequelize, Sequelize) => {
     const Kota = sequelize.define("Master_Kabupaten_Kota", {
-        ID_Kabupaten: {
+        ID_Kabkota: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true
         },
-        Kabupaten_Code: {
+        Kabkota_Code: {
             type: Sequelize.BIGINT,
             primaryKey: true,
             unique: true,
         },
-        Kabupaten_Name: {
+        Kabkota_Name: {
             type: Sequelize.STRING(100),
             allowNull: false
         },
         BI_Location_Code: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING(4),
         },
         Antasena_Code: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING(4),
         },
         Provinsi_Code: {
             type: Sequelize.BIGINT,
@@ -30,6 +30,15 @@ module.exports = (sequelize, Sequelize) => {
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
         },
+        Kabkota_Flag: {
+            type: Sequelize.STRING(100),
+            enum: ['Other', 'Kotamadya', 'Kabupaten']
+        },
+        Status: {
+            type: Sequelize.STRING(1),
+            enum: ['Y', 'N'],
+            defaultValue: 'Y'
+        }
     }, {
         tableName: 'Master_Kabupaten_Kota',
         timestamps: false

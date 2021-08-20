@@ -41,11 +41,11 @@ exports.getByIdKodepos = async (req, res) => {
 // add Kodepos
 exports.createKodepos = async (req, res, next) => {
     try {
-        const { Kodepos_Code, Kelurahan_Code } = req.body;
+        const { Postcode, Kelurahan_Code, Status } = req.body;
 
-        if (!Kodepos_Code) return next(new Error('Kodepos harus diisi!'));
+        if (!Postcode) return next(new Error('Kodepos harus diisi!'));
 
-        // const checkkode = await Kodepos.findOne({ where: { Kodepos_Code } });
+        // const checkkode = await Kodepos.findOne({ where: { Postcode } });
 
         // if (checkkode) return next(new Error('kodepos sudah digunakan!'));
 
@@ -58,11 +58,12 @@ exports.createKodepos = async (req, res, next) => {
         if (!kelurahan) return next(new Error(`Kelurahan dengan kode ${Kelurahan_Code} tidak ditemukan!`, 404));
 
         const kodepos = await Kodepos.create({
-            Kodepos_Code,
+            Postcode: Postcode,
             Kelurahan_Code,
             Kecamatan_Code: kelurahan.Kecamatan_Code,
-            Kabupaten_Code: kelurahan.Kabupaten_Code,
+            Kabkota_Code: kelurahan.Kabkota_Code,
             Provinsi_Code: kelurahan.Provinsi_Code,
+            Status: Status
         });
 
         res.status(201).json({
@@ -80,9 +81,9 @@ exports.createKodepos = async (req, res, next) => {
 // update Kodepos
 exports.updateKodepos = async (req, res, next) => {
     try {
-        const { Kodepos_Code, Kelurahan_Code } = req.body;
+        const { Postcode, Kelurahan_Code, Status } = req.body;
 
-        if (!Kodepos_Code) return next(new Error('Kodepos harus diisi!'));
+        if (!Postcode) return next(new Error('Kodepos harus diisi!'));
 
         const kelurahan = await Kelurahan.findOne({
             where: {
@@ -94,14 +95,15 @@ exports.updateKodepos = async (req, res, next) => {
 
         const kodepos = await Kodepos.update(
             {
-                Kodepos_Code: Kodepos_Code,
+                Postcode: Postcode,
                 Kelurahan_Code,
                 Kecamatan_Code: kelurahan.Kecamatan_Code,
                 Kabupaten_Code: kelurahan.Kabupaten_Code,
                 Provinsi_Code: kelurahan.Provinsi_Code,
+                Status: Status
             }, {
             where: {
-                ID_Kodepos: req.params.id
+                ID_Postcode: req.params.id
             }
         });
 
@@ -123,7 +125,7 @@ exports.deleteKodepos = async (req, res, next) => {
 
         const id = await Kodepos.findAll({
             where: {
-                ID_Kodepos: req.params.id
+                ID_Postcode: req.params.id
             }
         });
 
@@ -131,7 +133,7 @@ exports.deleteKodepos = async (req, res, next) => {
 
         await Kodepos.destroy({
             where: {
-                ID_Kodepos: req.params.id
+                ID_Postcode: req.params.id
             }
         });
 

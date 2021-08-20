@@ -48,12 +48,24 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                         <tr>
                             <td>
                                 <Card.Text>
+                                    Status
+                                </Card.Text>
+                            </td>
+                            <td>
+                                <Card.Text className="font-weight-bold">
+                                    : {kecamatan.kecamatan?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                </Card.Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Card.Text>
                                     Kode Kota/ Kabupaten
                                 </Card.Text>
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kecamatan.kecamatan?.Kabupaten_Code}
+                                    : {kecamatan.kecamatan?.Kabkota_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -65,7 +77,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kecamatan.kecamatan?.kota.Kabupaten_Name}
+                                    : {kecamatan.kecamatan?.kota.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>

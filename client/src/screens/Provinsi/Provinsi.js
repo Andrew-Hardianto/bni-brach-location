@@ -67,6 +67,12 @@ const Provinsi = ({ history }) => {
         dataField: 'Provinsi_Name',
         text: 'Nama Provinsi'
     }, {
+        dataField: 'Status',
+        text: 'Status',
+        formatter: (cell) => {
+            return cell === 'Y' ? 'Aktif' : 'Tidak Aktif'
+        }
+    }, {
         dataField: "link",
         text: 'Aksi',
         formatter: (rowContent, row) => {

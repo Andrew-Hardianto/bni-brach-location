@@ -32,6 +32,7 @@ const OutletTambah = ({ history }) => {
     const [Branch_Code, setKodeCabang] = useState('');
     const [Latitude, setLatitude] = useState('');
     const [Longitude, setLongitude] = useState('');
+    const [Status, setStatus] = useState('');
 
     const dispatch = useDispatch();
 
@@ -54,7 +55,7 @@ const OutletTambah = ({ history }) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(createOutlet(Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude))
+        dispatch(createOutlet(Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude, Status))
     }
 
     const coords = { lat: -6.241586, lng: 106.992416 };
@@ -128,7 +129,7 @@ const OutletTambah = ({ history }) => {
                             >
                                 <option value="">- Pilih Cabang -</option>
                                 {cabang
-                                    .filter(cab => cab.Branch_Code.toString().includes(Outlet_Code.toString().substring(0, 4)))
+                                    // .filter(cab => cab.Branch_Code.toString().includes(Outlet_Code.toString().substring(0, 4)))
                                     .map((data) => (
                                         <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
                                     ))}
@@ -144,7 +145,6 @@ const OutletTambah = ({ history }) => {
                                     onChange={(e) => setLatitude(e.target.value)}
                                 />
                             </Form.Group>
-
                             <Form.Group as={Col} controlId="longitude">
                                 <Form.Label>Longitude</Form.Label>
                                 <Form.Control
@@ -155,6 +155,20 @@ const OutletTambah = ({ history }) => {
                                 />
                             </Form.Group>
                         </Form.Row>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                value={Status}
+                                onChange={(e) => setStatus(e.target.value)}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
+                            </Form.Control>
+                        </Form.Group>
                         <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
                                 attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'

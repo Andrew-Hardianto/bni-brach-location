@@ -9,7 +9,7 @@ import { listProvinsi } from '../../actions/provinsiActions';
 import { KECAMATAN_UPDATE_RESET } from '../../constants/kecamatanConstants';
 import { detailKecamatan, editKecamatan } from '../../actions/kecamatanActions';
 
-const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabupaten_Code: '' }
+const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabkota_Code: '', Status: '' }
 
 const ModalEditKecamatan = ({ onClick, kecamatanId }) => {
 
@@ -72,20 +72,33 @@ const ModalEditKecamatan = ({ onClick, kecamatanId }) => {
                             onChange={(e) => setData({ ...data, Kecamatan_Name: e.target.value })}
                         />
                     </Form.Group>
-                    <Form.Group controlId="Kabupaten_Code">
+                    <Form.Group controlId="Kabkota_Code">
                         <Form.Label>Kota/Kabupaten</Form.Label>
                         <Form.Control
                             as="select"
                             custom
-                            name="Kabupaten_Code"
-                            value={data?.Kabupaten_Code}
-                            onChange={(e) => setData({ ...data, Kabupaten_Code: e.target.value })}
+                            name="Kabkota_Code"
+                            value={data?.Kabkota_Code}
+                            onChange={(e) => setData({ ...data, Kabkota_Code: e.target.value })}
                         >
                             <option value="">- Pilih Kota -</option>
-                            {kota?.filter((kt) => kt.Kabupaten_Code.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
+                            {kota?.filter((kt) => kt.Kabkota_Code.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
                                 .map((data) => (
-                                    <option key={data.ID_Kabupaten} value={data.Kabupaten_Code} >{data.Kabupaten_Name}</option>
+                                    <option key={data.ID_Kabkota} value={data.Kabkota_Code} >{data.Kabkota_Name}</option>
                                 ))}
+                        </Form.Control>
+                    </Form.Group>
+                    <Form.Group controlId="Status">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Control
+                            as="select"
+                            custom
+                            name="Status"
+                            onChange={(e) => setData({ ...data, Status: e.target.value })}
+                        >
+                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value="Y" >Aktif</option>
+                            <option value="N" >Tidak Aktif</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>

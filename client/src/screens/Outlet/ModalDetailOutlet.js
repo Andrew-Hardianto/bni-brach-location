@@ -39,6 +39,11 @@ const ModalDetailOutlet = ({ onClick, outletId }) => {
                             <td className="font-weight-bold">{outlet?.outlet?.Outlet_Name}</td>
                         </tr>
                         <tr>
+                            <td width="150px">Status</td>
+                            <td width="30px"> : </td>
+                            <td className="font-weight-bold">{outlet?.outlet?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</td>
+                        </tr>
+                        <tr>
                             <td width="150px">Kode Cabang</td>
                             <td width="30px"> : </td>
                             <td>{outlet?.outlet?.Branch_Code}</td>

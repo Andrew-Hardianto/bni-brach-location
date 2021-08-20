@@ -46,6 +46,18 @@ const KodeposDetail = ({ match }) => {
                                         <tr>
                                             <td style={{ width: '30%' }}>
                                                 <Card.Text>
+                                                    Status
+                                                </Card.Text>
+                                            </td>
+                                            <td>
+                                                <Card.Text>
+                                                    : {kodepos.kodepos?.Kodepos_Code}
+                                                </Card.Text>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ width: '30%' }}>
+                                                <Card.Text>
                                                     Kode Kelurahan
                                                 </Card.Text>
                                             </td>
@@ -99,7 +111,7 @@ const KodeposDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {kodepos.kodepos?.Kabupaten_Code}
+                                                    : {kodepos.kodepos?.Kabkota_Code}
                                                 </Card.Text>
                                             </td>
                                         </tr>
@@ -111,7 +123,7 @@ const KodeposDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {kodepos.kodepos?.kota?.Kabupaten_Name}
+                                                    : {kodepos.kodepos?.kota?.Kabkota_Name}
                                                 </Card.Text>
                                             </td>
                                         </tr>

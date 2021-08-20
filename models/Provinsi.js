@@ -15,6 +15,14 @@ module.exports = (sequelize, Sequelize) => {
         Provinsi_Name: {
             type: Sequelize.STRING(100),
             allowNull: false
+        },
+        BI_Location_Code: {
+            type: Sequelize.STRING(4),
+        },
+        Status: {
+            type: Sequelize.STRING(1),
+            enum: ['Y', 'N'],
+            defaultValue: 'Y'
         }
     }, {
         tableName: 'Master_Provinsi',

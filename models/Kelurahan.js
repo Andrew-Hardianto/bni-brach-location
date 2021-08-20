@@ -24,11 +24,11 @@ module.exports = (sequelize, Sequelize) => {
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
         },
-        Kabupaten_Code: {
+        Kabkota_Code: {
             type: Sequelize.BIGINT,
             references: {
                 model: 'Master_Kabupaten_Kota',
-                key: 'Kabupaten_Code'
+                key: 'Kabkota_Code'
             },
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
@@ -42,6 +42,11 @@ module.exports = (sequelize, Sequelize) => {
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
         },
+        Status: {
+            type: Sequelize.STRING(1),
+            enum: ['Y', 'N'],
+            defaultValue: 'Y'
+        }
     }, {
         tableName: 'Master_Kelurahan',
         timestamps: false

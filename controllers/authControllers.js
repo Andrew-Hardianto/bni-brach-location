@@ -116,27 +116,27 @@ exports.getUser = async (req, res, next) => {
 }
 
 // get user
-exports.updateUser = async (req, res, next) => {
-    try {
+// exports.updateUser = async (req, res, next) => {
+//     try {
 
-        const user = await User.update(req.body, {
-            where: {
-                ID_Branch: req.params.id
-            }
-        })
+//         const user = await User.update(req.body, {
+//             where: {
+//                 ID_Branch: req.params.id
+//             }
+//         })
 
-        res.status(200).json({
-            success: true,
-            user
-        })
+//         res.status(200).json({
+//             success: true,
+//             user
+//         })
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: error.message
+//         })
+//     }
+// }
 
 // get update user
 exports.updateUser = async (req, res, next) => {

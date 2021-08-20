@@ -19,6 +19,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING(100),
             allowNull: false,
         },
+        Status: {
+            type: Sequelize.STRING(1),
+            enum: ['Y', 'N'],
+            defaultValue: 'Y'
+        }
     }, {
         tableName: 'Region',
         timestamps: false

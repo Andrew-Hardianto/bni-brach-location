@@ -81,6 +81,19 @@ const ModalEditRegion = ({ onClick, wilayahId }) => {
                             onChange={(e) => setData({ ...data, Region_Name: e.target.value })}
                         />
                     </Form.Group>
+                    <Form.Group controlId="Status">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Control
+                            as="select"
+                            custom
+                            name="Status"
+                            onChange={(e) => setData({ ...data, Status: e.target.value })}
+                        >
+                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value="Y" >Aktif</option>
+                            <option value="N" >Tidak Aktif</option>
+                        </Form.Control>
+                    </Form.Group>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

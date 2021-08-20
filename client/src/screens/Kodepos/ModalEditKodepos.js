@@ -14,8 +14,9 @@ import { KODEPOS_UPDATE_RESET } from '../../constants/kodeposConstants';
 
 const ModalEditKodepos = ({ onClick, kodeposId }) => {
 
-    const [Kodepos_Code, setKodeposCode] = useState('');
+    const [Postcode, setKodeposCode] = useState('');
     const [Kelurahan_Code, setKelurahanCode] = useState('');
+    const [Status, setStatus] = useState('');
     const [Code, setCode] = useState();
     const [nama, setNama] = useState('');
     const [display, setDisplay] = useState(false);
@@ -36,16 +37,17 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
             window.location.reload(false)
             onClick()
         } else {
-            if (kodepos?.kodepos?.ID_Kodepos !== kodeposId) {
+            if (kodepos?.kodepos?.ID_Postcode !== kodeposId) {
                 dispatch(detailKodepos(kodeposId));
             }
             // setData(kodepos?.kodepos)
             setKelurahanCode(kodepos?.kodepos?.Kelurahan_Code)
             setNama(kodepos?.kodepos?.kelurahan?.Kelurahan_Name)
             setCode(kodepos?.kodepos?.Kelurahan_Code)
-            setKodeposCode(kodepos?.kodepos?.Kodepos_Code)
+            setKodeposCode(kodepos?.kodepos?.Postcode)
+            setStatus(kodepos?.kodepos?.Status)
         }
-    }, [dispatch, kodeposId, kodepos?.kodepos?.ID_Kodepos, success]);
+    }, [dispatch, kodeposId, kodepos?.kodepos?.ID_Postcode, success]);
 
     function filterBy(option, state) {
         if (state.selected.length) {
@@ -57,9 +59,9 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
     const submitHandler = (e) => {
         e.preventDefault();
         if (Kelurahan_Code[0]?.Kelurahan_Code == undefined) {
-            dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code }))
+            dispatch(editKodepos({ ID_Postcode: kodeposId, Postcode, Kelurahan_Code, Status }))
         }
-        dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code }))
+        dispatch(editKodepos({ ID_Postcode: kodeposId, Postcode, Status, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code }))
     }
 
     return (
@@ -71,13 +73,13 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
                 {error && <Message variant="danger" >{error}</Message>}
                 {loading && <Loader />}
                 <Form>
-                    <Form.Group controlId="Kodepos_Code">
+                    <Form.Group controlId="Postcode">
                         <Form.Label>Kodepos</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Masukkan Kode Pos..."
-                            name="Kodepos_Code"
-                            value={Kodepos_Code}
+                            name="Postcode"
+                            value={Postcode}
                             onChange={(e) => setKodeposCode(e.target.value)}
                         />
                     </Form.Group>
@@ -99,6 +101,20 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
                                 </div>
                             )}
                         />
+                    </Form.Group>
+                    <Form.Group controlId="Status">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Control
+                            as="select"
+                            custom
+                            name="Status"
+                            value={Status}
+                            onChange={(e) => setStatus(e.target.value)}
+                        >
+                            <option value={Status}>{Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value="Y" >Aktif</option>
+                            <option value="N" >Tidak Aktif</option>
+                        </Form.Control>
                     </Form.Group>
                 </Form>
             </Modal.Body>

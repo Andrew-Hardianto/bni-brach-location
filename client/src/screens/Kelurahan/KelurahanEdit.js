@@ -9,7 +9,7 @@ import { detailKelurahan, editKelurahan } from '../../actions/kelurahanActions';
 import { listKecamatan } from '../../actions/kecamatanActions';
 import { KELURAHAN_UPDATE_RESET } from '../../constants/kelurahanConstants';
 
-const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '' }
+const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '', Status: '' }
 
 const KelurahanEdit = ({ history, match }) => {
     const kelurahanId = match.params.id;
@@ -94,6 +94,19 @@ const KelurahanEdit = ({ history, match }) => {
                                     .map((d) => (
                                         <option key={d.ID_Kecamatan} value={d.Kecamatan_Code} >{d.Kecamatan_Name}</option>
                                     ))} */}
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                onChange={(e) => setData({ ...data, Status: e.target.value })}
+                            >
+                                <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">

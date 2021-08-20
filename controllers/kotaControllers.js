@@ -1,6 +1,5 @@
 const db = require('../config/db');
 const Kota = db.Kota;
-const Provinsi = db.Provinsi;
 const Op = db.Sequelize.Op;
 
 // get all kota
@@ -42,17 +41,17 @@ exports.getByIdKota = async (req, res, next) => {
 // add kota
 exports.addKota = async (req, res, next) => {
     try {
-        const { Kabupaten_Code, Kabupaten_Name } = req.body;
+        const { Kabkota_Code, Kabkota_Name, Kabkota_Flag } = req.body;
 
         const checkkode = await Kota.findOne(
             {
                 where: {
-                    Kabupaten_Code
+                    Kabkota_Code
                 }
             }
         )
 
-        if (!Kabupaten_Code || !Kabupaten_Name) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
+        if (!Kabkota_Code || !Kabkota_Name || !Kabkota_Flag) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
 
         if (checkkode) return next(new Error('Kode Kota sudah digunakan!'));
 
@@ -73,13 +72,13 @@ exports.addKota = async (req, res, next) => {
 // update kota 
 exports.updateKota = async (req, res, next) => {
     try {
-        const { Kabupaten_Code, Kabupaten_Name } = req.body;
+        const { Kabkota_Code, Kabkota_Name } = req.body;
 
-        if (!Kabupaten_Code || !Kabupaten_Name) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
+        if (!Kabkota_Code || !Kabkota_Name) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
 
         const kota = await Kota.update(req.body, {
             where: {
-                ID_Kabupaten: req.params.id
+                ID_Kabkota: req.params.id
             }
         })
 
@@ -104,7 +103,7 @@ exports.deleteKota = async (req, res, next) => {
 
         await Kota.destroy({
             where: {
-                ID_Kabupaten: req.params.id
+                ID_Kabkota: req.params.id
             }
         });
 

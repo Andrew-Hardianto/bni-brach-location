@@ -11,12 +11,13 @@ import { createKodepos } from '../../actions/kodeposActions';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 
-const initialState = { Kodepos_Code: '', Kelurahan_Code: '' }
+const initialState = { Postcode: '', Kelurahan_Code: '' }
 
 const KodeposTambah = ({ history }) => {
     const [data, setData] = useState(initialState);
-    const [Kodepos_Code, setKodeposCode] = useState('');
+    const [Postcode, setKodeposCode] = useState('');
     const [Kelurahan_Code, setKelurahanCode] = useState('');
+    const [Status, setStatus] = useState('');
 
 
     const dispatch = useDispatch();
@@ -48,13 +49,10 @@ const KodeposTambah = ({ history }) => {
     const submitHandler = (e) => {
         e.preventDefault();
         // dispatch(createKodepos(data))
-        dispatch(createKodepos({ Kodepos_Code, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code }))
+        dispatch(createKodepos({ Postcode, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code, Status }))
+        // console.log(Postcode)
     }
 
-    // console.log(data)
-    // console.log(Kodepos_Code)
-    // console.log(Kelurahan_Code)
-    // console.log(Kelurahan_Code[0]?.Kelurahan_Code)
 
     return (
         <div className="home">
@@ -64,14 +62,12 @@ const KodeposTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="Kodepos_Code">
+                        <Form.Group controlId="Postcode">
                             <Form.Label>Kodepos</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Masukkan Kodepos..."
-                                name="Kodepos_Code"
-                                // value={nama}
-                                // onChange={handleChange}
+                                placeholder="Masukkan Kode Pos..."
+                                name="Postcode"
                                 onChange={(e) => setKodeposCode(e.target.value)}
                             />
                         </Form.Group>
@@ -104,6 +100,19 @@ const KodeposTambah = ({ history }) => {
                                     </div>
                                 )}
                             />
+                        </Form.Group>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                onChange={(e) => setStatus(e.target.value)}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
+                            </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             Submit

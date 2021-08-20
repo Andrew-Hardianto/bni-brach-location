@@ -66,7 +66,7 @@ const User = () => {
                 return (
                     <div className="">
                         {
-                            userInfo.user.Username !== row.Username ? (
+                            userInfo.user.Username !== row.ID_User ? (
                                 <>
                                     {/* <LinkContainer to={`/user/detail/${row.ID_User}`}>
                                         <Button variant="info" size="sm">

@@ -8,7 +8,7 @@ import Message from '../../components/Message';
 import { createKota } from '../../actions/kotaActions';
 import { listProvinsi } from '../../actions/provinsiActions';
 
-const initialState = { Kabupaten_Code: '', Kabupaten_Name: '', BI_Location_Code: '', Antasena_Code: '', Provinsi_Code: '' }
+const initialState = { Kabkota_Code: '', Kabkota_Name: '', BI_Location_Code: '', Antasena_Code: '', Provinsi_Code: '', Kabkota_Flag: '', Status: '' }
 
 const KotaTambah = ({ history }) => {
     const [data, setData] = useState(initialState)
@@ -45,20 +45,20 @@ const KotaTambah = ({ history }) => {
                     {loading && <Loader />}
                     {error && <Message variant="danger" >{error}</Message>}
                     <Form onSubmit={submitHandler}>
-                        <Form.Group controlId="Kabupaten_Code">
+                        <Form.Group controlId="Kabkota_Code">
                             <Form.Label>Kode Kota</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="Kabupaten_Code"
+                                name="Kabkota_Code"
                                 onChange={handleChange}
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="Kabupaten_Name">
+                        <Form.Group controlId="Kabkota_Name">
                             <Form.Label>Nama Kota</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="Kabupaten_Name"
+                                name="Kabkota_Name"
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -87,10 +87,37 @@ const KotaTambah = ({ history }) => {
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Provinsi -</option>
-                                {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(data.Kabupaten_Code.toString().substring(0, 2)))
+                                {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(data.Kabkota_Code.toString().substring(0, 2)))
                                     .map((prov) => (
                                         <option value={prov.Provinsi_Code} >{prov.Provinsi_Name}</option>
                                     ))}
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="Kabkota_Flag">
+                            <Form.Label>Jenis Kabupaten/ Kotamadya</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Kabkota_Flag"
+                                onChange={handleChange}
+                            >
+                                <option value="">- Pilih Jenis Kabupaten/Kotamadya -</option>
+                                <option value="Kabupaten" >Kabupaten</option>
+                                <option value="Kotamadya" >Kotamadya</option>
+                                <option value="Other" >Other</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                onChange={handleChange}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">

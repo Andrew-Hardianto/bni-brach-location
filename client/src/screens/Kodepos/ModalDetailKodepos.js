@@ -29,7 +29,19 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kodepos?.kodepos?.Kodepos_Code}
+                                    : {kodepos?.kodepos?.Postcode}
+                                </Card.Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ width: '40%' }}>
+                                <Card.Text>
+                                    Status
+                                </Card.Text>
+                            </td>
+                            <td>
+                                <Card.Text className="font-weight-bold">
+                                    : {kodepos?.kodepos?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -89,7 +101,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kodepos?.kodepos?.Kabupaten_Code}
+                                    : {kodepos?.kodepos?.Kabkota_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -101,7 +113,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kodepos?.kodepos?.kota?.Kabupaten_Name}
+                                    : {kodepos?.kodepos?.kota?.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>

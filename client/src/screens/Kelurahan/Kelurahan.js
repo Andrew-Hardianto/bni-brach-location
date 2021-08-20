@@ -65,8 +65,8 @@ const Kelurahan = ({ history }) => {
         dataField: 'Kelurahan_Name',
         text: 'Nama Kelurahan'
     }, {
-        dataField: 'Kecamatan_Code',
-        text: 'Kode Kecamatan'
+        dataField: 'kecamatan.Kecamatan_Name',
+        text: 'Nama Kecamatan'
     }, {
         dataField: "link",
         text: 'Aksi',

@@ -18,11 +18,12 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
         },
         BI_Location_Code: {
-            type: Sequelize.INTEGER
+            type: Sequelize.STRING(4),
         },
         Address: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            max: 100
         },
         Latitude: {
             type: Sequelize.STRING(100)
@@ -39,6 +40,11 @@ module.exports = (sequelize, Sequelize) => {
             onDelete: 'SET NULL',
             onUpdate: 'CASCADE'
         },
+        Status: {
+            type: Sequelize.STRING(1),
+            enum: ['Y', 'N'],
+            defaultValue: 'Y'
+        }
     }, {
         tableName: 'Branch',
         timestamps: false

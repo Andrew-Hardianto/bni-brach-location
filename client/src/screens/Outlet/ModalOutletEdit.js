@@ -18,6 +18,7 @@ const initialState = {
     Branch_Code: '',
     Latitude: '',
     Longitude: '',
+    Status: ''
 }
 
 const ModalOutletEdit = ({ onClick, outletId }) => {
@@ -122,7 +123,7 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                         >
                             <option value="">- Pilih Cabang -</option>
                             {cabang
-                                .filter(cab => cab.Branch_Code.toString().includes(data?.Outlet_Code.toString().substring(0, 4)))
+                                // .filter(cab => cab.Branch_Code.toString().includes(data?.Outlet_Code.toString().substring(0, 4)))
                                 .map((data) => (
                                     <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
                                 ))}
@@ -151,6 +152,20 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                             />
                         </Form.Group>
                     </Form.Row>
+                    <Form.Group controlId="Status">
+                        <Form.Label>Status</Form.Label>
+                        <Form.Control
+                            as="select"
+                            custom
+                            name="Status"
+                            value={data?.Status}
+                            onChange={(e) => setData({ ...data, Status: e.target.value })}
+                        >
+                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value="Y" >Aktif</option>
+                            <option value="N" >Tidak Aktif</option>
+                        </Form.Control>
+                    </Form.Group>
                     <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                         <TileLayer
                             attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'

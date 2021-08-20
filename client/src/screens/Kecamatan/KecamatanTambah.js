@@ -8,7 +8,7 @@ import Message from '../../components/Message';
 import { createKecamatan } from '../../actions/kecamatanActions';
 import { listKota } from '../../actions/kotaActions';
 
-const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabupaten_Code: '' }
+const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabkota_Code: '', Status: '' }
 
 const KecamatanTambah = ({ history }) => {
 
@@ -67,20 +67,33 @@ const KecamatanTambah = ({ history }) => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group controlId="Kabupaten_Code">
+                        <Form.Group controlId="Kabkota_Code">
                             <Form.Label>Kota</Form.Label>
                             <Form.Control
                                 as="select"
                                 custom
-                                name="Kabupaten_Code"
+                                name="Kabkota_Code"
                                 // value={kotaId}
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Kota -</option>
-                                {kota?.filter((kt) => kt.Kabupaten_Code.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
+                                {kota?.filter((kt) => kt.Kabkota_Code?.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
                                     .map((data) => (
-                                        <option key={data?.ID_Kabupaten} value={data?.Kabupaten_Code} >{data.Kabupaten_Name}</option>
+                                        <option key={data?.ID_Kabkota} value={data?.Kabkota_Code} >{data.Kabkota_Name}</option>
                                     ))}
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="Status">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Control
+                                as="select"
+                                custom
+                                name="Status"
+                                onChange={handleChange}
+                            >
+                                <option value="">- Pilih Status -</option>
+                                <option value="Y" >Aktif</option>
+                                <option value="N" >Tidak Aktif</option>
                             </Form.Control>
                         </Form.Group>
                         <Button variant="primary" type="submit">

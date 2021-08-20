@@ -28,7 +28,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kota.kota?.Kabupaten_Code}
+                                    : {kota.kota?.Kabkota_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -40,7 +40,31 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kota.kota?.Kabupaten_Name}
+                                    : {kota.kota?.Kabkota_Name}
+                                </Card.Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Card.Text>
+                                    Kabupaten/Kotamadya
+                                </Card.Text>
+                            </td>
+                            <td>
+                                <Card.Text className="font-weight-bold">
+                                    : {kota?.kota?.Kabkota_Flag}
+                                </Card.Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Card.Text>
+                                    Status
+                                </Card.Text>
+                            </td>
+                            <td>
+                                <Card.Text className="font-weight-bold">
+                                    : {kota?.kota?.Status === 'Y' ? 'Aktif' : 'TIdak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>
