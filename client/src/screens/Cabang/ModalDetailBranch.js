@@ -56,12 +56,12 @@ const ModalDetailBranch = ({ onClick, cabangId }) => {
                         <tr>
                             <td width="150px">Sub Nama Wilayah</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{cabang?.cabang?.wilayah.Region_Subname}</td>
+                            <td className="font-weight-bold">{cabang?.cabang?.wilayah?.Region_Subname}</td>
                         </tr>
                         <tr>
                             <td width="150px">Nama Wilayah</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{cabang?.cabang?.wilayah.Region_Name}</td>
+                            <td className="font-weight-bold">{cabang?.cabang?.wilayah?.Region_Name}</td>
                         </tr>
                         <tr>
                             <td width="150px">Alamat</td>

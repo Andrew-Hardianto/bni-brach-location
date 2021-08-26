@@ -51,7 +51,7 @@ const ModalDetailOutlet = ({ onClick, outletId }) => {
                         <tr>
                             <td width="150px">Nama Cabang</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{outlet?.outlet?.cabang.Branch_Name}</td>
+                            <td className="font-weight-bold">{outlet?.outlet?.cabang?.Branch_Name}</td>
                         </tr>
                         <tr>
                             <td width="150px">Kode Wilayah</td>
@@ -59,9 +59,14 @@ const ModalDetailOutlet = ({ onClick, outletId }) => {
                             <td>{outlet?.outlet?.Region_Code}</td>
                         </tr>
                         <tr>
+                            <td width="150px">Sub Nama Wilayah</td>
+                            <td width="30px"> : </td>
+                            <td className="font-weight-bold">{outlet?.outlet?.wilayah?.Region_Subname}</td>
+                        </tr>
+                        <tr>
                             <td width="150px">Nama Wilayah</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{outlet?.outlet?.wilayah.Region_Name}</td>
+                            <td className="font-weight-bold">{outlet?.outlet?.wilayah?.Region_Name}</td>
                         </tr>
                         <tr>
                             <td width="150px">Alamat</td>

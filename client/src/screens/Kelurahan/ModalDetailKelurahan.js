@@ -77,7 +77,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.kecamatan.Kecamatan_Name}
+                                    : {kelurahan?.kelurahan?.kecamatan?.Kecamatan_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -101,7 +101,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.kota.Kabkota_Name}
+                                    : {kelurahan?.kelurahan?.kota?.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -125,7 +125,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.provinsi.Provinsi_Name}
+                                    : {kelurahan?.kelurahan?.provinsi?.Provinsi_Name}
                                 </Card.Text>
                             </td>
                         </tr>

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+// import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -66,7 +66,7 @@ const User = () => {
                 return (
                     <div className="">
                         {
-                            userInfo.user.Username !== row.ID_User ? (
+                            userInfo.user.ID_User !== row.ID_User ? (
                                 <>
                                     {/* <LinkContainer to={`/user/detail/${row.ID_User}`}>
                                         <Button variant="info" size="sm">

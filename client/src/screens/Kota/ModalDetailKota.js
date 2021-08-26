@@ -88,7 +88,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kota.kota?.provinsi.Provinsi_Name}
+                                    : {kota.kota?.provinsi?.Provinsi_Name}
                                 </Card.Text>
                             </td>
                         </tr>

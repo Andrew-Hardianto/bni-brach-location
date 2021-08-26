@@ -73,8 +73,20 @@ const Kota = ({ history }) => {
         text: 'Antasena Code'
     }, {
         dataField: 'provinsi.Provinsi_Name',
-        text: 'Nama Provinsi'
-    }, {
+        text: 'Nama Provinsi',
+        // formatter: (cell) => {
+        //     return cell === null && ''
+        // }
+    },
+    {
+        dataField: 'Status',
+        text: 'Status',
+        sort: true,
+        formatter: (cell) => {
+            return cell === 'Y' ? 'Aktif' : 'Tidak Aktif'
+        }
+    },
+    {
         dataField: "link",
         text: 'Aksi',
         formatter: (rowContent, row) => {

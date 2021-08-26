@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -66,13 +65,16 @@ const Provinsi = ({ history }) => {
     }, {
         dataField: 'Provinsi_Name',
         text: 'Nama Provinsi'
-    }, {
+    },
+    {
         dataField: 'Status',
         text: 'Status',
+        sort: true,
         formatter: (cell) => {
             return cell === 'Y' ? 'Aktif' : 'Tidak Aktif'
         }
-    }, {
+    },
+    {
         dataField: "link",
         text: 'Aksi',
         formatter: (rowContent, row) => {

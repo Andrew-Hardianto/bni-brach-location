@@ -77,7 +77,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kecamatan.kecamatan?.kota.Kabkota_Name}
+                                    : {kecamatan.kecamatan?.kota?.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -101,7 +101,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kecamatan.kecamatan?.provinsi.Provinsi_Name}
+                                    : {kecamatan.kecamatan?.provinsi?.Provinsi_Name}
                                 </Card.Text>
                             </td>
                         </tr>
