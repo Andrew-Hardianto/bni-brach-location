@@ -60,3 +60,5 @@ const PORT = 5000
 app.listen(PORT, () => {
     console.log(`Server berjalan di ${PORT}`.blue.bold)
 })
+
+module.exports = app

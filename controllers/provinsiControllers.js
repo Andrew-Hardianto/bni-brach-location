@@ -20,10 +20,11 @@ exports.getProvinsi = async (req, res) => {
 }
 
 // get by id data
-exports.getByIdProvinsi = async (req, res) => {
+exports.getByIdProvinsi = async (req, res, next) => {
     try {
         const provinsi = await Provinsi.findByPk(req.params.id);
         // const provinsi = await Provinsi.findOne({ where: { ID_Provinsi: req.params.id } });
+        if (!provinsi) return next(new Error('Provinsi tidak ditemukan!', 404))
 
         res.status(200).json(provinsi)
     } catch (err) {
@@ -72,6 +73,10 @@ exports.updateProvinsi = async (req, res, next) => {
 
         if (!Provinsi_Code || !Provinsi_Name) return next(new Error('kode provinsi/Nama harus diisi', 401))
 
+        const id = await Provinsi.findByPk(req.params.id)
+
+        if (!id) return next(new Error('Data tidak ditemukan!'))
+
         const provinsi = await Provinsi.update(req.body, {
             where: {
                 ID_Provinsi: req.params.id
@@ -110,7 +115,7 @@ exports.deleteProvinsi = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            data: {}
+            data: { }
         })
     } catch (err) {
         res.status(400).json({
