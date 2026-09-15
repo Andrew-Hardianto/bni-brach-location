@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorMessage } from '@/shared/utils/errorHandler';
 
 import {
     KELURAHAN_CREATE_FAIL,
@@ -39,9 +40,7 @@ export const listKelurahan = (page: any = 1, limit: any = 10, keyword: any = '')
         dispatch({
             type: KELURAHAN_LIST_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -62,9 +61,7 @@ export const detailKelurahan = (id) => async (dispatch) => {
         dispatch({
             type: KELURAHAN_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -93,9 +90,7 @@ export const createKelurahan = (data) => async (dispatch) => {
         dispatch({
             type: KELURAHAN_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -119,9 +114,7 @@ export const editKelurahan = (kelurahan) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KELURAHAN_UPDATE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            payload: getErrorMessage(error)
         })
     }
 }
@@ -144,9 +137,7 @@ export const deleteKelurahan = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KELURAHAN_DELETE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
+            payload: getErrorMessage(error),
         })
     }
 }
@@ -169,9 +160,7 @@ export const allKelurahan = () => async (
         dispatch({
             type: KELURAHAN_ALL_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorMessage } from '@/shared/utils/errorHandler';
 
 import {
     KECAMATAN_CREATE_FAIL,
@@ -36,9 +37,7 @@ export const listKecamatan = (page: any = 1, limit: any = 10, keyword: any = '')
         dispatch({
             type: KECAMATAN_LIST_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -59,9 +58,7 @@ export const detailKecamatan = (id) => async (dispatch) => {
         dispatch({
             type: KECAMATAN_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -90,9 +87,7 @@ export const createKecamatan = (data) => async (dispatch) => {
         dispatch({
             type: KECAMATAN_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -116,9 +111,7 @@ export const editKecamatan = (data) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KECAMATAN_UPDATE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            payload: getErrorMessage(error)
         })
     }
 }
@@ -141,9 +134,7 @@ export const deleteKecamatan = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KECAMATAN_DELETE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
+            payload: getErrorMessage(error),
         })
     }
 }

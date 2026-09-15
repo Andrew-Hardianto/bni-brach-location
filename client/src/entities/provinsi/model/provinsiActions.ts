@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorMessage } from '@/shared/utils/errorHandler';
 
 import {
     PROVINSI_CREATE_FAIL,
@@ -37,9 +38,7 @@ export const listProvinsi = (page: any = 1, limit: any = 10, keyword: any = '') 
         dispatch({
             type: PROVINSI_LIST_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -60,9 +59,7 @@ export const detailProvinsi = (id) => async (dispatch) => {
         dispatch({
             type: PROVINSI_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -91,9 +88,7 @@ export const createProvinsi = (Provinsi_Code, Provinsi_Name, BI_Location_Code, S
         dispatch({
             type: PROVINSI_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -117,9 +112,7 @@ export const editProvinsi = (provinsi) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: PROVINSI_UPDATE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            payload: getErrorMessage(error)
         })
     }
 }
@@ -142,9 +135,7 @@ export const deleteProvinsi = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: PROVINSI_DELETE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
+            payload: getErrorMessage(error),
         })
     }
 }

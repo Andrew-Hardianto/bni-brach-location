@@ -198,3 +198,119 @@ body {
   font-size: 0.85em;
   background-color: #fff !important;
 }
+
+/* =========================================
+   DARK MODE OVERRIDES
+   ========================================= */
+
+body.dark-mode {
+  --brutal-bg: #1A1A1A; /* Dark background */
+  --brutal-border: 3px solid #FFF;
+  --brutal-shadow: 5px 5px 0px 0px #FFF;
+  --brutal-shadow-hover: 7px 7px 0px 0px #FFF;
+  --brutal-primary: #F15A24; /* BNI Orange remains */
+  --brutal-secondary: #008499; /* Lightened BNI Teal for contrast */
+}
+
+/* Global text color in dark mode */
+body.dark-mode {
+  color: #FFF !important;
+}
+
+/* Base structural elements */
+body.dark-mode .card,
+body.dark-mode .modal-content,
+body.dark-mode .table-responsive {
+  background-color: #2D2D2D !important;
+  border: var(--brutal-border) !important;
+  box-shadow: var(--brutal-shadow) !important;
+  color: #FFF !important;
+}
+
+/* Table */
+body.dark-mode .table {
+  color: #FFF !important;
+}
+
+body.dark-mode .table th, body.dark-mode .table td {
+  border-color: #FFF !important;
+}
+
+body.dark-mode .table thead th {
+  border-bottom: var(--brutal-border) !important;
+  background-color: var(--brutal-secondary) !important;
+  color: #FFF !important;
+}
+
+/* Inputs */
+body.dark-mode .form-control, 
+body.dark-mode .form-select, 
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+  background-color: #3D3D3D !important;
+  color: #FFF !important;
+  border-color: #FFF !important;
+  box-shadow: 3px 3px 0px 0px #FFF !important;
+}
+
+body.dark-mode .form-control:focus, 
+body.dark-mode .form-select:focus, 
+body.dark-mode input:focus {
+  border-color: var(--brutal-primary) !important;
+  box-shadow: var(--brutal-shadow) !important;
+}
+
+/* Modals */
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: #FFF !important;
+}
+body.dark-mode .close {
+  color: #FFF !important;
+}
+
+/* Pagination */
+body.dark-mode .react-bootstrap-table-pagination .page-link {
+  background-color: #2D2D2D !important;
+  color: #FFF !important;
+  border-color: #FFF !important;
+  box-shadow: 2px 2px 0px 0px #FFF !important;
+}
+body.dark-mode .react-bootstrap-table-pagination .page-item.active .page-link {
+  background-color: var(--brutal-primary) !important;
+  color: #FFF !important;
+}
+
+/* Badges */
+body.dark-mode .badge {
+  background-color: #2D2D2D !important;
+  color: #FFF !important;
+  border-color: #FFF !important;
+  box-shadow: 2px 2px 0px 0px #FFF !important;
+}
+
+/* Header/Navbar */
+body.dark-mode .navbar, body.dark-mode header, body.dark-mode .navbar-dark {
+  border-bottom: var(--brutal-border) !important;
+  box-shadow: 0px 5px 0px 0px #FFF !important;
+}
+
+/* Buttons in Dark Mode */
+body.dark-mode .btn {
+  border: var(--brutal-border) !important;
+  box-shadow: var(--brutal-shadow) !important;
+  color: #000 !important; /* Button text often remains black if button color is bright, but primary/secondary are overridden below */
+}
+body.dark-mode .btn:hover {
+  box-shadow: var(--brutal-shadow-hover) !important;
+}
+body.dark-mode .btn:active {
+  box-shadow: 0px 0px 0px 0px #FFF !important;
+}
+body.dark-mode .btn-primary { color: #FFF !important; }
+body.dark-mode .btn-secondary { color: #FFF !important; }
+body.dark-mode .btn-danger { color: #FFF !important; }
+body.dark-mode .btn-dark { background-color: #000 !important; color: #FFF !important; border-color: #FFF !important; }
+body.dark-mode .btn-light { background-color: #FFF !important; color: #000 !important; }
+

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorMessage } from '@/shared/utils/errorHandler';
 
 import {
     CABANG_CREATE_FAIL,
@@ -35,9 +36,7 @@ export const listCabang = (page: any = 1, limit: any = 10, keyword: any = '') =>
         dispatch({
             type: CABANG_LIST_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -58,9 +57,7 @@ export const detailCabang = (id) => async (dispatch) => {
         dispatch({
             type: CABANG_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -89,9 +86,7 @@ export const createCabang = (Branch_Code, Branch_Name, BI_Location_Code, Address
         dispatch({
             type: CABANG_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -115,9 +110,7 @@ export const editCabang = (cabang) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: CABANG_UPDATE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            payload: getErrorMessage(error)
         })
     }
 }
@@ -140,9 +133,7 @@ export const deleteCabang = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: CABANG_DELETE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
+            payload: getErrorMessage(error),
         })
     }
 }

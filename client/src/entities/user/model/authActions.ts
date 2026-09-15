@@ -57,9 +57,7 @@ export const login = (username, password) => async (dispatch) => {
         dispatch({
             type: USER_LOGIN_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -94,9 +92,7 @@ export const listUsers = () => async (dispatch, getState) => {
         })
     } catch (error) {
         const message =
-            error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            getErrorMessage(error)
         if (message === 'Not authorized, token failed') {
             dispatch(logout())
         }
@@ -138,9 +134,7 @@ export const createUser = (username, password) => async (dispatch, getState) => 
         dispatch({
             type: USER_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -166,9 +160,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
         dispatch({ type: USER_DELETE_SUCCESS })
     } catch (error) {
         const message =
-            error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            getErrorMessage(error)
         if (message === 'Not authorized, token failed') {
             dispatch(logout())
         }
@@ -205,9 +197,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
 
     } catch (error) {
         const message =
-            error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            getErrorMessage(error)
         if (message === 'Not authorized, token failed') {
             dispatch(logout())
         }
@@ -246,9 +236,7 @@ export const detailUser = (id) => async (dispatch, getState) => {
         dispatch({
             type: USER_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -281,9 +269,7 @@ export const profileUser = () => async (dispatch, getState) => {
         dispatch({
             type: USER_PROFILE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }

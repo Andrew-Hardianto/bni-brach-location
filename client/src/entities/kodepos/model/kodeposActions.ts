@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorMessage } from '@/shared/utils/errorHandler';
 
 import {
     KODEPOS_CREATE_FAIL,
@@ -36,9 +37,7 @@ export const listKodepos = (page: any = 1, limit: any = 10, keyword: any = '') =
         dispatch({
             type: KODEPOS_LIST_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -59,9 +58,7 @@ export const detailKodepos = (id) => async (dispatch) => {
         dispatch({
             type: KODEPOS_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -90,9 +87,7 @@ export const createKodepos = (data) => async (dispatch) => {
         dispatch({
             type: KODEPOS_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -116,9 +111,7 @@ export const editKodepos = (data) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KODEPOS_UPDATE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            payload: getErrorMessage(error)
         })
     }
 }
@@ -141,9 +134,7 @@ export const deleteKodepos = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KODEPOS_DELETE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
+            payload: getErrorMessage(error),
         })
     }
 }

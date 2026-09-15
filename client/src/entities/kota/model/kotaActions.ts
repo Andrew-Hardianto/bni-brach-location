@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorMessage } from '@/shared/utils/errorHandler';
 
 import {
     KOTA_ALL_FAIL,
@@ -39,9 +40,7 @@ export const listKota = (page: any = 1, limit: any = 10, keyword: any = '') => a
         dispatch({
             type: KOTA_LIST_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -62,9 +61,7 @@ export const detailKota = (id) => async (dispatch) => {
         dispatch({
             type: KOTA_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -94,9 +91,7 @@ export const createKota = (data) => async (dispatch) => {
         dispatch({
             type: KOTA_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -120,9 +115,7 @@ export const editKota = (kota) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KOTA_UPDATE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            payload: getErrorMessage(error)
         })
     }
 }
@@ -145,9 +138,7 @@ export const deleteKota = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: KOTA_DELETE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
+            payload: getErrorMessage(error),
         })
     }
 }
@@ -170,9 +161,7 @@ export const Kota = () => async (
         dispatch({
             type: KOTA_ALL_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }

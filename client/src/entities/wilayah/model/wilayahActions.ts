@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorMessage } from '@/shared/utils/errorHandler';
 
 import {
     WILAYAH_CREATE_FAIL,
@@ -35,9 +36,7 @@ export const listWilayah = (page: any = 1, limit: any = 10, keyword: any = '') =
         dispatch({
             type: WILAYAH_LIST_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -58,9 +57,7 @@ export const detailWilayah = (id) => async (dispatch) => {
         dispatch({
             type: WILAYAH_DETAILS_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -89,9 +86,7 @@ export const createWilayah = (data) => async (dispatch) => {
         dispatch({
             type: WILAYAH_CREATE_FAIL,
             payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+                getErrorMessage(error),
         })
     }
 }
@@ -115,9 +110,7 @@ export const editWilayah = (wilayah) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: WILAYAH_UPDATE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            payload: getErrorMessage(error)
         })
     }
 }
@@ -140,9 +133,7 @@ export const deleteWilayah = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: WILAYAH_DELETE_FAIL,
-            payload: error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
+            payload: getErrorMessage(error),
         })
     }
 }
