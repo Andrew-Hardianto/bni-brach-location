@@ -1,10 +1,10 @@
 export default (sequelize, Sequelize) => {
     const Kodepos = sequelize.define("Master_Kodepos", {
         ID_Postcode: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
-            autoIncrement: true
+            defaultValue: Sequelize.UUIDV4
         },
         Postcode: {
             type: Sequelize.INTEGER,

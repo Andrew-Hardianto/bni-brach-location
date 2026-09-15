@@ -3,10 +3,10 @@ import geocoder from '../utils/geocoder';
 export default (sequelize, Sequelize) => {
     const Cabang = sequelize.define("Branch", {
         ID_Branch: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
-            autoIncrement: true
+            defaultValue: Sequelize.UUIDV4
         },
         Branch_Code: {
             type: Sequelize.BIGINT,

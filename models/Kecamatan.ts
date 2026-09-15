@@ -1,10 +1,10 @@
 export default (sequelize, Sequelize) => {
     const Kecamatan = sequelize.define("Master_Kecamatan", {
         ID_Kecamatan: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
-            autoIncrement: true
+            defaultValue: Sequelize.UUIDV4
         },
         Kecamatan_Code: {
             type: Sequelize.BIGINT,

@@ -1,10 +1,10 @@
 export default (sequelize, Sequelize) => {
     const Outlet = sequelize.define("Outlet", {
         ID_Outlet: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
-            autoIncrement: true
+            defaultValue: Sequelize.UUIDV4
         },
         Outlet_Code: {
             type: Sequelize.BIGINT,

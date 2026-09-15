@@ -1,10 +1,10 @@
 export default (sequelize, Sequelize) => {
     const Kota = sequelize.define("Master_Kabupaten_Kota", {
         ID_Kabkota: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
-            autoIncrement: true
+            defaultValue: Sequelize.UUIDV4
         },
         Kabkota_Code: {
             type: Sequelize.BIGINT,

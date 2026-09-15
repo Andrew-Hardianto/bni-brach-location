@@ -2,10 +2,10 @@
 export default (sequelize, Sequelize) => {
     const Provinsi = sequelize.define("Master_Provinsi", {
         ID_Provinsi: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.UUID,
             primaryKey: true,
             allowNull: false,
-            autoIncrement: true
+            defaultValue: Sequelize.UUIDV4
         },
         Provinsi_Code: {
             type: Sequelize.BIGINT,

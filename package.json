@@ -9,7 +9,11 @@
     "client": "npm start --prefix client",
     "start:dev": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "tsc",
-    "test": "mocha test/api"
+    "test": "mocha test/api",
+    "seeder": "tsx seeder.js",
+    "seed": "tsx seeder.js -i",
+    "seed:import": "tsx seeder.js -i",
+    "seed:destroy": "tsx seeder.js -d"
   },
   "repository": {
     "type": "git",
