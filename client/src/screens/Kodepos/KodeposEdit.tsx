@@ -27,13 +27,13 @@ const KodeposEdit = ({ history, match }) => {
 
     const dispatch = useDispatch();
 
-    const kodeposDetail = useSelector(state => state.kodeposDetail);
+    const kodeposDetail = useSelector((state: any) => state.kodeposDetail);
     const { kodepos } = kodeposDetail;
 
-    const kodeposUpdate = useSelector(state => state.kodeposUpdate);
+    const kodeposUpdate = useSelector((state: any) => state.kodeposUpdate);
     const { loading, error, success } = kodeposUpdate;
 
-    const kelurahanAll = useSelector(state => state.kelurahanAll);
+    const kelurahanAll = useSelector((state: any) => state.kelurahanAll);
     const { kelurahan } = kelurahanAll;
 
     useEffect(() => {

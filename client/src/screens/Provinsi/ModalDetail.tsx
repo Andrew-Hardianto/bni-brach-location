@@ -6,7 +6,7 @@ import { detailProvinsi } from '../../actions/provinsiActions';
 const ModalDetail = ({ onClick, provinsiId }) => {
     const dispatch = useDispatch();
 
-    const { provinsi } = useSelector(state => state.provinsiDetail);
+    const { provinsi } = useSelector((state: any) => state.provinsiDetail);
 
     useEffect(() => {
         dispatch(detailProvinsi(provinsiId));

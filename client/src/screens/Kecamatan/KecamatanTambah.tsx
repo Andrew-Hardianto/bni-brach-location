@@ -16,10 +16,10 @@ const KecamatanTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const kecamatanCreate = useSelector(state => state.kecamatanCreate);
+    const kecamatanCreate = useSelector((state: any) => state.kecamatanCreate);
     const { loading, error, success } = kecamatanCreate;
 
-    const kotaList = useSelector(state => state.kotaList);
+    const kotaList = useSelector((state: any) => state.kotaList);
     const { kota } = kotaList;
 
     useEffect(() => {

@@ -76,7 +76,7 @@ export const createKodepos = (data) => async (dispatch) => {
             },
         }
 
-        const { kodepos } = await axios.post(
+        const { data: kodepos } = await axios.post(
             '/kodepos',
             data,
             config
@@ -107,7 +107,7 @@ export const editKodepos = (data) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/kodepos/${data.ID_Postcode}`, data, config);
+        const { data: dataPost } = await axios.put(`/kodepos/${data.ID_Postcode}`, data, config);
 
         dispatch({
             type: KODEPOS_UPDATE_SUCCESS,

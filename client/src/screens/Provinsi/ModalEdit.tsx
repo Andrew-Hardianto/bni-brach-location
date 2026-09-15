@@ -15,14 +15,14 @@ const ModalEdit = ({ onClick, provinsiId }) => {
 
     const [data, setData] = useState(initialState);
 
-    const { provinsi } = useSelector(state => state.provinsiDetail);
+    const { provinsi } = useSelector((state: any) => state.provinsiDetail);
 
-    const { loading, error, success } = useSelector(state => state.provinsiUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.provinsiUpdate);
 
     useEffect(() => {
         if (success) {
             dispatch({ type: PROVINSI_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (!provinsi?.Provinsi_Name || provinsi?.ID_Provinsi !== provinsiId) {

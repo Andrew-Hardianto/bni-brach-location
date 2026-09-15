@@ -14,7 +14,7 @@ const CabangDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const cabangDetail = useSelector(state => state.cabangDetail);
+    const cabangDetail = useSelector((state: any) => state.cabangDetail);
     const { loading, error, cabang } = cabangDetail;
 
     useEffect(() => {

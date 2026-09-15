@@ -27,13 +27,13 @@ const OutletEdit = ({ history, match }) => {
 
     const dispatch = useDispatch();
 
-    const outletDetail = useSelector(state => state.outletDetail);
+    const outletDetail = useSelector((state: any) => state.outletDetail);
     const { outlet } = outletDetail;
 
-    const outletUpdate = useSelector(state => state.outletUpdate);
+    const outletUpdate = useSelector((state: any) => state.outletUpdate);
     const { loading, error, success } = outletUpdate;
 
-    const cabangList = useSelector(state => state.cabangList);
+    const cabangList = useSelector((state: any) => state.cabangList);
     const { cabang } = cabangList;
 
     useEffect(() => {
@@ -89,7 +89,7 @@ const OutletEdit = ({ history, match }) => {
                                 placeholder="Masukkan Kode Cabang..."
                                 name="Outlet_Code"
                                 value={data?.Outlet_Code}
-                                onChange={(e) => setData({ ...data, Outlet_Code: e.target.value })}
+                                onChange={(e) => setData({ ...data, Outlet_Code: e.target.value }, [])}
                             />
                         </Form.Group>
                         <Form.Group controlId="Outlet_Name">

@@ -108,7 +108,7 @@ export const editProvinsi = (provinsi) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/provinsi/${provinsi.ID_Provinsi}`, provinsi, config);
+        const { data: dataPost } = await axios.put(`/provinsi/${provinsi.ID_Provinsi}`, provinsi, config);
 
         dispatch({
             type: PROVINSI_UPDATE_SUCCESS,

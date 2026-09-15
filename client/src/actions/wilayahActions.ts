@@ -75,7 +75,7 @@ export const createWilayah = (data) => async (dispatch) => {
             },
         }
 
-        const { postData } = await axios.post(
+        const { data: postData } = await axios.post(
             '/wilayah',
             data,
             config
@@ -106,7 +106,7 @@ export const editWilayah = (wilayah) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/wilayah/${wilayah.ID_Region}`, wilayah, config);
+        const { data: dataPost } = await axios.put(`/wilayah/${wilayah.ID_Region}`, wilayah, config);
 
         dispatch({
             type: WILAYAH_UPDATE_SUCCESS,

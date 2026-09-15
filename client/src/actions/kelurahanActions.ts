@@ -79,7 +79,7 @@ export const createKelurahan = (data) => async (dispatch) => {
             },
         }
 
-        const { prov } = await axios.post(
+        const { data: prov } = await axios.post(
             '/kelurahan',
             data,
             config
@@ -110,7 +110,7 @@ export const editKelurahan = (kelurahan) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/kelurahan/${kelurahan.ID_Kelurahan}`, kelurahan, config);
+        const { data: dataPost } = await axios.put(`/kelurahan/${kelurahan.ID_Kelurahan}`, kelurahan, config);
 
         dispatch({
             type: KELURAHAN_UPDATE_SUCCESS,

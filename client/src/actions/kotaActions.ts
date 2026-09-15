@@ -79,7 +79,7 @@ export const createKota = (data) => async (dispatch) => {
             },
         }
 
-        const { kota } = await axios.post(
+        const { data: kota } = await axios.post(
             '/kota',
             data,
             config
@@ -111,7 +111,7 @@ export const editKota = (kota) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/kota/${kota.id}`, kota, config);
+        const { data: dataPost } = await axios.put(`/kota/${kota.id}`, kota, config);
 
         dispatch({
             type: KOTA_UPDATE_SUCCESS,

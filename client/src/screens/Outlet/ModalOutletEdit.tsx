@@ -27,17 +27,17 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
 
     const dispatch = useDispatch();
 
-    const { outlet } = useSelector(state => state.outletDetail);
+    const { outlet } = useSelector((state: any) => state.outletDetail);
 
-    const { loading, error, success } = useSelector(state => state.outletUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.outletUpdate);
 
-    const { cabang } = useSelector(state => state.cabangList);
+    const { cabang } = useSelector((state: any) => state.cabangList);
 
     useEffect(() => {
         dispatch(listCabang());
         if (success) {
             dispatch({ type: OUTLET_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (!outlet.outlet?.Outlet_Name || outlet.outlet?.ID_Outlet !== outletId) {
@@ -87,7 +87,7 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                             placeholder="Masukkan Kode Cabang..."
                             name="Outlet_Code"
                             value={data?.Outlet_Code}
-                            onChange={(e) => setData({ ...data, Outlet_Code: e.target.value })}
+                            onChange={(e) => setData({ ...data, Outlet_Code: e.target.value }, [])}
                         />
                     </Form.Group>
                     <Form.Group controlId="Outlet_Name">

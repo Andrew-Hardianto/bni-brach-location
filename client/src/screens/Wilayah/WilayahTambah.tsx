@@ -14,7 +14,7 @@ const WilayahTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const wilayahCreate = useSelector(state => state.wilayahCreate);
+    const wilayahCreate = useSelector((state: any) => state.wilayahCreate);
     const { loading, error, success } = wilayahCreate;
 
     useEffect(() => {

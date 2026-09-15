@@ -15,14 +15,14 @@ const ModalEditUser = ({ onClick, userId }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, success } = useSelector(state => state.userUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.userUpdate);
 
-    const { user } = useSelector(state => state.userDetails);
+    const { user } = useSelector((state: any) => state.userDetails);
 
     useEffect(() => {
         if (success) {
             dispatch({ type: USER_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (user.Username || user.ID_User !== userId) {

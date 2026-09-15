@@ -15,7 +15,7 @@ const ProvinsiTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const provinsiCreate = useSelector(state => state.provinsiCreate);
+    const provinsiCreate = useSelector((state: any) => state.provinsiCreate);
     const { loading, error, success } = provinsiCreate;
 
     useEffect(() => {

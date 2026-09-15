@@ -24,11 +24,11 @@ const Kecamatan = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, kecamatan } = useSelector(state => state.kecamatanList);
+    const { loading, error, kecamatan } = useSelector((state: any) => state.kecamatanList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kecamatanDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kecamatanDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin)
+    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -36,12 +36,12 @@ const Kecamatan = ({ history }) => {
     const handleShow = useCallback(data => {
         setKecamatanId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setKecamatanId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
         if (userInfo) {

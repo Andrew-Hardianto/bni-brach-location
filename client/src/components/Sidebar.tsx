@@ -25,7 +25,7 @@ const NavIcon = styled(Link)`
   align-items: center;
 `;
 
-const SidebarNav = styled.nav`
+const SidebarNav = styled.nav<{ sidebar: boolean }>`
   background: #15171c;
   width: 230px;
   height: 100vh;
@@ -47,7 +47,7 @@ const Sidebar = () => {
 
   const showSidebar = () => setSidebar(!sidebar);
 
-  const { userInfo } = useSelector((state) => state.userLogin)
+  const { userInfo } = useSelector((state: any) => state.userLogin)
 
   return (
     <>

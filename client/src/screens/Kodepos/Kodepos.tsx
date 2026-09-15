@@ -24,11 +24,11 @@ const Kodepos = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, kodepos } = useSelector(state => state.kodeposList);
+    const { loading, error, kodepos } = useSelector((state: any) => state.kodeposList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kodeposDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kodeposDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin);
+    const { userInfo } = useSelector((state: any) => state.userLogin);
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -36,12 +36,12 @@ const Kodepos = ({ history }) => {
     const handleShow = useCallback(data => {
         setKodeposId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setKodeposId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
         if (userInfo) {

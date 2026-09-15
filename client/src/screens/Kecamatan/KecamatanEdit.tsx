@@ -18,13 +18,13 @@ const KecamatanEdit = ({ match, history }) => {
 
     const dispatch = useDispatch();
 
-    const kecamatanDetail = useSelector(state => state.kecamatanDetail);
+    const kecamatanDetail = useSelector((state: any) => state.kecamatanDetail);
     const { kecamatan } = kecamatanDetail;
 
-    const kecamatanUpdate = useSelector(state => state.kecamatanUpdate);
+    const kecamatanUpdate = useSelector((state: any) => state.kecamatanUpdate);
     const { loading, error, success } = kecamatanUpdate;
 
-    const kotaList = useSelector(state => state.kotaList);
+    const kotaList = useSelector((state: any) => state.kotaList);
     const { kota } = kotaList;
 
     useEffect(() => {

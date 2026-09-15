@@ -24,11 +24,11 @@ const Outlet = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, outlet } = useSelector(state => state.outletList);
+    const { loading, error, outlet } = useSelector((state: any) => state.outletList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.outletDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.outletDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin)
+    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -36,12 +36,12 @@ const Outlet = ({ history }) => {
     const handleShow = useCallback(data => {
         setOutletId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setOutletId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
         if (userInfo) {

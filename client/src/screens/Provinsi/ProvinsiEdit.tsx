@@ -17,10 +17,10 @@ const ProvinsiEdit = ({ history, match }) => {
 
     const dispatch = useDispatch();
 
-    const provinsiDetail = useSelector(state => state.provinsiDetail);
+    const provinsiDetail = useSelector((state: any) => state.provinsiDetail);
     const { provinsi } = provinsiDetail;
 
-    const provinsiUpdate = useSelector(state => state.provinsiUpdate);
+    const provinsiUpdate = useSelector((state: any) => state.provinsiUpdate);
     const { loading, error, success } = provinsiUpdate;
 
     useEffect(() => {

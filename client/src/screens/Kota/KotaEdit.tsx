@@ -20,13 +20,13 @@ const KotaEdit = ({ history, match }) => {
 
     const dispatch = useDispatch();
 
-    const kotaDetail = useSelector(state => state.kotaDetail);
+    const kotaDetail = useSelector((state: any) => state.kotaDetail);
     const { kota } = kotaDetail;
 
-    const kotaUpdate = useSelector(state => state.kotaUpdate);
+    const kotaUpdate = useSelector((state: any) => state.kotaUpdate);
     const { loading, error, success } = kotaUpdate;
 
-    const provinsiList = useSelector(state => state.provinsiList);
+    const provinsiList = useSelector((state: any) => state.provinsiList);
     const { provinsi } = provinsiList;
 
     useEffect(() => {

@@ -17,10 +17,10 @@ const WilayahEdit = ({ match, history }) => {
 
     const dispatch = useDispatch();
 
-    const wilayahDetail = useSelector(state => state.wilayahDetail);
+    const wilayahDetail = useSelector((state: any) => state.wilayahDetail);
     const { wilayah } = wilayahDetail;
 
-    const wilayahUpdate = useSelector(state => state.wilayahUpdate);
+    const wilayahUpdate = useSelector((state: any) => state.wilayahUpdate);
     const { loading, error, success } = wilayahUpdate;
 
     useEffect(() => {

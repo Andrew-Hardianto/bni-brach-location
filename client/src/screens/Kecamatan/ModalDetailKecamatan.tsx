@@ -6,7 +6,7 @@ import { detailKecamatan } from '../../actions/kecamatanActions';
 const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
     const dispatch = useDispatch();
 
-    const { kecamatan } = useSelector(state => state.kecamatanDetail);
+    const { kecamatan } = useSelector((state: any) => state.kecamatanDetail);
 
     useEffect(() => {
         dispatch(detailKecamatan(kecamatanId));

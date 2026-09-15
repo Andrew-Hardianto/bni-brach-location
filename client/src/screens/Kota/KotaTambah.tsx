@@ -15,10 +15,10 @@ const KotaTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const kotaCreate = useSelector(state => state.kotaCreate);
+    const kotaCreate = useSelector((state: any) => state.kotaCreate);
     const { loading, error, success } = kotaCreate;
 
-    const provinsiList = useSelector(state => state.provinsiList);
+    const provinsiList = useSelector((state: any) => state.provinsiList);
     const { provinsi } = provinsiList;
 
     useEffect(() => {

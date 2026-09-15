@@ -6,7 +6,7 @@ import { detailKota } from '../../actions/kotaActions';
 const ModalDetailKota = ({ onClick, kotaId }) => {
     const dispatch = useDispatch();
 
-    const { kota } = useSelector(state => state.kotaDetail);
+    const { kota } = useSelector((state: any) => state.kotaDetail);
 
     useEffect(() => {
         dispatch(detailKota(kotaId));

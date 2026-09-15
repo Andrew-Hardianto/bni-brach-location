@@ -11,9 +11,9 @@ const UserProfile = ({ history }) => {
 
     const dispatch = useDispatch()
 
-    const { user, loading, error } = useSelector(state => state.userProfile)
+    const { user, loading, error } = useSelector((state: any) => state.userProfile)
 
-    const { userInfo } = useSelector(state => state.userLogin)
+    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     useEffect(() => {
         if (userInfo) {

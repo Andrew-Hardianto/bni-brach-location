@@ -9,7 +9,7 @@ const ModalDetailRegion = ({ onClick, wilayahId }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, wilayah } = useSelector(state => state.wilayahDetail);
+    const { loading, error, wilayah } = useSelector((state: any) => state.wilayahDetail);
 
     useEffect(() => {
         dispatch(detailWilayah(wilayahId));

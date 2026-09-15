@@ -24,17 +24,17 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
 
     const dispatch = useDispatch();
 
-    const { kodepos } = useSelector(state => state.kodeposDetail);
+    const { kodepos } = useSelector((state: any) => state.kodeposDetail);
 
-    const { loading, error, success } = useSelector(state => state.kodeposUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.kodeposUpdate);
 
-    const { kelurahan } = useSelector(state => state.kelurahanAll);
+    const { kelurahan } = useSelector((state: any) => state.kelurahanAll);
 
     useEffect(() => {
         dispatch(allKelurahan(Kelurahan_Code))
         if (success) {
             dispatch({ type: KODEPOS_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (kodepos?.kodepos?.ID_Postcode !== kodeposId) {

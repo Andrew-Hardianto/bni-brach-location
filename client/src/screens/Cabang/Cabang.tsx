@@ -24,11 +24,11 @@ const Cabang = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, cabang } = useSelector(state => state.cabangList);
+    const { loading, error, cabang } = useSelector((state: any) => state.cabangList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.cabangDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.cabangDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin)
+    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -36,12 +36,12 @@ const Cabang = ({ history }) => {
     const handleShow = useCallback(data => {
         setCabangId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setCabangId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
         if (userInfo) {

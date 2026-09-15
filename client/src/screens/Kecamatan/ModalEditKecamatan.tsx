@@ -17,17 +17,17 @@ const ModalEditKecamatan = ({ onClick, kecamatanId }) => {
 
     const dispatch = useDispatch();
 
-    const { kecamatan } = useSelector(state => state.kecamatanDetail);
+    const { kecamatan } = useSelector((state: any) => state.kecamatanDetail);
 
-    const { loading, error, success } = useSelector(state => state.kecamatanUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.kecamatanUpdate);
 
-    const { kota } = useSelector(state => state.kotaList);
+    const { kota } = useSelector((state: any) => state.kotaList);
 
     useEffect(() => {
         dispatch(listKota())
         if (success) {
             dispatch({ type: KECAMATAN_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (!kecamatan?.kecamatan?.Kecamatan_Name || kecamatan?.kecamatan?.ID_Kecamatan !== kecamatanId) {

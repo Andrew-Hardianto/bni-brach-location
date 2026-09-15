@@ -12,7 +12,7 @@ const WilayahDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const wilayahDetail = useSelector(state => state.wilayahDetail);
+    const wilayahDetail = useSelector((state: any) => state.wilayahDetail);
     const { loading, error, wilayah } = wilayahDetail;
 
     useEffect(() => {

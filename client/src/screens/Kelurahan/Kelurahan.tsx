@@ -24,11 +24,11 @@ const Kelurahan = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, kelurahan } = useSelector(state => state.kelurahanList);
+    const { loading, error, kelurahan } = useSelector((state: any) => state.kelurahanList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kelurahanDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kelurahanDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin);
+    const { userInfo } = useSelector((state: any) => state.userLogin);
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -36,12 +36,12 @@ const Kelurahan = ({ history }) => {
     const handleShow = useCallback(data => {
         setKelurahanId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setKelurahanId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
         if (userInfo) {

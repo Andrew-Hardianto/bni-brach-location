@@ -13,7 +13,7 @@ const UserTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, success } = useSelector(state => state.userCreate);
+    const { loading, error, success } = useSelector((state: any) => state.userCreate);
 
     useEffect(() => {
         if (success) {

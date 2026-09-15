@@ -13,7 +13,7 @@ const KotaDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const kotaDetail = useSelector(state => state.kotaDetail);
+    const kotaDetail = useSelector((state: any) => state.kotaDetail);
     const { loading, error, kota } = kotaDetail;
 
     useEffect(() => {

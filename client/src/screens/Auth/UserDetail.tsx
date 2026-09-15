@@ -12,7 +12,7 @@ const UserDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, user } = useSelector(state => state.userDetails);
+    const { loading, error, user } = useSelector((state: any) => state.userDetails);
 
     useEffect(() => {
         dispatch(detailUser(userId));

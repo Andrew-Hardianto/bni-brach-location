@@ -11,7 +11,7 @@ const ProvinsiDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const provinsiDetail = useSelector(state => state.provinsiDetail);
+    const provinsiDetail = useSelector((state: any) => state.provinsiDetail);
     const { loading, error, provinsi } = provinsiDetail;
 
     useEffect(() => {

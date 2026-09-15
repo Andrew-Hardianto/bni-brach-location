@@ -20,16 +20,16 @@ const ModalEditKota = ({ onClick, kotaId }) => {
 
     const dispatch = useDispatch();
 
-    const { kota } = useSelector(state => state.kotaDetail);
+    const { kota } = useSelector((state: any) => state.kotaDetail);
 
-    const { loading, error, success } = useSelector(state => state.kotaUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.kotaUpdate);
 
-    const { provinsi } = useSelector(state => state.provinsiList);
+    const { provinsi } = useSelector((state: any) => state.provinsiList);
 
     useEffect(() => {
         if (success) {
             dispatch({ type: KOTA_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (!kota?.kota?.Kabkota_Name || kota?.kota?.ID_Kabkota !== kotaId) {

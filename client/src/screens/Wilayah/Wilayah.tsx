@@ -24,11 +24,11 @@ const Wilayah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, wilayah } = useSelector(state => state.wilayahList);
+    const { loading, error, wilayah } = useSelector((state: any) => state.wilayahList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.wilayahDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.wilayahDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin)
+    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -36,12 +36,12 @@ const Wilayah = ({ history }) => {
     const handleShow = useCallback(data => {
         setWilayahId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setWilayahId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
         if (userInfo) {

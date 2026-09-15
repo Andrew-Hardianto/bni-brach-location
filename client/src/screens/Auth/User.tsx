@@ -24,10 +24,10 @@ const User = () => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, users } = useSelector(state => state.userList);
-    const { userInfo } = useSelector(state => state.userLogin);
+    const { loading, error, users } = useSelector((state: any) => state.userList);
+    const { userInfo } = useSelector((state: any) => state.userLogin);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.userDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.userDelete);
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -35,12 +35,12 @@ const User = () => {
     const handleShow = useCallback(data => {
         setUserId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setUserId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
 

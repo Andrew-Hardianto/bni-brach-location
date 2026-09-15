@@ -16,14 +16,14 @@ const ModalEditRegion = ({ onClick, wilayahId }) => {
 
     const dispatch = useDispatch();
 
-    const { wilayah } = useSelector(state => state.wilayahDetail);
+    const { wilayah } = useSelector((state: any) => state.wilayahDetail);
 
-    const { loading, error, success } = useSelector(state => state.wilayahUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.wilayahUpdate);
 
     useEffect(() => {
         if (success) {
             dispatch({ type: WILAYAH_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (!wilayah?.wilayah?.Region_Name || wilayah?.wilayah?.ID_Region !== wilayahId) {

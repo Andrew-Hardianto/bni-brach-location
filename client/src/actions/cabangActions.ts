@@ -75,7 +75,7 @@ export const createCabang = (Branch_Code, Branch_Name, BI_Location_Code, Address
             },
         }
 
-        const { postData } = await axios.post(
+        const { data: postData } = await axios.post(
             '/cabang',
             { Branch_Code, Branch_Name, BI_Location_Code, Address, Region_Code, Latitude, Longitude },
             config
@@ -106,7 +106,7 @@ export const editCabang = (cabang) => async (dispatch) => {
             },
         }
 
-        const { dataPost } = await axios.put(`/cabang/${cabang.ID_Branch}`, cabang, config);
+        const { data: dataPost } = await axios.put(`/cabang/${cabang.ID_Branch}`, cabang, config);
 
         dispatch({
             type: CABANG_UPDATE_SUCCESS,

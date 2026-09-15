@@ -23,11 +23,11 @@ const Kota = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, kota } = useSelector(state => state.kotaList);
+    const { loading, error, kota } = useSelector((state: any) => state.kotaList);
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector(state => state.kotaDelete);
+    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kotaDelete);
 
-    const { userInfo } = useSelector((state) => state.userLogin)
+    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -35,12 +35,12 @@ const Kota = ({ history }) => {
     const handleShow = useCallback(data => {
         setKotaId(data);
         setShow(true);
-    });
+    }, []);
 
     const handleShowEdit = useCallback(data => {
         setKotaId(data);
         setShowEdit(true);
-    });
+    }, []);
 
     useEffect(() => {
         if (userInfo) {

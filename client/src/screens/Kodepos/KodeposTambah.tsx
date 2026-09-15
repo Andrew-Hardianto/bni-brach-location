@@ -22,10 +22,10 @@ const KodeposTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const kodeposCreate = useSelector(state => state.kodeposCreate);
+    const kodeposCreate = useSelector((state: any) => state.kodeposCreate);
     const { loading, error, success } = kodeposCreate;
 
-    const kelurahanList = useSelector(state => state.kelurahanList);
+    const kelurahanList = useSelector((state: any) => state.kelurahanList);
     const { kelurahan } = kelurahanList;
 
     useEffect(() => {

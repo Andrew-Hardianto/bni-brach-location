@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 const Topbar = () => {
 
-    const { userInfo } = useSelector((state) => state.userLogin)
+    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     return (
         <>

@@ -28,20 +28,20 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
 
     const dispatch = useDispatch();
 
-    const cabangDetail = useSelector(state => state.cabangDetail);
+    const cabangDetail = useSelector((state: any) => state.cabangDetail);
     const { cabang } = cabangDetail;
 
-    const cabangUpdate = useSelector(state => state.cabangUpdate);
+    const cabangUpdate = useSelector((state: any) => state.cabangUpdate);
     const { loading, error, success } = cabangUpdate;
 
-    const wilayahList = useSelector(state => state.wilayahList);
+    const wilayahList = useSelector((state: any) => state.wilayahList);
     const { wilayah } = wilayahList;
 
     useEffect(() => {
         dispatch(listWilayah());
         if (success) {
             dispatch({ type: CABANG_UPDATE_RESET })
-            window.location.reload(false)
+            window.location.reload()
             onClick()
         } else {
             if (!cabang?.cabang?.Branch_Name || cabang?.cabang?.ID_Branch !== cabangId) {
@@ -92,7 +92,7 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             placeholder="Masukkan Kode Cabang..."
                             name="Branch_Code"
                             value={data?.Branch_Code}
-                            onChange={(e) => setData({ ...data, Branch_Code: e.target.value })}
+                            onChange={(e) => setData({ ...data, Branch_Code: e.target.value }, [])}
                         // onChange={(e) => setKode(e.target.value)}
                         />
                     </Form.Group>

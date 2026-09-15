@@ -12,7 +12,7 @@ const KecamatanDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const kecamatanDetail = useSelector(state => state.kecamatanDetail);
+    const kecamatanDetail = useSelector((state: any) => state.kecamatanDetail);
     const { loading, error, kecamatan } = kecamatanDetail;
 
     useEffect(() => {

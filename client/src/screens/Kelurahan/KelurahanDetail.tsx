@@ -12,7 +12,7 @@ const KelurahanDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const kelurahanDetail = useSelector(state => state.kelurahanDetail);
+    const kelurahanDetail = useSelector((state: any) => state.kelurahanDetail);
     const { loading, error, kelurahan } = kelurahanDetail;
 
     useEffect(() => {

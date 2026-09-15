@@ -12,7 +12,7 @@ const Login = ({ location, history }) => {
 
     const dispatch = useDispatch()
 
-    const { loading, error, userInfo } = useSelector((state) => state.userLogin)
+    const { loading, error, userInfo } = useSelector((state: any) => state.userLogin)
 
     const redirect = location.search ? location.search.split('=')[1] : '/location/provinsi'
 

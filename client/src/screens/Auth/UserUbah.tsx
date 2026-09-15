@@ -16,9 +16,9 @@ const UserUbah = ({ match, history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, success } = useSelector(state => state.userUpdate);
+    const { loading, error, success } = useSelector((state: any) => state.userUpdate);
 
-    const { user } = useSelector(state => state.userDetails);
+    const { user } = useSelector((state: any) => state.userDetails);
 
     useEffect(() => {
         if (success) {

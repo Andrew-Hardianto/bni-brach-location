@@ -9,7 +9,7 @@ const ModalDetailUser = ({ onClick, userId }) => {
 
     const dispatch = useDispatch();
 
-    const { user } = useSelector(state => state.userDetails);
+    const { user } = useSelector((state: any) => state.userDetails);
 
     useEffect(() => {
         dispatch(detailUser(userId));

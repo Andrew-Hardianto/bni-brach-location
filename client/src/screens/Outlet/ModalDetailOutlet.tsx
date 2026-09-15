@@ -11,7 +11,7 @@ const ModalDetailOutlet = ({ onClick, outletId }) => {
 
     const dispatch = useDispatch();
 
-    const { outlet } = useSelector(state => state.outletDetail);
+    const { outlet } = useSelector((state: any) => state.outletDetail);
 
     useEffect(() => {
         dispatch(detailOutlet(outletId));

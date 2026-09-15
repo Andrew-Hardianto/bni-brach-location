@@ -35,10 +35,10 @@ const CabangTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const cabangCreate = useSelector(state => state.cabangCreate);
+    const cabangCreate = useSelector((state: any) => state.cabangCreate);
     const { loading, error, success } = cabangCreate;
 
-    const wilayahList = useSelector(state => state.wilayahList);
+    const wilayahList = useSelector((state: any) => state.wilayahList);
     const { wilayah } = wilayahList;
 
     useEffect(() => {

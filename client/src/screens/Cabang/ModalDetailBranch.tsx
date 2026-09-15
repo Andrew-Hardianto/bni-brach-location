@@ -11,7 +11,7 @@ const ModalDetailBranch = ({ onClick, cabangId }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, cabang } = useSelector(state => state.cabangDetail);
+    const { loading, error, cabang } = useSelector((state: any) => state.cabangDetail);
 
     useEffect(() => {
         dispatch(detailCabang(cabangId));

@@ -14,7 +14,7 @@ const OutletDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const outletDetail = useSelector(state => state.outletDetail);
+    const outletDetail = useSelector((state: any) => state.outletDetail);
     const { loading, error, outlet } = outletDetail;
 
     useEffect(() => {

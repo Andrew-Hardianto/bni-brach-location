@@ -7,7 +7,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, kodepos } = useSelector(state => state.kodeposDetail);
+    const { loading, error, kodepos } = useSelector((state: any) => state.kodeposDetail);
 
     useEffect(() => {
         dispatch(detailKodepos(kodeposId));

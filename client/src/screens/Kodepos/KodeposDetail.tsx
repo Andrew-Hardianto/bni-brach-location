@@ -12,7 +12,7 @@ const KodeposDetail = ({ match }) => {
 
     const dispatch = useDispatch();
 
-    const kodeposDetail = useSelector(state => state.kodeposDetail);
+    const kodeposDetail = useSelector((state: any) => state.kodeposDetail);
     const { loading, error, kodepos } = kodeposDetail;
 
     useEffect(() => {

@@ -36,10 +36,10 @@ const OutletTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const outletCreate = useSelector(state => state.outletCreate);
+    const outletCreate = useSelector((state: any) => state.outletCreate);
     const { loading, error, success } = outletCreate;
 
-    const cabangList = useSelector(state => state.cabangList);
+    const cabangList = useSelector((state: any) => state.cabangList);
     const { cabang } = cabangList;
 
     useEffect(() => {
