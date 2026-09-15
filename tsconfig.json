@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": false
+  },
+  "include": [
+    "server.ts",
+    "config/**/*",
+    "controllers/**/*",
+    "middleware/**/*",
+    "models/**/*",
+    "routes/**/*",
+    "utils/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "client",
+    "test"
+  ]
+}
