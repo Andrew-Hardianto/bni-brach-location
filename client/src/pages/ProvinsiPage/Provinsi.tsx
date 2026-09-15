@@ -10,6 +10,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { deleteProvinsi, listProvinsi } from '@/entities/provinsi/model/provinsiActions';
 import { PROVINSI_CREATE_RESET, PROVINSI_UPDATE_RESET } from '@/entities/provinsi/model/provinsiConstants';
 import Loader from '@/shared/ui/Loader';
+import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import ModalDetail from '@/features/Provinsi/ModalDetail';
 import ModalEdit from '@/features/Provinsi/ModalEdit';
@@ -119,12 +120,12 @@ const Provinsi = ({ history }) => {
         <div className="home">
             <div className="container-fluid">
                 <Container>
-                    {loading ? <Loader />
-                        : error ? (<Message variant="danger" >{error}</Message>)
-                            : (
-                                <Card className="mt-3 shadow-lg" >
+                    <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="text-center font-weight-bold">DATA PROVINSI</Card.Title>
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error}</Message>) : (
+                                            
+                                        <>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -158,10 +159,11 @@ const Provinsi = ({ history }) => {
                                                 )
                                             }
                                         </ToolkitProvider>
+                                    
+                                        </>
+                                        )}
                                     </Card.Body>
                                 </Card>
-                            )
-                    }
                 </Container>
                 <Modal show={show} onHide={handleClose}>
                     <ModalDetail onClick={handleClose} provinsiId={provinsiId} />

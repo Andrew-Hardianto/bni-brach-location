@@ -9,6 +9,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 import Loader from '@/shared/ui/Loader';
+import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import { deleteKota, listKota } from '@/entities/kota/model/kotaActions';
 import { KOTA_CREATE_RESET, KOTA_UPDATE_RESET } from '@/entities/kota/model/kotaConstants';
@@ -137,12 +138,12 @@ const Kota = ({ history }) => {
         <div className="home">
             <div className="container-fluid">
                 <Container>
-                    {loading ? <Loader />
-                        : error ? (<Message variant="danger" >{error}</Message>)
-                            : (
-                                <Card className="mt-3 shadow-lg" >
+                    <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="text-center font-weight-bold">DATA KOTA/KABUPATEN</Card.Title>
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error}</Message>) : (
+                                            
+                                        <>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -176,9 +177,11 @@ const Kota = ({ history }) => {
                                                 )
                                             }
                                         </ToolkitProvider>
+                                    
+                                        </>
+                                        )}
                                     </Card.Body>
                                 </Card>
-                            )}
                     <Modal show={show} onHide={handleClose}>
                         <ModalDetailKota onClick={handleClose} kotaId={kotaId} />
                     </Modal>

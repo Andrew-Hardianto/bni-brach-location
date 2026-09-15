@@ -9,6 +9,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 import Loader from '@/shared/ui/Loader';
+import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import { deleteKodepos, listKodepos } from '@/entities/kodepos/model/kodeposActions';
 import { KODEPOS_CREATE_RESET } from '@/entities/kodepos/model/kodeposConstants';
@@ -116,12 +117,12 @@ const Kodepos = ({ history }) => {
         <div className="home">
             <div className="container-fluid">
                 <Container>
-                    {loading ? <Loader />
-                        : error ? (<Message variant="danger" >{error}</Message>)
-                            : (
-                                <Card className="mt-3 shadow-lg" >
+                    <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">DATA KODEPOS</Card.Title>
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error}</Message>) : (
+                                            
+                                        <>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -155,9 +156,11 @@ const Kodepos = ({ history }) => {
                                                 )
                                             }
                                         </ToolkitProvider>
+                                    
+                                        </>
+                                        )}
                                     </Card.Body>
                                 </Card>
-                            )}
                     <Modal show={show} onHide={handleClose}>
                         <ModalDetailKodepos onClick={handleClose} kodeposId={kodeposId} />
                     </Modal>

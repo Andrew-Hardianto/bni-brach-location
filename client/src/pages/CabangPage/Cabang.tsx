@@ -9,6 +9,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 import Loader from '@/shared/ui/Loader';
+import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import { CABANG_CREATE_RESET } from '@/entities/cabang/model/cabangConstants';
 import { deleteCabang, listCabang } from '@/entities/cabang/model/cabangActions';
@@ -122,12 +123,12 @@ const Cabang = ({ history }) => {
         <div className="home">
             <div className="container-fluid">
                 <Container>
-                    {loading ? <Loader />
-                        : error ? (<Message variant="danger" >{error}</Message>)
-                            : (
-                                <Card className="mt-3 shadow-lg" >
+                    <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">Data Branch</Card.Title>
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error}</Message>) : (
+                                            
+                                        <>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
                                         <ToolkitProvider
@@ -161,9 +162,11 @@ const Cabang = ({ history }) => {
                                                 )
                                             }
                                         </ToolkitProvider>
+                                    
+                                        </>
+                                        )}
                                     </Card.Body>
                                 </Card>
-                            )}
                     <Modal size="lg" show={show} onHide={handleClose}>
                         <ModalDetailBranch onClick={handleClose} cabangId={cabangId} />
                     </Modal>

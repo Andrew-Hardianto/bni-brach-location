@@ -9,6 +9,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 import Loader from '@/shared/ui/Loader';
+import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import { deleteKecamatan, listKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
 import { KECAMATAN_CREATE_RESET, KECAMATAN_UPDATE_RESET } from '@/entities/kecamatan/model/kecamatanConstants';
