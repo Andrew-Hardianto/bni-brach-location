@@ -24,7 +24,7 @@ const Outlet = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, outlet } = useSelector((state: any) => state.outletList);
+    const { loading, error, outlet, pagination } = useSelector((state: any) => state.outletList);
 
     const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.outletDelete);
 
@@ -51,6 +51,12 @@ const Outlet = ({ history }) => {
             history.push('/login')
         }
     }, [dispatch, success, history])
+
+
+    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
+        dispatch(listOutlet(page, sizePerPage, searchText || ''));
+    }
+
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -114,7 +120,7 @@ const Outlet = ({ history }) => {
                     {loading ? <Loader />
                         : error ? (<Message variant="danger" >{error}</Message>)
                             : (
-                                <Card lg="2" className="mt-3 shadow-lg" >
+                                <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">Data Outlet</Card.Title>
                                         {loadingDelete && <Loader />}
@@ -140,7 +146,9 @@ const Outlet = ({ history }) => {
                                                         <Card.Title>Data Outlet</Card.Title>
                                                         <BootstrapTable
                                                             {...props.baseProps}
-                                                            pagination={paginationFactory()}
+                                                            remote={{ search: true, pagination: true }}
+                                                            onTableChange={handleTableChange}
+                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
                                                             wrapperClasses="table-responsive"
                                                             rowClasses="text-nowrap"
                                                         />

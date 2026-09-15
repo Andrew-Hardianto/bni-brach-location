@@ -24,7 +24,7 @@ const Cabang = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, cabang } = useSelector((state: any) => state.cabangList);
+    const { loading, error, cabang, pagination } = useSelector((state: any) => state.cabangList);
 
     const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.cabangDelete);
 
@@ -51,6 +51,12 @@ const Cabang = ({ history }) => {
             history.push('/login')
         }
     }, [dispatch, success, history])
+
+
+    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
+        dispatch(listCabang(page, sizePerPage, searchText || ''));
+    }
+
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -119,7 +125,7 @@ const Cabang = ({ history }) => {
                     {loading ? <Loader />
                         : error ? (<Message variant="danger" >{error}</Message>)
                             : (
-                                <Card lg="2" className="mt-3 shadow-lg" >
+                                <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">Data Branch</Card.Title>
                                         {loadingDelete && <Loader />}
@@ -144,7 +150,9 @@ const Cabang = ({ history }) => {
                                                         </Row>
                                                         <BootstrapTable
                                                             {...props.baseProps}
-                                                            pagination={paginationFactory()}
+                                                            remote={{ search: true, pagination: true }}
+                                                            onTableChange={handleTableChange}
+                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
                                                             defaultSorted={defaultSortedBy}
                                                             wrapperClasses="table-responsive"
                                                             rowClasses="text-nowrap"

@@ -26,6 +26,7 @@ export const kodeposListReducer = (state = { kodepos: [] }, action) => {
             return {
                 loading: false,
                 kodepos: action.payload.kodepos,
+                pagination: action.payload.pagination,
             }
         case KODEPOS_LIST_FAIL:
             return { loading: false, error: action.payload }

@@ -7,12 +7,36 @@ const Op = db.Sequelize.Op;
 
 // get all data
 export const getKodepos = asyncHandler(async (req: any, res: any) => {
-        // const kodepos = await Kodepos.findAll({ include: ["kota", "provinsi", "kecamatan", "kelurahan"] });
-        const kodepos = await Kodepos.findAll();
+        const page = req.query.page ? parseInt(req.query.page as string) : null;
+        const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
+        
+        let queryOptions: any = { include: ["kota", "provinsi", "kecamatan", "kelurahan"] };
+        
+        if (req.query.keyword) {
+            queryOptions.where = {
+                ...queryOptions.where,
+                Postcode: {
+                    [Op.like]: `%${req.query.keyword}%`
+                }
+            };
+        }
 
-        res.status(200).json({
+        if (page && limit) {
+            queryOptions.offset = (page - 1) * limit;
+            queryOptions.limit = limit;
+        }
+
+        const { count, rows } = await Kodepos.findAndCountAll(queryOptions);
+
+res.status(200).json({
             success: true,
-            kodepos
+            kodepos: rows,
+            pagination: page && limit ? {
+                totalItems: count,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page,
+                limit: limit
+            } : null
         })
 })
 

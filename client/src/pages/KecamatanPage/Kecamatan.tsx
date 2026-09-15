@@ -24,7 +24,7 @@ const Kecamatan = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, kecamatan } = useSelector((state: any) => state.kecamatanList);
+    const { loading, error, kecamatan, pagination } = useSelector((state: any) => state.kecamatanList);
 
     const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kecamatanDelete);
 
@@ -52,6 +52,12 @@ const Kecamatan = ({ history }) => {
             history.push('/login')
         }
     }, [dispatch, success, history])
+
+
+    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
+        dispatch(listKecamatan(page, sizePerPage, searchText || ''));
+    }
+
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -115,7 +121,7 @@ const Kecamatan = ({ history }) => {
                     {loading ? <Loader />
                         : error ? <Message variant="danger">{error}</Message>
                             : (
-                                <Card lg="2" className="mt-3 shadow-lg" >
+                                <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
@@ -141,7 +147,9 @@ const Kecamatan = ({ history }) => {
                                                         <Card.Title>Data Kecamatan</Card.Title>
                                                         <BootstrapTable
                                                             {...props.baseProps}
-                                                            pagination={paginationFactory()}
+                                                            remote={{ search: true, pagination: true }}
+                                                            onTableChange={handleTableChange}
+                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
                                                             defaultSorted={defaultSortedBy}
                                                             wrapperClasses="table-responsive"
                                                             rowClasses="text-nowrap"
@@ -153,10 +161,10 @@ const Kecamatan = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
-                    <Modal size="md" show={show} onHide={handleClose}>
+                    <Modal show={show} onHide={handleClose}>
                         <ModalDetailKecamatan onClick={handleClose} kecamatanId={kecamatanId} />
                     </Modal>
-                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                    <Modal show={showEdit} onHide={handleCloseEdit}>
                         <ModalEditKecamatan onClick={handleCloseEdit} kecamatanId={kecamatanId} />
                     </Modal>
                 </Container >

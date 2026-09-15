@@ -27,6 +27,7 @@ export const cabangListReducer = (state = { cabang: [] }, action) => {
             return {
                 loading: false,
                 cabang: action.payload.cabang,
+                pagination: action.payload.pagination,
             }
         case CABANG_LIST_FAIL:
             return { loading: false, error: action.payload }

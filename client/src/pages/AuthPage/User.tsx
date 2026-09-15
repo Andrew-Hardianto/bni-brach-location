@@ -119,7 +119,7 @@ const User = () => {
                     {loading ? <Loader />
                         : error ? (<Message variant="danger" >{error}</Message>)
                             : (
-                                <Card lg="2" className="mt-3 shadow-lg" >
+                                <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{error}</Message>}
@@ -156,10 +156,10 @@ const User = () => {
                                     </Card.Body>
                                 </Card>
                             )}
-                    <Modal size="md" show={show} onHide={handleClose}>
+                    <Modal show={show} onHide={handleClose}>
                         <ModalDetailUser onClick={handleClose} userId={userId} />
                     </Modal>
-                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                    <Modal show={showEdit} onHide={handleCloseEdit}>
                         <ModalEditUser onClick={handleCloseEdit} userId={userId} />
                     </Modal>
                 </Container>

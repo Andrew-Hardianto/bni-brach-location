@@ -18,14 +18,14 @@ import {
     KODEPOS_UPDATE_SUCCESS
 } from "@/entities/kodepos/model/kodeposConstants";
 
-export const listKodepos = () => async (
+export const listKodepos = (page: any = 1, limit: any = 10, keyword: any = '') => async (
     dispatch
 ) => {
     try {
         dispatch({ type: KODEPOS_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/kodepos`
+            `/kodepos?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

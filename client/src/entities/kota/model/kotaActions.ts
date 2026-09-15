@@ -21,14 +21,14 @@ import {
     KOTA_UPDATE_SUCCESS
 } from "@/entities/kota/model/kotaConstants";
 
-export const listKota = () => async (
+export const listKota = (page: any = 1, limit: any = 10, keyword: any = '') => async (
     dispatch
 ) => {
     try {
         dispatch({ type: KOTA_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/kota`
+            `/kota?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

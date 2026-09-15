@@ -19,12 +19,12 @@ import {
 } from "@/entities/outlet/model/outletConstants"
 
 
-export const listOutlet = () => async (dispatch) => {
+export const listOutlet = (page: any = 1, limit: any = 10, keyword: any = '') => async (dispatch) => {
     try {
         dispatch({ type: OUTLET_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/outlet`
+            `/outlet?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

@@ -19,12 +19,12 @@ import {
 } from "@/entities/cabang/model/cabangConstants"
 
 
-export const listCabang = () => async (dispatch) => {
+export const listCabang = (page: any = 1, limit: any = 10, keyword: any = '') => async (dispatch) => {
     try {
         dispatch({ type: CABANG_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/cabang`
+            `/cabang?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

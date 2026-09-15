@@ -29,6 +29,7 @@ export const kotaListReducer = (state = { kota: [] }, action) => {
             return {
                 loading: false,
                 kota: action.payload.kota,
+                pagination: action.payload.pagination,
             }
         case KOTA_LIST_FAIL:
             return { loading: false, error: action.payload }

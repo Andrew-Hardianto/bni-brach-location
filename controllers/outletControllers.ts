@@ -8,15 +8,41 @@ const Op = db.Sequelize.Op;
 
 // get all outlet
 export const getAllOutlet = asyncHandler(async (req: any, res: any) => {
-        const outlet = await Outlet.findAll({
+        const page = req.query.page ? parseInt(req.query.page as string) : null;
+        const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
+        
+        let queryOptions: any = {
             include: [
                 "cabang"
             ]
-        });
+        
+        
+        };
+        
+        if (req.query.keyword) {
+            queryOptions.where = {
+                Outlet_Name: {
+                    [Op.like]: `%${req.query.keyword}%`
+                }
+            };
+        }
 
-        res.status(200).json({
+        if (page && limit) {
+            queryOptions.offset = (page - 1) * limit;
+            queryOptions.limit = limit;
+        }
+
+        const { count, rows } = await Outlet.findAndCountAll(queryOptions);
+
+res.status(200).json({
             success: true,
-            outlet
+            outlet: rows,
+            pagination: page && limit ? {
+                totalItems: count,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page,
+                limit: limit
+            } : null
         })
 })
 

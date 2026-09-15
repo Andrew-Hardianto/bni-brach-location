@@ -29,6 +29,7 @@ export const kelurahanListReducer = (state = { kelurahan: [] }, action) => {
             return {
                 loading: false,
                 kelurahan: action.payload.kelurahan,
+                pagination: action.payload.pagination,
             }
         case KELURAHAN_LIST_FAIL:
             return { loading: false, error: action.payload }

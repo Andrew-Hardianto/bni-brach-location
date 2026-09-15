@@ -19,14 +19,14 @@ import {
 } from "@/entities/provinsi/model/provinsiConstants"
 
 
-export const listProvinsi = () => async (
+export const listProvinsi = (page: any = 1, limit: any = 10, keyword: any = '') => async (
     dispatch
 ) => {
     try {
         dispatch({ type: PROVINSI_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/provinsi`
+            `/provinsi?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

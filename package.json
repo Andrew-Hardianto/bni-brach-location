@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon server.ts",
+    "dev": "nodemon --exec tsx server.ts",
     "client": "npm start --prefix client",
     "start:dev": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "tsc",
@@ -47,6 +47,7 @@
     "mocha": "^9.1.1",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.2",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }
 }

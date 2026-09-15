@@ -27,6 +27,7 @@ export const provinsiListReducer = (state = { provinsi: [] }, action) => {
             return {
                 loading: false,
                 provinsi: action.payload.provinsi,
+                pagination: action.payload.pagination,
             }
         case PROVINSI_LIST_FAIL:
             return { loading: false, error: action.payload }

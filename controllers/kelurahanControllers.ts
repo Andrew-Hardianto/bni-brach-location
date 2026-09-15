@@ -8,12 +8,36 @@ import fs from 'fs';
 
 // get all data
 export const getKelurahan = asyncHandler(async (req: any, res: any) => {
-        // const kelurahan = await Kelurahan.findAll({ include: ["kota", "provinsi", "kecamatan"] });
-        const kelurahan = await Kelurahan.findAll({ include: ["kecamatan"] });
+        const page = req.query.page ? parseInt(req.query.page as string) : null;
+        const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
+        
+        let queryOptions: any = { include: ["kota", "provinsi", "kecamatan"] };
+        
+        if (req.query.keyword) {
+            queryOptions.where = {
+                ...queryOptions.where,
+                Kelurahan_Name: {
+                    [Op.like]: `%${req.query.keyword}%`
+                }
+            };
+        }
 
-        res.status(200).json({
+        if (page && limit) {
+            queryOptions.offset = (page - 1) * limit;
+            queryOptions.limit = limit;
+        }
+
+        const { count, rows } = await Kelurahan.findAndCountAll(queryOptions);
+
+res.status(200).json({
             success: true,
-            kelurahan
+            kelurahan: rows,
+            pagination: page && limit ? {
+                totalItems: count,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page,
+                limit: limit
+            } : null
         })
 })
 

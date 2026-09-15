@@ -27,6 +27,7 @@ export const outletListReducer = (state = { outlet: [] }, action) => {
             return {
                 loading: false,
                 outlet: action.payload.outlet,
+                pagination: action.payload.pagination,
             }
         case OUTLET_LIST_FAIL:
             return { loading: false, error: action.payload }

@@ -26,6 +26,7 @@ export const kecamatanListReducer = (state = { kecamatan: [] }, action) => {
             return {
                 loading: false,
                 kecamatan: action.payload.kecamatan,
+                pagination: action.payload.pagination,
             }
         case KECAMATAN_LIST_FAIL:
             return { loading: false, error: action.payload }

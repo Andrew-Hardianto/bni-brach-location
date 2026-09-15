@@ -23,7 +23,7 @@ const Kota = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, kota } = useSelector((state: any) => state.kotaList);
+    const { loading, error, kota, pagination } = useSelector((state: any) => state.kotaList);
 
     const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kotaDelete);
 
@@ -51,6 +51,12 @@ const Kota = ({ history }) => {
             history.push('/login')
         }
     }, [dispatch, success, history])
+
+
+    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
+        dispatch(listKota(page, sizePerPage, searchText || ''));
+    }
+
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -134,7 +140,7 @@ const Kota = ({ history }) => {
                     {loading ? <Loader />
                         : error ? (<Message variant="danger" >{error}</Message>)
                             : (
-                                <Card lg="2" className="mt-3 shadow-lg" >
+                                <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="text-center font-weight-bold">DATA KOTA/KABUPATEN</Card.Title>
                                         {loadingDelete && <Loader />}
@@ -159,7 +165,9 @@ const Kota = ({ history }) => {
                                                         </Row>
                                                         <BootstrapTable
                                                             {...props.baseProps}
-                                                            pagination={paginationFactory()}
+                                                            remote={{ search: true, pagination: true }}
+                                                            onTableChange={handleTableChange}
+                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
                                                             defaultSorted={defaultSortedBy}
                                                             wrapperClasses="table-responsive"
                                                             rowClasses="text-nowrap"
@@ -171,10 +179,10 @@ const Kota = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
-                    <Modal size="md" show={show} onHide={handleClose}>
+                    <Modal show={show} onHide={handleClose}>
                         <ModalDetailKota onClick={handleClose} kotaId={kotaId} />
                     </Modal>
-                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                    <Modal show={showEdit} onHide={handleCloseEdit}>
                         <ModalEditKota onClick={handleCloseEdit} kotaId={kotaId} />
                     </Modal>
                 </Container>

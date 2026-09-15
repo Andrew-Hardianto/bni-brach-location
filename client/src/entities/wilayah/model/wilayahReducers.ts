@@ -27,6 +27,7 @@ export const wilayahListReducer = (state = { wilayah: [] }, action) => {
             return {
                 loading: false,
                 wilayah: action.payload.wilayah,
+                pagination: action.payload.pagination,
             }
         case WILAYAH_LIST_FAIL:
             return { loading: false, error: action.payload }

@@ -18,14 +18,14 @@ import {
     KECAMATAN_UPDATE_SUCCESS
 } from "@/entities/kecamatan/model/kecamatanConstants";
 
-export const listKecamatan = () => async (
+export const listKecamatan = (page: any = 1, limit: any = 10, keyword: any = '') => async (
     dispatch
 ) => {
     try {
         dispatch({ type: KECAMATAN_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/kecamatan`
+            `/kecamatan?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

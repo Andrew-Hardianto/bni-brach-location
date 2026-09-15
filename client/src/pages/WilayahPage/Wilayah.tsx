@@ -24,7 +24,7 @@ const Wilayah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, wilayah } = useSelector((state: any) => state.wilayahList);
+    const { loading, error, wilayah, pagination } = useSelector((state: any) => state.wilayahList);
 
     const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.wilayahDelete);
 
@@ -51,6 +51,12 @@ const Wilayah = ({ history }) => {
             history.push('/login')
         }
     }, [dispatch, success, history])
+
+
+    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
+        dispatch(listWilayah(page, sizePerPage, searchText || ''));
+    }
+
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -109,7 +115,7 @@ const Wilayah = ({ history }) => {
                     {loading ? <Loader />
                         : error ? (<Message variant="danger" >{error}</Message>)
                             : (
-                                <Card lg="2" className="mt-3 shadow-lg" >
+                                <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">Data Region</Card.Title>
                                         {loadingDelete && <Loader />}
@@ -135,7 +141,9 @@ const Wilayah = ({ history }) => {
 
                                                         <BootstrapTable
                                                             {...props.baseProps}
-                                                            pagination={paginationFactory()}
+                                                            remote={{ search: true, pagination: true }}
+                                                            onTableChange={handleTableChange}
+                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
                                                             defaultSorted={defaultSortedBy}
                                                         />
                                                     </div>
@@ -145,10 +153,10 @@ const Wilayah = ({ history }) => {
                                     </Card.Body>
                                 </Card>
                             )}
-                    <Modal size="md" show={show} onHide={handleClose}>
+                    <Modal show={show} onHide={handleClose}>
                         <ModalDetailRegion onClick={handleClose} wilayahId={wilayahId} />
                     </Modal>
-                    <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                    <Modal show={showEdit} onHide={handleCloseEdit}>
                         <ModalEditRegion onClick={handleCloseEdit} wilayahId={wilayahId} />
                     </Modal>
                 </Container>

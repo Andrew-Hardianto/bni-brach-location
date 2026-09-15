@@ -23,7 +23,7 @@ const Provinsi = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, provinsi } = useSelector((state: any) => state.provinsiList);
+    const { loading, error, provinsi, pagination } = useSelector((state: any) => state.provinsiList);
 
     const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.provinsiDelete);
 
@@ -51,6 +51,12 @@ const Provinsi = ({ history }) => {
             history.push('/login')
         }
     }, [dispatch, success, history])
+
+
+    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
+        dispatch(listProvinsi(page, sizePerPage, searchText || ''));
+    }
+
 
     const deletehandler = (id) => {
         if (window.confirm('Apa anda yakin ?')) {
@@ -116,7 +122,7 @@ const Provinsi = ({ history }) => {
                     {loading ? <Loader />
                         : error ? (<Message variant="danger" >{error}</Message>)
                             : (
-                                <Card lg="2" className="mt-3 shadow-lg" >
+                                <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="text-center font-weight-bold">DATA PROVINSI</Card.Title>
                                         {loadingDelete && <Loader />}
@@ -141,7 +147,9 @@ const Provinsi = ({ history }) => {
                                                         </Row>
                                                         <BootstrapTable
                                                             {...props.baseProps}
-                                                            pagination={paginationFactory()}
+                                                            remote={{ search: true, pagination: true }}
+                                                            onTableChange={handleTableChange}
+                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
                                                             defaultSorted={defaultSortedBy}
                                                             wrapperClasses="table-responsive"
                                                             rowClasses="text-nowrap"
@@ -155,10 +163,10 @@ const Provinsi = ({ history }) => {
                             )
                     }
                 </Container>
-                <Modal size="md" show={show} onHide={handleClose}>
+                <Modal show={show} onHide={handleClose}>
                     <ModalDetail onClick={handleClose} provinsiId={provinsiId} />
                 </Modal>
-                <Modal size="md" show={showEdit} onHide={handleCloseEdit}>
+                <Modal show={showEdit} onHide={handleCloseEdit}>
                     <ModalEdit onClick={handleCloseEdit} provinsiId={provinsiId} />
                 </Modal>
             </div>

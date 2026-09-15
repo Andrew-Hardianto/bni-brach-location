@@ -21,14 +21,14 @@ import {
     KELURAHAN_UPDATE_SUCCESS
 } from "@/entities/kelurahan/model/kelurahanConstants";
 
-export const listKelurahan = () => async (
+export const listKelurahan = (page: any = 1, limit: any = 10, keyword: any = '') => async (
     dispatch
 ) => {
     try {
         dispatch({ type: KELURAHAN_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/kelurahan`
+            `/kelurahan?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

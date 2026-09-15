@@ -19,12 +19,12 @@ import {
 } from "@/entities/wilayah/model/wilayahConstants"
 
 
-export const listWilayah = () => async (dispatch) => {
+export const listWilayah = (page: any = 1, limit: any = 10, keyword: any = '') => async (dispatch) => {
     try {
         dispatch({ type: WILAYAH_LIST_REQUEST })
 
         const { data } = await axios.get(
-            `/wilayah`
+            `/wilayah?page=${page}&limit=${limit}&keyword=${keyword}`
         )
 
         dispatch({

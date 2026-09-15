@@ -6,11 +6,36 @@ const Op = db.Sequelize.Op;
 
 // get all kota
 export const getKota = asyncHandler(async (req: any, res: any) => {
-        const kota = await Kota.findAll({ include: ["provinsi"] });
+        const page = req.query.page ? parseInt(req.query.page as string) : null;
+        const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
+        
+        let queryOptions: any = { include: ["provinsi"] };
+        
+        if (req.query.keyword) {
+            queryOptions.where = {
+                ...queryOptions.where,
+                Kabkota_Name: {
+                    [Op.like]: `%${req.query.keyword}%`
+                }
+            };
+        }
 
-        res.status(200).json({
+        if (page && limit) {
+            queryOptions.offset = (page - 1) * limit;
+            queryOptions.limit = limit;
+        }
+
+        const { count, rows } = await Kota.findAndCountAll(queryOptions);
+
+res.status(200).json({
             success: true,
-            kota
+            kota: rows,
+            pagination: page && limit ? {
+                totalItems: count,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page,
+                limit: limit
+            } : null
         })
 })
 
