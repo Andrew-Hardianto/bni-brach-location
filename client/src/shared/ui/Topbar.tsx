@@ -1,9 +1,30 @@
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Topbar = () => {
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const { userInfo } = useSelector((state: any) => state.userLogin);
 
-    const { userInfo } = useSelector((state: any) => state.userLogin)
+    useEffect(() => {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            setIsDarkMode(true);
+        }
+    }, []);
+
+    const toggleDarkMode = () => {
+        if (isDarkMode) {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+            setIsDarkMode(false);
+        } else {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+            setIsDarkMode(true);
+        }
+    };
 
     return (
         <>
@@ -18,6 +39,18 @@ const Topbar = () => {
                         </form>
 
                         <ul className="navbar-nav ml-auto">
+
+                            {/* Dark Mode Toggle Button */}
+                            <li className="nav-item d-flex align-items-center mr-3">
+                                <button
+                                    className={`btn btn-sm ${isDarkMode ? 'btn-light' : 'btn-dark'}`}
+                                    onClick={toggleDarkMode}
+                                    title="Toggle Dark Mode"
+                                    style={{ borderRadius: '20px', padding: '5px 10px' }}
+                                >
+                                    {isDarkMode ? <i className="fas fa-sun"></i> : <i className="fas fa-moon"></i>}
+                                </button>
+                            </li>
 
                             <li className="nav-item dropdown no-arrow">
                                 <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"

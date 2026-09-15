@@ -13,13 +13,19 @@
   --brutal-shadow: 5px 5px 0px 0px #000000;
   --brutal-shadow-hover: 7px 7px 0px 0px #000000;
   --brutal-radius: 6px;
-  
-  --brutal-primary: #F15A24; /* BNI Orange */
-  --brutal-secondary: #006677; /* BNI Teal */
-  --brutal-success: #00A651; /* Standard Green */
-  --brutal-info: #00AEC7; /* Lighter Teal/Cyan */
-  --brutal-danger: #ED1C24; /* Standard Red */
-  --brutal-bg: #F9F9F9; /* Clean white-grey */
+
+  --brutal-primary: #F15A24;
+  /* BNI Orange */
+  --brutal-secondary: #006677;
+  /* BNI Teal */
+  --brutal-success: #00A651;
+  /* Standard Green */
+  --brutal-info: #00AEC7;
+  /* Lighter Teal/Cyan */
+  --brutal-danger: #ED1C24;
+  /* Standard Red */
+  --brutal-bg: #F9F9F9;
+  /* Clean white-grey */
 }
 
 body {
@@ -38,7 +44,9 @@ body {
 }
 
 /* Force override bootstrap shadow classes */
-.shadow-lg, .shadow-sm, .shadow {
+.shadow-lg,
+.shadow-sm,
+.shadow {
   box-shadow: var(--brutal-shadow) !important;
 }
 
@@ -64,23 +72,60 @@ body {
   box-shadow: 0px 0px 0px 0px #000 !important;
 }
 
-.btn-primary { background-color: var(--brutal-primary) !important; color: #fff !important; }
-.btn-primary:hover { color: #fff !important; }
+.btn-primary {
+  background-color: var(--brutal-primary) !important;
+  color: #fff !important;
+}
 
-.btn-secondary { background-color: var(--brutal-secondary) !important; color: #fff !important; }
-.btn-secondary:hover { color: #fff !important; }
+.btn-primary:hover {
+  color: #fff !important;
+}
 
-.btn-success { background-color: var(--brutal-success) !important; }
-.btn-info { background-color: var(--brutal-info) !important; }
-.btn-danger { background-color: var(--brutal-danger) !important; color: #fff !important; }
-.btn-danger:hover { color: #fff !important; }
+.btn-secondary {
+  background-color: var(--brutal-secondary) !important;
+  color: #fff !important;
+}
 
-.btn-warning { background-color: #FFC107 !important; }
-.btn-light { background-color: #fff !important; }
-.btn-dark { background-color: #000 !important; color: #fff !important; }
+.btn-secondary:hover {
+  color: #fff !important;
+}
+
+.btn-success {
+  background-color: var(--brutal-success) !important;
+}
+
+.btn-info {
+  background-color: var(--brutal-info) !important;
+}
+
+.btn-danger {
+  background-color: var(--brutal-danger) !important;
+  color: #fff !important;
+}
+
+.btn-danger:hover {
+  color: #fff !important;
+}
+
+.btn-warning {
+  background-color: #FFC107 !important;
+}
+
+.btn-light {
+  background-color: #fff !important;
+}
+
+.btn-dark {
+  background-color: #000 !important;
+  color: #fff !important;
+}
 
 /* ---- INPUTS ---- */
-.form-control, .form-select, input, select, textarea {
+.form-control,
+.form-select,
+input,
+select,
+textarea {
   border: var(--brutal-border) !important;
   border-radius: var(--brutal-radius) !important;
   box-shadow: 3px 3px 0px 0px #000 !important;
@@ -88,7 +133,9 @@ body {
   color: #000 !important;
 }
 
-.form-control:focus, .form-select:focus, input:focus {
+.form-control:focus,
+.form-select:focus,
+input:focus {
   outline: none !important;
   box-shadow: var(--brutal-shadow) !important;
   border-color: var(--brutal-primary) !important;
@@ -135,7 +182,8 @@ body {
   margin-bottom: 0 !important;
 }
 
-.table th, .table td {
+.table th,
+.table td {
   border-color: #000 !important;
   border-bottom: 2px solid #000 !important;
   vertical-align: middle !important;
@@ -157,21 +205,27 @@ body {
   margin: 0 3px;
   border-radius: 4px;
 }
+
 .react-bootstrap-table-pagination .page-item.active .page-link {
   background-color: var(--brutal-primary) !important;
   color: #fff !important;
 }
 
 /* ---- NAVBAR / HEADER ---- */
-.navbar, header, .navbar-dark {
+.navbar,
+header,
+.navbar-dark {
   border-bottom: var(--brutal-border) !important;
   box-shadow: 0px 5px 0px 0px #000 !important;
   background-color: var(--brutal-secondary) !important;
 }
-.navbar-brand, .nav-link {
+
+.navbar-brand,
+.nav-link {
   color: #fff !important;
   font-weight: bold !important;
 }
+
 .nav-link:hover {
   color: var(--brutal-primary) !important;
 }
@@ -184,9 +238,19 @@ body {
   color: #000 !important;
   font-weight: bold;
 }
-.alert-danger { background-color: var(--brutal-danger) !important; color: #fff !important; }
-.alert-info { background-color: var(--brutal-info) !important; }
-.alert-success { background-color: var(--brutal-success) !important; }
+
+.alert-danger {
+  background-color: var(--brutal-danger) !important;
+  color: #fff !important;
+}
+
+.alert-info {
+  background-color: var(--brutal-info) !important;
+}
+
+.alert-success {
+  background-color: var(--brutal-success) !important;
+}
 
 /* ---- BADGES ---- */
 .badge {
@@ -204,12 +268,15 @@ body {
    ========================================= */
 
 body.dark-mode {
-  --brutal-bg: #1A1A1A; /* Dark background */
+  --brutal-bg: #1A1A1A;
+  /* Dark background */
   --brutal-border: 3px solid #FFF;
   --brutal-shadow: 5px 5px 0px 0px #FFF;
   --brutal-shadow-hover: 7px 7px 0px 0px #FFF;
-  --brutal-primary: #F15A24; /* BNI Orange remains */
-  --brutal-secondary: #008499; /* Lightened BNI Teal for contrast */
+  --brutal-primary: #F15A24;
+  /* BNI Orange remains */
+  --brutal-secondary: #008499;
+  /* Lightened BNI Teal for contrast */
 }
 
 /* Global text color in dark mode */
@@ -232,7 +299,8 @@ body.dark-mode .table {
   color: #FFF !important;
 }
 
-body.dark-mode .table th, body.dark-mode .table td {
+body.dark-mode .table th,
+body.dark-mode .table td {
   border-color: #FFF !important;
 }
 
@@ -243,10 +311,10 @@ body.dark-mode .table thead th {
 }
 
 /* Inputs */
-body.dark-mode .form-control, 
-body.dark-mode .form-select, 
-body.dark-mode input, 
-body.dark-mode select, 
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode input,
+body.dark-mode select,
 body.dark-mode textarea {
   background-color: #3D3D3D !important;
   color: #FFF !important;
@@ -254,8 +322,8 @@ body.dark-mode textarea {
   box-shadow: 3px 3px 0px 0px #FFF !important;
 }
 
-body.dark-mode .form-control:focus, 
-body.dark-mode .form-select:focus, 
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus,
 body.dark-mode input:focus {
   border-color: var(--brutal-primary) !important;
   box-shadow: var(--brutal-shadow) !important;
@@ -266,6 +334,7 @@ body.dark-mode .modal-header,
 body.dark-mode .modal-footer {
   border-color: #FFF !important;
 }
+
 body.dark-mode .close {
   color: #FFF !important;
 }
@@ -277,6 +346,7 @@ body.dark-mode .react-bootstrap-table-pagination .page-link {
   border-color: #FFF !important;
   box-shadow: 2px 2px 0px 0px #FFF !important;
 }
+
 body.dark-mode .react-bootstrap-table-pagination .page-item.active .page-link {
   background-color: var(--brutal-primary) !important;
   color: #FFF !important;
@@ -291,29 +361,109 @@ body.dark-mode .badge {
 }
 
 /* Header/Navbar */
-body.dark-mode .navbar, body.dark-mode header, body.dark-mode .navbar-dark {
+body.dark-mode .navbar,
+body.dark-mode header,
+body.dark-mode .navbar-dark,
+body.dark-mode .topbar {
   border-bottom: var(--brutal-border) !important;
   box-shadow: 0px 5px 0px 0px #FFF !important;
+  background-color: #000 !important;
+  border-color: #FFF !important;
+}
+
+body.dark-mode .topbar .nav-link .text-gray-600 {
+  color: #FFF !important;
 }
 
 /* Buttons in Dark Mode */
 body.dark-mode .btn {
   border: var(--brutal-border) !important;
   box-shadow: var(--brutal-shadow) !important;
-  color: #000 !important; /* Button text often remains black if button color is bright, but primary/secondary are overridden below */
+  color: #000 !important;
+  /* Button text often remains black if button color is bright, but primary/secondary are overridden below */
 }
+
 body.dark-mode .btn:hover {
   box-shadow: var(--brutal-shadow-hover) !important;
 }
+
 body.dark-mode .btn:active {
   box-shadow: 0px 0px 0px 0px #FFF !important;
 }
-body.dark-mode .btn-primary { color: #FFF !important; }
-body.dark-mode .btn-secondary { color: #FFF !important; }
-body.dark-mode .btn-danger { color: #FFF !important; }
-body.dark-mode .btn-dark { background-color: #000 !important; color: #FFF !important; border-color: #FFF !important; }
-body.dark-mode .btn-light { background-color: #FFF !important; color: #000 !important; }
 
+body.dark-mode .btn-primary {
+  color: #FFF !important;
+}
+
+body.dark-mode .btn-secondary {
+  color: #FFF !important;
+}
+
+body.dark-mode .btn-danger {
+  color: #FFF !important;
+}
+
+body.dark-mode .btn-dark {
+  background-color: #000 !important;
+  color: #FFF !important;
+  border-color: #FFF !important;
+}
+
+body.dark-mode .btn-light {
+  background-color: #FFF !important;
+  color: #000 !important;
+}
+
+
+/* ---- SIDEBAR (NEO-BRUTALISM) ---- */
+.sidebar {
+  background-color: var(--brutal-primary) !important;
+  background-image: none !important;
+  border-right: var(--brutal-border) !important;
+}
+
+.sidebar .sidebar-brand {
+  border-bottom: var(--brutal-border) !important;
+}
+
+.sidebar .collapse-inner {
+  border: var(--brutal-border) !important;
+  box-shadow: 4px 4px 0px 0px #000 !important;
+  border-radius: var(--brutal-radius) !important;
+  background-color: #fff !important;
+  margin: 0.5rem 1rem !important;
+  /* give it a bit more room */
+}
+
+/* Sidebar Dark Mode */
+body.dark-mode .sidebar {
+  background-color: #1a1a1a !important;
+  border-right: 3px solid #FFF !important;
+}
+
+body.dark-mode .sidebar .sidebar-brand {
+  border-bottom: 3px solid #FFF !important;
+}
+
+body.dark-mode .sidebar .collapse-inner {
+  background-color: #000 !important;
+  border: 3px solid #FFF !important;
+  box-shadow: 4px 4px 0px 0px #FFF !important;
+}
+
+body.dark-mode .sidebar .collapse-item {
+  color: #DDD !important;
+}
+
+body.dark-mode .sidebar .collapse-item:hover,
+body.dark-mode .sidebar .collapse-item.active {
+  background-color: #333 !important;
+  color: #FFF !important;
+}
+
+body.dark-mode .sidebar .collapse-header {
+  color: #AAA !important;
+}
 
 /* =========================================
    SKELETON LOADING ANIMATION
@@ -337,25 +487,21 @@ body.dark-mode .skeleton-box {
   bottom: 0;
   left: 0;
   transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.5) 60%,
-    rgba(255, 255, 255, 0)
-  );
+  background-image: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0));
   animation: shimmer 2s infinite;
   content: '';
 }
 
 body.dark-mode .skeleton-box::after {
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0,
-    rgba(255, 255, 255, 0.05) 20%,
-    rgba(255, 255, 255, 0.1) 60%,
-    rgba(255, 255, 255, 0)
-  );
+  background-image: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.05) 20%,
+      rgba(255, 255, 255, 0.1) 60%,
+      rgba(255, 255, 255, 0));
 }
 
 @keyframes shimmer {
