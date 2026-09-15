@@ -1,3 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
 .main {
   min-height: 80vh;
+}
+
+/* =========================================
+   NEO-BRUTALISM THEME (BNI COLORS)
+   ========================================= */
+
+:root {
+  --brutal-border: 3px solid #000000;
+  --brutal-shadow: 5px 5px 0px 0px #000000;
+  --brutal-shadow-hover: 7px 7px 0px 0px #000000;
+  --brutal-radius: 6px;
+  
+  --brutal-primary: #F15A24; /* BNI Orange */
+  --brutal-secondary: #006677; /* BNI Teal */
+  --brutal-success: #00A651; /* Standard Green */
+  --brutal-info: #00AEC7; /* Lighter Teal/Cyan */
+  --brutal-danger: #ED1C24; /* Standard Red */
+  --brutal-bg: #F9F9F9; /* Clean white-grey */
+}
+
+body {
+  background-color: var(--brutal-bg) !important;
+  color: #000 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+/* ---- CARDS ---- */
+.card {
+  border: var(--brutal-border) !important;
+  border-radius: var(--brutal-radius) !important;
+  box-shadow: var(--brutal-shadow) !important;
+  background-color: #fff !important;
+  margin-bottom: 20px;
+}
+
+/* Force override bootstrap shadow classes */
+.shadow-lg, .shadow-sm, .shadow {
+  box-shadow: var(--brutal-shadow) !important;
+}
+
+/* ---- BUTTONS ---- */
+.btn {
+  border: var(--brutal-border) !important;
+  border-radius: var(--brutal-radius) !important;
+  box-shadow: var(--brutal-shadow) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  transition: all 0.1s ease-in-out !important;
+  color: #000 !important;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--brutal-shadow-hover) !important;
+  color: #000 !important;
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px #000 !important;
+}
+
+.btn-primary { background-color: var(--brutal-primary) !important; color: #fff !important; }
+.btn-primary:hover { color: #fff !important; }
+
+.btn-secondary { background-color: var(--brutal-secondary) !important; color: #fff !important; }
+.btn-secondary:hover { color: #fff !important; }
+
+.btn-success { background-color: var(--brutal-success) !important; }
+.btn-info { background-color: var(--brutal-info) !important; }
+.btn-danger { background-color: var(--brutal-danger) !important; color: #fff !important; }
+.btn-danger:hover { color: #fff !important; }
+
+.btn-warning { background-color: #FFC107 !important; }
+.btn-light { background-color: #fff !important; }
+.btn-dark { background-color: #000 !important; color: #fff !important; }
+
+/* ---- INPUTS ---- */
+.form-control, .form-select, input, select, textarea {
+  border: var(--brutal-border) !important;
+  border-radius: var(--brutal-radius) !important;
+  box-shadow: 3px 3px 0px 0px #000 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  color: #000 !important;
+}
+
+.form-control:focus, .form-select:focus, input:focus {
+  outline: none !important;
+  box-shadow: var(--brutal-shadow) !important;
+  border-color: var(--brutal-primary) !important;
+}
+
+/* ---- MODALS ---- */
+.modal-content {
+  border: var(--brutal-border) !important;
+  border-radius: var(--brutal-radius) !important;
+  box-shadow: 10px 10px 0px 0px #000 !important;
+  background-color: #fff !important;
+}
+
+.modal-header {
+  border-bottom: var(--brutal-border) !important;
+  background-color: var(--brutal-primary) !important;
+  color: #fff !important;
+}
+
+.modal-title {
+  font-weight: 700;
+}
+
+.modal-footer {
+  border-top: var(--brutal-border) !important;
+}
+
+.close {
+  color: #fff !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  font-weight: 900;
+}
+
+/* ---- TABLES ---- */
+.table-responsive {
+  border: var(--brutal-border) !important;
+  border-radius: var(--brutal-radius) !important;
+  background-color: #fff !important;
+  box-shadow: var(--brutal-shadow) !important;
+}
+
+.react-bootstrap-table table {
+  margin-bottom: 0 !important;
+}
+
+.table th, .table td {
+  border-color: #000 !important;
+  border-bottom: 2px solid #000 !important;
+  vertical-align: middle !important;
+}
+
+.table thead th {
+  border-bottom: var(--brutal-border) !important;
+  background-color: var(--brutal-secondary) !important;
+  color: #fff !important;
+  text-transform: uppercase;
+}
+
+/* Pagination Buttons inside Table */
+.react-bootstrap-table-pagination .page-link {
+  border: 2px solid #000 !important;
+  color: #000 !important;
+  font-weight: bold;
+  box-shadow: 2px 2px 0px 0px #000 !important;
+  margin: 0 3px;
+  border-radius: 4px;
+}
+.react-bootstrap-table-pagination .page-item.active .page-link {
+  background-color: var(--brutal-primary) !important;
+  color: #fff !important;
+}
+
+/* ---- NAVBAR / HEADER ---- */
+.navbar, header, .navbar-dark {
+  border-bottom: var(--brutal-border) !important;
+  box-shadow: 0px 5px 0px 0px #000 !important;
+  background-color: var(--brutal-secondary) !important;
+}
+.navbar-brand, .nav-link {
+  color: #fff !important;
+  font-weight: bold !important;
+}
+.nav-link:hover {
+  color: var(--brutal-primary) !important;
+}
+
+/* ---- ALERTS / MESSAGES ---- */
+.alert {
+  border: var(--brutal-border) !important;
+  border-radius: var(--brutal-radius) !important;
+  box-shadow: var(--brutal-shadow) !important;
+  color: #000 !important;
+  font-weight: bold;
+}
+.alert-danger { background-color: var(--brutal-danger) !important; color: #fff !important; }
+.alert-info { background-color: var(--brutal-info) !important; }
+.alert-success { background-color: var(--brutal-success) !important; }
+
+/* ---- BADGES ---- */
+.badge {
+  border: 2px solid #000 !important;
+  box-shadow: 2px 2px 0px 0px #000 !important;
+  color: #000 !important;
+  border-radius: 4px !important;
+  padding: 0.5em 0.8em;
+  font-size: 0.85em;
+  background-color: #fff !important;
 }
