@@ -1,16 +1,35 @@
+const ErrorResponse = require('../utils/errorResponse');
+
 const notFound = (req, res, next) => {
-  const error = new Error(`Not Found - ${req.originalUrl}`)
-  res.status(404)
-  next(error)
+  const error = new ErrorResponse(`Not Found - ${req.originalUrl}`, 404);
+  next(error);
 }
 
 const errorHandler = (err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode
-  res.status(statusCode)
-  res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-  })
+  let error = { ...err };
+  error.message = err.message;
+
+  // Log to console for dev
+  // console.log(err);
+
+  // Sequelize Unique Constraint Error
+  if (err.name === 'SequelizeUniqueConstraintError') {
+    const message = 'Duplicate field value entered';
+    error = new ErrorResponse(message, 400);
+  }
+
+  // Sequelize Validation Error
+  if (err.name === 'SequelizeValidationError') {
+    const message = err.errors.map(val => val.message).join(', ');
+    error = new ErrorResponse(message, 400);
+  }
+
+  const statusCode = error.statusCode || 500;
+
+  res.status(statusCode).json({
+    success: false,
+    message: error.message || 'Server Error'
+  });
 }
 
-module.exports = { notFound, errorHandler }
+module.exports = { notFound, errorHandler };

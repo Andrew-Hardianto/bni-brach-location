@@ -1,43 +1,30 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const Provinsi = db.Provinsi;
 const Op = db.Sequelize.Op;
 
 // get all data
-exports.getProvinsi = async (req, res) => {
-    try {
+exports.getProvinsi = asyncHandler(async (req, res) => {
         const provinsi = await Provinsi.findAll();
 
         res.status(200).json({
             success: true,
             provinsi
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // get by id data
-exports.getByIdProvinsi = async (req, res, next) => {
-    try {
+exports.getByIdProvinsi = asyncHandler(async (req, res, next) => {
         const provinsi = await Provinsi.findByPk(req.params.id);
         // const provinsi = await Provinsi.findOne({ where: { ID_Provinsi: req.params.id } });
-        if (!provinsi) return next(new Error('Provinsi tidak ditemukan!', 404))
+        if (!provinsi) return next(new ErrorResponse('Provinsi tidak ditemukan!', 400))
 
         res.status(200).json(provinsi)
-    } catch (err) {
-        res.status(404).json({
-            success: false,
-            message: err
-        })
-    }
-}
+})
 
 // add Provinsi
-exports.createProvinsi = async (req, res, next) => {
-    try {
+exports.createProvinsi = asyncHandler(async (req, res, next) => {
         const { Provinsi_Code, Provinsi_Name } = req.body;
 
         const checkkode = await Provinsi.findOne(
@@ -48,9 +35,9 @@ exports.createProvinsi = async (req, res, next) => {
             }
         )
 
-        if (!Provinsi_Code || !Provinsi_Name) return next(new Error('kode provinsi/Nama harus diisi', 401))
+        if (!Provinsi_Code || !Provinsi_Name) return next(new ErrorResponse('kode provinsi/Nama harus diisi', 400))
 
-        if (checkkode) return next(new Error('kode provinsi sudah digunakan!', 400))
+        if (checkkode) return next(new ErrorResponse('kode provinsi sudah digunakan!', 400))
 
         const provinsi = await Provinsi.create(req.body);
 
@@ -58,24 +45,17 @@ exports.createProvinsi = async (req, res, next) => {
             success: true,
             provinsi
         })
-    } catch (err) {
-        res.status(401).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // update Provinsi
-exports.updateProvinsi = async (req, res, next) => {
-    try {
+exports.updateProvinsi = asyncHandler(async (req, res, next) => {
         const { Provinsi_Code, Provinsi_Name } = req.body;
 
-        if (!Provinsi_Code || !Provinsi_Name) return next(new Error('kode provinsi/Nama harus diisi', 401))
+        if (!Provinsi_Code || !Provinsi_Name) return next(new ErrorResponse('kode provinsi/Nama harus diisi', 400))
 
         const id = await Provinsi.findByPk(req.params.id)
 
-        if (!id) return next(new Error('Data tidak ditemukan!'))
+        if (!id) return next(new ErrorResponse('Data tidak ditemukan!', 400))
 
         const provinsi = await Provinsi.update(req.body, {
             where: {
@@ -87,25 +67,17 @@ exports.updateProvinsi = async (req, res, next) => {
             success: true,
             provinsi
         })
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // delete Provinsi
-exports.deleteProvinsi = async (req, res, next) => {
-    try {
-
+exports.deleteProvinsi = asyncHandler(async (req, res, next) => {
         const id = await Provinsi.findAll({
             where: {
                 ID_Provinsi: req.params.id
             }
         });
 
-        if (!id) return next(new Error(`Provinsi dengan Id ${id} tidak ditemukan!`, 404))
+        if (!id) return next(new ErrorResponse(`Provinsi dengan Id ${id} tidak ditemukan!`, 404))
 
         await Provinsi.destroy({
             where: {
@@ -117,10 +89,4 @@ exports.deleteProvinsi = async (req, res, next) => {
             success: true,
             data: { }
         })
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})

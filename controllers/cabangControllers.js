@@ -1,3 +1,5 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const geocoder = require('../utils/geocoder');
 const Cabang = db.Cabang;
@@ -5,42 +7,27 @@ const Wilayah = db.Wilayah;
 const Op = db.Sequelize.Op;
 
 // get all cabang
-exports.getAllCabang = async (req, res) => {
-    try {
+exports.getAllCabang = asyncHandler(async (req, res) => {
         const cabang = await Cabang.findAll({ include: ["wilayah"] });
 
         res.status(200).json({
             success: true,
             cabang
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // get all cabang
-exports.getByIdCabang = async (req, res) => {
-    try {
+exports.getByIdCabang = asyncHandler(async (req, res) => {
         const cabang = await Cabang.findByPk(req.params.id, { include: ["wilayah"] });
 
         res.status(200).json({
             success: true,
             cabang
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // add cabang
-exports.createCabang = async (req, res, next) => {
-    try {
+exports.createCabang = asyncHandler(async (req, res, next) => {
         const { Branch_Code, Branch_Name, Address, Region_Code } = req.body;
 
         const checkId = await Cabang.findOne(
@@ -51,12 +38,12 @@ exports.createCabang = async (req, res, next) => {
             }
         )
 
-        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
-        if (!Branch_Name) return next(new Error('Field Branch Name tidak boleh kosong!'));
-        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
-        if (!Region_Code) return next(new Error('Field Region Code tidak boleh kosong!'));
+        if (!Branch_Code) return next(new ErrorResponse('Field Branch Code tidak boleh kosong!', 400));
+        if (!Branch_Name) return next(new ErrorResponse('Field Branch Name tidak boleh kosong!', 400));
+        if (!Address) return next(new ErrorResponse('Field Address tidak boleh kosong!', 400));
+        if (!Region_Code) return next(new ErrorResponse('Field Region Code tidak boleh kosong!', 400));
 
-        if (checkId) return next(new Error('Kode tidak boleh sama!'));
+        if (checkId) return next(new ErrorResponse('Kode tidak boleh sama!', 400));
 
         const cabang = await Cabang.create(req.body);
 
@@ -64,23 +51,16 @@ exports.createCabang = async (req, res, next) => {
             success: true,
             cabang
         })
-    } catch (error) {
-        res.status(401).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // update cabang
-exports.updateCabang = async (req, res, next) => {
-    try {
+exports.updateCabang = asyncHandler(async (req, res, next) => {
         const { Branch_Code, Branch_Name, Address, Region_Code } = req.body;
 
-        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
-        if (!Branch_Name) return next(new Error('Field Branch Name tidak boleh kosong!'));
-        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
-        if (!Region_Code) return next(new Error('Field Region Code tidak boleh kosong!'));
+        if (!Branch_Code) return next(new ErrorResponse('Field Branch Code tidak boleh kosong!', 400));
+        if (!Branch_Name) return next(new ErrorResponse('Field Branch Name tidak boleh kosong!', 400));
+        if (!Address) return next(new ErrorResponse('Field Address tidak boleh kosong!', 400));
+        if (!Region_Code) return next(new ErrorResponse('Field Region Code tidak boleh kosong!', 400));
 
         const cabang = await Cabang.update(req.body, {
             where: {
@@ -92,17 +72,10 @@ exports.updateCabang = async (req, res, next) => {
             success: true,
             cabang
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // delete cabang
-exports.deleteCabang = async (req, res) => {
-    try {
+exports.deleteCabang = asyncHandler(async (req, res) => {
         await Cabang.destroy({
             where: {
                 ID_Branch: req.params.id
@@ -113,10 +86,4 @@ exports.deleteCabang = async (req, res) => {
             success: true,
             data: {}
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})

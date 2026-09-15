@@ -1,3 +1,5 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const geocoder = require('../utils/geocoder');
 const Outlet = db.Outlet;
@@ -5,8 +7,7 @@ const Cabang = db.Cabang;
 const Op = db.Sequelize.Op;
 
 // get all outlet
-exports.getAllOutlet = async (req, res) => {
-    try {
+exports.getAllOutlet = asyncHandler(async (req, res) => {
         const outlet = await Outlet.findAll({
             include: [
                 "cabang"
@@ -17,17 +18,10 @@ exports.getAllOutlet = async (req, res) => {
             success: true,
             outlet
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // get all outlet
-exports.getByIdOutlet = async (req, res) => {
-    try {
+exports.getByIdOutlet = asyncHandler(async (req, res) => {
         const outlet = await Outlet.findByPk(req.params.id, {
             include: [
                 "wilayah",
@@ -39,17 +33,10 @@ exports.getByIdOutlet = async (req, res) => {
             success: true,
             outlet
         })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // add outlet
-exports.createOutlet = async (req, res, next) => {
-    try {
+exports.createOutlet = asyncHandler(async (req, res, next) => {
         const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude, Status } = req.body;
 
         const checkId = await Outlet.findOne(
@@ -60,12 +47,12 @@ exports.createOutlet = async (req, res, next) => {
             }
         )
 
-        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
-        if (!Outlet_Code) return next(new Error('Field Outlet code tidak boleh kosong!'));
-        if (!Outlet_Name) return next(new Error('Field Outlet name tidak boleh kosong!'));
-        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
+        if (!Branch_Code) return next(new ErrorResponse('Field Branch Code tidak boleh kosong!', 400));
+        if (!Outlet_Code) return next(new ErrorResponse('Field Outlet code tidak boleh kosong!', 400));
+        if (!Outlet_Name) return next(new ErrorResponse('Field Outlet name tidak boleh kosong!', 400));
+        if (!Address) return next(new ErrorResponse('Field Address tidak boleh kosong!', 400));
 
-        if (checkId) return next(new Error('Kode outlet sudah digunakan!'))
+        if (checkId) return next(new ErrorResponse('Kode outlet sudah digunakan!', 400))
 
         const cabang = await Cabang.findOne({ where: { Branch_Code } });
 
@@ -84,23 +71,16 @@ exports.createOutlet = async (req, res, next) => {
             success: true,
             outlet
         })
-    } catch (error) {
-        res.status(401).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // update outlet
-exports.updateOutlet = async (req, res, next) => {
-    try {
+exports.updateOutlet = asyncHandler(async (req, res, next) => {
         const { Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude, Status, Outlet_level } = req.body;
 
-        if (!Branch_Code) return next(new Error('Field Branch Code tidak boleh kosong!'));
-        if (!Outlet_Code) return next(new Error('Field Outlet code tidak boleh kosong!'));
-        if (!Outlet_Name) return next(new Error('Field Outlet name tidak boleh kosong!'));
-        if (!Address) return next(new Error('Field Address tidak boleh kosong!'));
+        if (!Branch_Code) return next(new ErrorResponse('Field Branch Code tidak boleh kosong!', 400));
+        if (!Outlet_Code) return next(new ErrorResponse('Field Outlet code tidak boleh kosong!', 400));
+        if (!Outlet_Name) return next(new ErrorResponse('Field Outlet name tidak boleh kosong!', 400));
+        if (!Address) return next(new ErrorResponse('Field Address tidak boleh kosong!', 400));
 
         const cabang = await Cabang.findOne({ where: { Branch_Code } });
 
@@ -124,17 +104,10 @@ exports.updateOutlet = async (req, res, next) => {
             success: true,
             outlet
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // delete outlet
-exports.deleteOutlet = async (req, res) => {
-    try {
+exports.deleteOutlet = asyncHandler(async (req, res) => {
         await Outlet.destroy({
             where: {
                 ID_Outlet: req.params.id
@@ -145,10 +118,4 @@ exports.deleteOutlet = async (req, res) => {
             success: true,
             data: {}
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})

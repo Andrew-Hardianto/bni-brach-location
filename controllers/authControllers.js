@@ -1,23 +1,24 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const User = db.User;
 const Op = db.Sequelize.Op;
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken');
 // login
-exports.login = async (req, res, next) => {
-    try {
+exports.login = asyncHandler(async (req, res, next) => {
         const { username, password } = req.body
 
-        if (!username || !password) return next(new Error('Mohon isi semua kolom', 400))
+        if (!username || !password) return next(new ErrorResponse('Mohon isi semua kolom', 400))
 
         const user = await User.findOne({ where: { Username: username } })
 
-        if (!user) return next(new Error('username tidak ada!', 404))
+        if (!user) return next(new ErrorResponse('username tidak ada!', 400))
 
         const matchPassword = bcrypt.compareSync(password, user.Password)
 
         if (!matchPassword) {
-            return next(new Error('Password salah!', 400))
+            return next(new ErrorResponse('Password salah!', 400))
         }
 
         res.status(200).json({
@@ -26,40 +27,25 @@ exports.login = async (req, res, next) => {
             user
         })
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // current user
-exports.getMe = async (req, res) => {
-    try {
-
+exports.getMe = asyncHandler(async (req, res) => {
         const user = await User.findByPk(req.user.ID_User)
 
         res.status(200).json(user)
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // create user
-exports.createUser = async (req, res, next) => {
-    try {
+exports.createUser = asyncHandler(async (req, res, next) => {
         const { username, password } = req.body
 
-        if (!username || !password) return next(new Error('Mohon isi semua kolom', 400))
+        if (!username || !password) return next(new ErrorResponse('Mohon isi semua kolom', 400))
 
         const checkUser = await User.findOne({ where: { Username: username } })
 
-        if (checkUser) return next(new Error('username sudah digunakan!', 404))
+        if (checkUser) return next(new ErrorResponse('username sudah digunakan!', 400))
 
         const user = await User.create({
             Username: username,
@@ -71,17 +57,10 @@ exports.createUser = async (req, res, next) => {
             user
         })
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // get All user
-exports.getAllUser = async (req, res, next) => {
-    try {
+exports.getAllUser = asyncHandler(async (req, res, next) => {
         const user = await User.findAll()
 
         res.status(200).json({
@@ -89,17 +68,10 @@ exports.getAllUser = async (req, res, next) => {
             user
         })
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // get user
-exports.getUser = async (req, res, next) => {
-    try {
+exports.getUser = asyncHandler(async (req, res, next) => {
         const user = await User.findByPk(req.params.id)
 
         res.status(200).json({
@@ -107,16 +79,10 @@ exports.getUser = async (req, res, next) => {
             user
         })
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // get user
-// exports.updateUser = async (req, res, next) => {
+// exports.updateUser = asyncHandler(async (req, res, next) => {
 //     try {
 
 //         const user = await User.update(req.body, {
@@ -130,18 +96,10 @@ exports.getUser = async (req, res, next) => {
 //             user
 //         })
 
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: error.message
-//         })
-//     }
-// }
+//})
 
 // get update user
-exports.updateUser = async (req, res, next) => {
-    try {
-
+exports.updateUser = asyncHandler(async (req, res, next) => {
         const { username, password } = req.body
 
         if (password) {
@@ -175,17 +133,10 @@ exports.updateUser = async (req, res, next) => {
         }
 
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // get delete user
-exports.deleteUser = async (req, res, next) => {
-    try {
+exports.deleteUser = asyncHandler(async (req, res, next) => {
         await User.destroy({
             where: {
                 ID_User: req.params.id
@@ -197,10 +148,4 @@ exports.deleteUser = async (req, res, next) => {
             data: {}
         })
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})

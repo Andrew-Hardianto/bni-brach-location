@@ -1,11 +1,12 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const Kodepos = db.Kodepos;
 const Kelurahan = db.Kelurahan;
 const Op = db.Sequelize.Op;
 
 // get all data
-exports.getKodepos = async (req, res) => {
-    try {
+exports.getKodepos = asyncHandler(async (req, res) => {
         // const kodepos = await Kodepos.findAll({ include: ["kota", "provinsi", "kecamatan", "kelurahan"] });
         const kodepos = await Kodepos.findAll();
 
@@ -13,41 +14,27 @@ exports.getKodepos = async (req, res) => {
             success: true,
             kodepos
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // get by id data
-exports.getByIdKodepos = async (req, res) => {
-    try {
+exports.getByIdKodepos = asyncHandler(async (req, res) => {
         const kodepos = await Kodepos.findByPk(req.params.id, { include: ["kota", "provinsi", "kecamatan", "kelurahan"] });
 
         res.status(200).json({
             success: true,
             kodepos
         })
-    } catch (err) {
-        res.status(404).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // add Kodepos
-exports.createKodepos = async (req, res, next) => {
-    try {
+exports.createKodepos = asyncHandler(async (req, res, next) => {
         const { Postcode, Kelurahan_Code, Status } = req.body;
 
-        if (!Postcode) return next(new Error('Kodepos harus diisi!'));
+        if (!Postcode) return next(new ErrorResponse('Kodepos harus diisi!', 400));
 
         // const checkkode = await Kodepos.findOne({ where: { Postcode } });
 
-        // if (checkkode) return next(new Error('kodepos sudah digunakan!'));
+        // if (checkkode) return next(new ErrorResponse('kodepos sudah digunakan!', 400));
 
         const kelurahan = await Kelurahan.findOne({
             where: {
@@ -55,7 +42,7 @@ exports.createKodepos = async (req, res, next) => {
             }
         });
 
-        if (!kelurahan) return next(new Error(`Kelurahan dengan kode ${Kelurahan_Code} tidak ditemukan!`, 404));
+        if (!kelurahan) return next(new ErrorResponse(`Kelurahan dengan kode ${Kelurahan_Code} tidak ditemukan!`, 404));
 
         const kodepos = await Kodepos.create({
             Postcode: Postcode,
@@ -70,20 +57,13 @@ exports.createKodepos = async (req, res, next) => {
             success: true,
             kodepos
         })
-    } catch (err) {
-        res.status(401).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // update Kodepos
-exports.updateKodepos = async (req, res, next) => {
-    try {
+exports.updateKodepos = asyncHandler(async (req, res, next) => {
         const { Postcode, Kelurahan_Code, Status } = req.body;
 
-        if (!Postcode) return next(new Error('Kodepos harus diisi!'));
+        if (!Postcode) return next(new ErrorResponse('Kodepos harus diisi!', 400));
 
         const kelurahan = await Kelurahan.findOne({
             where: {
@@ -91,7 +71,7 @@ exports.updateKodepos = async (req, res, next) => {
             }
         });
 
-        if (!kelurahan) return next(new Error(`Kelurahan dengan kode ${Kelurahan_Code} tidak ditemukan!`, 404));
+        if (!kelurahan) return next(new ErrorResponse(`Kelurahan dengan kode ${Kelurahan_Code} tidak ditemukan!`, 404));
 
         const kodepos = await Kodepos.update(
             {
@@ -111,25 +91,17 @@ exports.updateKodepos = async (req, res, next) => {
             success: true,
             kodepos
         })
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // delete Kodepos
-exports.deleteKodepos = async (req, res, next) => {
-    try {
-
+exports.deleteKodepos = asyncHandler(async (req, res, next) => {
         const id = await Kodepos.findAll({
             where: {
                 ID_Postcode: req.params.id
             }
         });
 
-        if (!id) return next(new Error(`Kodepos dengan Id ${req.params.id} tidak ditemukan!`, 404))
+        if (!id) return next(new ErrorResponse(`Kodepos dengan Id ${req.params.id} tidak ditemukan!`, 404))
 
         await Kodepos.destroy({
             where: {
@@ -141,10 +113,4 @@ exports.deleteKodepos = async (req, res, next) => {
             success: true,
             data: {}
         })
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})

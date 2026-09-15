@@ -1,46 +1,33 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const Kota = db.Kota;
 const Op = db.Sequelize.Op;
 
 // get all kota
-exports.getKota = async (req, res) => {
-    try {
+exports.getKota = asyncHandler(async (req, res) => {
         const kota = await Kota.findAll({ include: ["provinsi"] });
 
         res.status(200).json({
             success: true,
             kota
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // get kota by id
-exports.getByIdKota = async (req, res, next) => {
-    try {
+exports.getByIdKota = asyncHandler(async (req, res, next) => {
         const kota = await Kota.findByPk(req.params.id, { include: ["provinsi"] });
 
-        if (!kota) return next(new Error(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
+        if (!kota) return next(new ErrorResponse(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
 
         res.status(200).json({
             success: true,
             kota
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // add kota
-exports.addKota = async (req, res, next) => {
-    try {
+exports.addKota = asyncHandler(async (req, res, next) => {
         const { Kabkota_Code, Kabkota_Name, Kabkota_Flag } = req.body;
 
         const checkkode = await Kota.findOne(
@@ -51,9 +38,9 @@ exports.addKota = async (req, res, next) => {
             }
         )
 
-        if (!Kabkota_Code || !Kabkota_Name || !Kabkota_Flag) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
+        if (!Kabkota_Code || !Kabkota_Name || !Kabkota_Flag) return next(new ErrorResponse('Kode Kota/Nama Kota harus diisi!', 400));
 
-        if (checkkode) return next(new Error('Kode Kota sudah digunakan!'));
+        if (checkkode) return next(new ErrorResponse('Kode Kota sudah digunakan!', 400));
 
         const kota = await Kota.create(req.body);
 
@@ -61,20 +48,13 @@ exports.addKota = async (req, res, next) => {
             success: true,
             kota
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // update kota 
-exports.updateKota = async (req, res, next) => {
-    try {
+exports.updateKota = asyncHandler(async (req, res, next) => {
         const { Kabkota_Code, Kabkota_Name } = req.body;
 
-        if (!Kabkota_Code || !Kabkota_Name) return next(new Error('Kode Kota/Nama Kota harus diisi!'));
+        if (!Kabkota_Code || !Kabkota_Name) return next(new ErrorResponse('Kode Kota/Nama Kota harus diisi!', 400));
 
         const kota = await Kota.update(req.body, {
             where: {
@@ -86,20 +66,13 @@ exports.updateKota = async (req, res, next) => {
             success: true,
             kota
         })
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // delete kota
-exports.deleteKota = async (req, res, next) => {
-    try {
+exports.deleteKota = asyncHandler(async (req, res, next) => {
         const kota = await Kota.findByPk(req.params.id);
 
-        if (!kota) return next(new Error(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
+        if (!kota) return next(new ErrorResponse(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
 
         await Kota.destroy({
             where: {
@@ -111,27 +84,14 @@ exports.deleteKota = async (req, res, next) => {
             success: true,
             data: {}
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // kota
-exports.getListKota = async (req, res) => {
-    try {
+exports.getListKota = asyncHandler(async (req, res) => {
         const kota = await Kota.findAll();
 
         res.status(200).json({
             success: true,
             kota
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})

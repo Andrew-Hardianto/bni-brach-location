@@ -1,49 +1,36 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const Wilayah = db.Wilayah;
 const Op = db.Sequelize.Op;
 
 // get all wilayah
-exports.getAllWilayah = async (req, res) => {
-    try {
+exports.getAllWilayah = asyncHandler(async (req, res) => {
         const wilayah = await Wilayah.findAll();
 
         res.status(200).json({
             success: true,
             wilayah
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // get by id wilayah
-exports.getByIdWilayah = async (req, res, next) => {
-    try {
+exports.getByIdWilayah = asyncHandler(async (req, res, next) => {
         const wilayah = await Wilayah.findByPk(req.params.id);
 
         if (!wilayah) {
             res.status(404)
-            next(new Error('Data tidak ditemukan!'))
+            next(new ErrorResponse('Data tidak ditemukan!', 400))
         }
 
         res.status(200).json({
             success: true,
             wilayah
         })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // add Wilayah
-exports.createWilayah = async (req, res, next) => {
-    try {
+exports.createWilayah = asyncHandler(async (req, res, next) => {
         const { Region_Code, Region_Subname, Region_Name } = req.body;
 
         const checkId = await Wilayah.findOne(
@@ -54,9 +41,9 @@ exports.createWilayah = async (req, res, next) => {
             }
         )
 
-        if (!Region_Code || !Region_Name || !Region_Subname) return next(new Error('Kode/Nama harus diisi!'))
+        if (!Region_Code || !Region_Name || !Region_Subname) return next(new ErrorResponse('Kode/Nama harus diisi!', 400))
 
-        if (checkId) return next(new Error('Kode tidak boleh sama!'))
+        if (checkId) return next(new ErrorResponse('Kode tidak boleh sama!', 400))
 
         const wilayah = await Wilayah.create(req.body);
 
@@ -64,23 +51,15 @@ exports.createWilayah = async (req, res, next) => {
             success: true,
             wilayah
         })
-    } catch (error) {
-        res.status(401).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // Update wilayah
-exports.updateWilayah = async (req, res, next) => {
-    try {
-
+exports.updateWilayah = asyncHandler(async (req, res, next) => {
         const checkId = await Wilayah.findByPk(req.params.id)
 
         if (!checkId) {
             res.status(404)
-            return next(new Error('Wilayah tidak ditemukan!'))
+            return next(new ErrorResponse('Wilayah tidak ditemukan!', 400))
         }
 
         const wilayah = await Wilayah.update(req.body, {
@@ -93,17 +72,10 @@ exports.updateWilayah = async (req, res, next) => {
             success: true,
             wilayah
         })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})
 
 // delete wilayah
-exports.deleteWilayah = async (req, res) => {
-    try {
+exports.deleteWilayah = asyncHandler(async (req, res) => {
         await Wilayah.destroy({
             where: {
                 ID_Region: req.params.id
@@ -114,10 +86,4 @@ exports.deleteWilayah = async (req, res) => {
             success: true,
             data: {}
         })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        })
-    }
-}
+})

@@ -1,3 +1,5 @@
+const asyncHandler = require('../middleware/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
 const db = require('../config/db');
 const Kelurahan = db.Kelurahan;
 const Kecamatan = db.Kecamatan;
@@ -5,8 +7,7 @@ const Op = db.Sequelize.Op;
 const fs = require('fs');
 
 // get all data
-exports.getKelurahan = async (req, res) => {
-    try {
+exports.getKelurahan = asyncHandler(async (req, res) => {
         // const kelurahan = await Kelurahan.findAll({ include: ["kota", "provinsi", "kecamatan"] });
         const kelurahan = await Kelurahan.findAll({ include: ["kecamatan"] });
 
@@ -14,34 +15,20 @@ exports.getKelurahan = async (req, res) => {
             success: true,
             kelurahan
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // get by id data
-exports.getByIdKelurahan = async (req, res) => {
-    try {
+exports.getByIdKelurahan = asyncHandler(async (req, res) => {
         const kelurahan = await Kelurahan.findByPk(req.params.id, { include: ["kota", "provinsi", "kecamatan"] });
 
         res.status(200).json({
             success: true,
             kelurahan
         })
-    } catch (err) {
-        res.status(404).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // add Kelurahan
-exports.createKelurahan = async (req, res, next) => {
-    try {
+exports.createKelurahan = asyncHandler(async (req, res, next) => {
         const { Kelurahan_Code, Kelurahan_Name, Kecamatan_Code, Status } = req.body;
 
         const checkkode = await Kelurahan.findOne(
@@ -53,11 +40,11 @@ exports.createKelurahan = async (req, res, next) => {
         )
 
         if (!Kelurahan_Code || !Kelurahan_Name) {
-            return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
+            return next(new ErrorResponse('Kode Kelurahan/Nama Kelurahan harus diisi!', 400));
         }
 
         if (checkkode) {
-            return next(new Error('Kode Kelurahan sudah ada!'));
+            return next(new ErrorResponse('Kode Kelurahan sudah ada!', 400));
         }
 
         const kecamatan = await Kecamatan.findOne({
@@ -67,7 +54,7 @@ exports.createKelurahan = async (req, res, next) => {
         });
 
         if (!kecamatan) {
-            return next(new Error(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404))
+            return next(new ErrorResponse(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404))
         }
 
         const kelurahan = await Kelurahan.create({
@@ -83,21 +70,13 @@ exports.createKelurahan = async (req, res, next) => {
             success: true,
             kelurahan
         })
-    } catch (err) {
-        res.status(401).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // update Kelurahan
-exports.updateKelurahan = async (req, res, next) => {
-    try {
-
+exports.updateKelurahan = asyncHandler(async (req, res, next) => {
         const { Kelurahan_Code, Kelurahan_Name, Kecamatan_Code, Status } = req.body;
 
-        if (!Kelurahan_Code || !Kelurahan_Name) return next(new Error('Kode Kelurahan/Nama Kelurahan harus diisi!'));
+        if (!Kelurahan_Code || !Kelurahan_Name) return next(new ErrorResponse('Kode Kelurahan/Nama Kelurahan harus diisi!', 400));
 
         const kecamatan = await Kecamatan.findOne({
             where: {
@@ -105,7 +84,7 @@ exports.updateKelurahan = async (req, res, next) => {
             }
         });
 
-        if (!kecamatan) return next(new Error(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404));
+        if (!kecamatan) return next(new ErrorResponse(`Kecamatan dengan kode ${Kecamatan_Code} tidak ditemukan!`, 404));
 
         const kelurahan = await Kelurahan.update(
             {
@@ -125,25 +104,17 @@ exports.updateKelurahan = async (req, res, next) => {
             success: true,
             kelurahan
         })
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 // delete Kelurahan
-exports.deleteKelurahan = async (req, res, next) => {
-    try {
-
+exports.deleteKelurahan = asyncHandler(async (req, res, next) => {
         const id = await Kelurahan.findAll({
             where: {
                 ID_Kelurahan: req.params.id
             }
         });
 
-        if (!id) return next(new Error(`Kelurahan dengan Id ${id} tidak ditemukan!`, 404))
+        if (!id) return next(new ErrorResponse(`Kelurahan dengan Id ${id} tidak ditemukan!`, 404))
 
         await Kelurahan.destroy({
             where: {
@@ -155,13 +126,7 @@ exports.deleteKelurahan = async (req, res, next) => {
             success: true,
             data: {}
         })
-    } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
 
 const getPagination = (page, size) => {
     const limit = size ? +size : 90000;
@@ -179,8 +144,7 @@ const getPagingData = (data, page, limit) => {
 };
 
 // get all data
-exports.getListKelurahan = async (req, res) => {
-    try {
+exports.getListKelurahan = asyncHandler(async (req, res) => {
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
         const Kelurahan_Name = req.query.name
@@ -202,10 +166,4 @@ exports.getListKelurahan = async (req, res) => {
             success: true,
             kelurahan
         })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-}
+})
