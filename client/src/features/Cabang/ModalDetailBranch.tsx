@@ -1,24 +1,18 @@
-import React, { useEffect } from 'react';
-import { Modal, Table, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
+import React from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
 
-import { detailCabang } from '@/entities/cabang/model/cabangActions';
+import { useGetCabangByIdQuery } from '@/entities/cabang/api/cabangApi';
 import Apikey from '@/shared/ui/Apikey';
+import Loader from '@/shared/ui/Loader';
+import Message from '@/shared/ui/Message';
 
 const ModalDetailBranch = ({ onClick, cabangId }) => {
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetCabangByIdQuery(cabangId);
+    const cabang = data?.cabang;
 
-    const { loading, error, cabang } = useSelector((state: any) => state.cabangDetail);
-
-    useEffect(() => {
-        dispatch(detailCabang(cabangId));
-    }, [dispatch, cabangId])
-
-    // const coords = [cabang.cabang?.latitude, cabang.cabang?.longitude];
-    const coords = [isNaN(cabang?.cabang?.Latitude) ? -6.241586 : cabang?.cabang?.Latitude, isNaN(cabang?.cabang?.Longitude) ? 106.992416 : cabang?.cabang?.Longitude];
+    const coords = [isNaN(cabang?.Latitude) ? -6.241586 : cabang?.Latitude, isNaN(cabang?.Longitude) ? 106.992416 : cabang?.Longitude];
 
     return (
         <div>
@@ -26,60 +20,66 @@ const ModalDetailBranch = ({ onClick, cabangId }) => {
                 <Modal.Title>Data Branch</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <table className="table table-borderless table-striped">
-                    <tbody>
-                        <tr>
-                            <td width="150px">Kode Cabang</td>
-                            <td width="30px"> : </td>
-                            <td>{cabang?.cabang?.Branch_Code}</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Nama Cabang</td>
-                            <td width="30px"> : </td>
-                            <td className="font-weight-bold">{cabang?.cabang?.Branch_Name}</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Nama Cabang</td>
-                            <td width="30px"> : </td>
-                            <td className="font-weight-bold">{cabang?.cabang?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">BI Location Code</td>
-                            <td width="30px"> : </td>
-                            <td>{cabang?.cabang?.BI_Location_Code}</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Kode Wilayah</td>
-                            <td width="30px"> : </td>
-                            <td>{cabang?.cabang?.Region_Code}</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Sub Nama Wilayah</td>
-                            <td width="30px"> : </td>
-                            <td className="font-weight-bold">{cabang?.cabang?.wilayah?.Region_Subname}</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Nama Wilayah</td>
-                            <td width="30px"> : </td>
-                            <td className="font-weight-bold">{cabang?.cabang?.wilayah?.Region_Name}</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Alamat</td>
-                            <td width="30px"> : </td>
-                            <td className="text-wrap"><p>{cabang?.cabang?.Address}</p></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <MapContainer style={{ width: "600px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
-                    <TileLayer
-                        attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
-                        url={Apikey.maptiler.url}
-                    />
-                    <Marker
-                        position={coords}>
-                        <Tooltip>{cabang?.cabang?.Address}</Tooltip>
-                    </Marker>
-                </MapContainer>
+                {loading && <Loader />}
+                {error && <Message variant="danger">{typeof error === 'string' ? error : 'An error occurred'}</Message>}
+                {cabang && (
+                    <>
+                        <table className="table table-borderless table-striped">
+                            <tbody>
+                                <tr>
+                                    <td width="150px">Kode Cabang</td>
+                                    <td width="30px"> : </td>
+                                    <td>{cabang?.Branch_Code}</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">Nama Cabang</td>
+                                    <td width="30px"> : </td>
+                                    <td className="font-weight-bold">{cabang?.Branch_Name}</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">Status</td>
+                                    <td width="30px"> : </td>
+                                    <td className="font-weight-bold">{cabang?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">BI Location Code</td>
+                                    <td width="30px"> : </td>
+                                    <td>{cabang?.BI_Location_Code}</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">Kode Wilayah</td>
+                                    <td width="30px"> : </td>
+                                    <td>{cabang?.Region_Code}</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">Sub Nama Wilayah</td>
+                                    <td width="30px"> : </td>
+                                    <td className="font-weight-bold">{cabang?.wilayah?.Region_Subname}</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">Nama Wilayah</td>
+                                    <td width="30px"> : </td>
+                                    <td className="font-weight-bold">{cabang?.wilayah?.Region_Name}</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">Alamat</td>
+                                    <td width="30px"> : </td>
+                                    <td className="text-wrap"><p>{cabang?.Address}</p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <MapContainer style={{ width: "600px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
+                            <TileLayer
+                                attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                                url={Apikey.maptiler.url}
+                            />
+                            <Marker
+                                position={coords}>
+                                <Tooltip>{cabang?.Address}</Tooltip>
+                            </Marker>
+                        </MapContainer>
+                    </>
+                )}
 
 
             </Modal.Body>
@@ -92,4 +92,4 @@ const ModalDetailBranch = ({ onClick, cabangId }) => {
     )
 }
 
-export default ModalDetailBranch
+export default ModalDetailBranch;

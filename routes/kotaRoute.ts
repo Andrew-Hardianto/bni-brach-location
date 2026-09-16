@@ -1,4 +1,6 @@
 import express from 'express';
+import advancedResults from '../middleware/advancedResults';
+import db from '../config/db';
 import { getKota, addKota, getByIdKota, updateKota, deleteKota, getListKota  } from '../controllers/kotaControllers';
 
 const router = express.Router();

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailUser, updateUser } from '@/entities/user/model/authActions';
-import { USER_UPDATE_RESET } from '@/entities/user/model/authConstants';
+import { useGetUserByIdQuery, useUpdateUserMutation } from '@/entities/user/api/authApi';
 
 const UserUbah = ({ match, history }) => {
     const userID = match.params.id
@@ -14,27 +12,25 @@ const UserUbah = ({ match, history }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const dispatch = useDispatch();
-
-    const { loading, error, success } = useSelector((state: any) => state.userUpdate);
-
-    const { user } = useSelector((state: any) => state.userDetails);
+    const { data: user } = useGetUserByIdQuery(userID);
+    const [updateUser, { isLoading: loading, error, isSuccess: success }] = useUpdateUserMutation();
 
     useEffect(() => {
         if (success) {
-            dispatch({ type: USER_UPDATE_RESET })
             history.push('/user')
-        } else {
-            if (user.Username || user.ID_User !== userID) {
-                dispatch(detailUser(userID))
-                setUsername(user.Username)
-            }
         }
-    }, [history, success, history, success, userID, user.ID_User])
+        if (user) {
+            setUsername(user.Username || '')
+        }
+    }, [history, success, user])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(updateUser({ ID_User: userID, username, password }))
+        try {
+            await updateUser({ id: userID, body: { username, password } }).unwrap();
+        } catch (err) {
+            // error is handled by the hook
+        }
     }
 
     return (
@@ -42,7 +38,7 @@ const UserUbah = ({ match, history }) => {
             <Card style={{ width: '25rem' }} className="mt-3" >
                 <Card.Body>
                     <Card.Title>Ubah User</Card.Title>
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{(error as any)?.data?.message || 'Error'}</Message>}
                     {loading && <Loader />}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="username">

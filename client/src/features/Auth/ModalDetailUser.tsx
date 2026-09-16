@@ -1,19 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card, Modal, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-
-import { detailUser } from '@/entities/user/model/authActions';
+import { useGetUserByIdQuery } from '@/entities/user/api/authApi';
 
 const ModalDetailUser = ({ onClick, userId }) => {
 
-    const dispatch = useDispatch();
-
-    const { user } = useSelector((state: any) => state.userDetails);
-
-    useEffect(() => {
-        dispatch(detailUser(userId));
-    }, [dispatch, userId])
+    const { data: user } = useGetUserByIdQuery(userId, { skip: !userId });
 
     return (
         <div>

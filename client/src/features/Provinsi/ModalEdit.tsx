@@ -3,8 +3,6 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/shared/ui/Loader';
-import { detailProvinsi, editProvinsi } from '@/entities/provinsi/model/provinsiActions';
-import { PROVINSI_UPDATE_RESET } from '@/entities/provinsi/model/provinsiConstants';
 import Message from '@/shared/ui/Message';
 
 const initialState = { Provinsi_Code: '', Provinsi_Name: '', BI_Location_Code: '', Status: '' }
@@ -15,9 +13,7 @@ const ModalEdit = ({ onClick, provinsiId }) => {
 
     const [data, setData] = useState(initialState);
 
-    const { provinsi } = useSelector((state: any) => state.provinsiDetail);
 
-    const { loading, error, success } = useSelector((state: any) => state.provinsiUpdate);
 
     useEffect(() => {
         if (success) {

@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import ErrorResponse from '../utils/errorResponse';
 import db from '../config/db';
@@ -7,43 +8,16 @@ const Wilayah = db.Wilayah;
 const Op = db.Sequelize.Op;
 
 // get all cabang
-export const getAllCabang = asyncHandler(async (req: any, res: any) => {
-    const page = req.query.page ? parseInt(req.query.page) : null;
-    const limit = req.query.limit ? parseInt(req.query.limit) : null;
-
-    let queryOptions: any = {
-        include: ["wilayah"]
-    };
-
-    if (req.query.keyword) {
-        queryOptions.where = {
-            Branch_Name: {
-                [Op.like]: `%${req.query.keyword}%`
-            }
-        };
-    }
-
-    if (page && limit) {
-        queryOptions.offset = (page - 1) * limit;
-        queryOptions.limit = limit;
-    }
-
-    const { count, rows } = await Cabang.findAndCountAll(queryOptions);
-
+export const getAllCabang = asyncHandler(async (req: any, res: Response) => {
+    const responseData = (res as any).advancedResults;
     res.status(200).json({
-        success: true,
-        cabang: rows,
-        pagination: page && limit ? {
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            currentPage: page,
-            limit: limit
-        } : null
+        success: responseData.success,
+        cabang: responseData.data,
+        pagination: responseData.pagination
     })
 })
-
 // get all cabang
-export const getByIdCabang = asyncHandler(async (req: any, res: any) => {
+export const getByIdCabang = asyncHandler(async (req: any, res: Response) => {
     const cabang = await Cabang.findByPk(req.params.id, { include: ["wilayah"] });
 
     res.status(200).json({
@@ -53,7 +27,7 @@ export const getByIdCabang = asyncHandler(async (req: any, res: any) => {
 })
 
 // add cabang
-export const createCabang = asyncHandler(async (req: any, res: any, next: any) => {
+export const createCabang = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
     const { Branch_Code, Branch_Name, Address, Region_Code } = req.body;
 
     const checkId = await Cabang.findOne(
@@ -80,7 +54,7 @@ export const createCabang = asyncHandler(async (req: any, res: any, next: any) =
 })
 
 // update cabang
-export const updateCabang = asyncHandler(async (req: any, res: any, next: any) => {
+export const updateCabang = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
     const { Branch_Code, Branch_Name, Address, Region_Code } = req.body;
 
     if (!Branch_Code) return next(new ErrorResponse('Field Branch Code tidak boleh kosong!', 400));
@@ -101,7 +75,7 @@ export const updateCabang = asyncHandler(async (req: any, res: any, next: any) =
 })
 
 // delete cabang
-export const deleteCabang = asyncHandler(async (req: any, res: any) => {
+export const deleteCabang = asyncHandler(async (req: any, res: Response) => {
     await Cabang.destroy({
         where: {
             ID_Branch: req.params.id

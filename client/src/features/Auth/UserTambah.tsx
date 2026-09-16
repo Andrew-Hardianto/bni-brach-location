@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { createUser } from '@/entities/user/model/authActions';
+import { useCreateUserMutation } from '@/entities/user/api/authApi';
 
 const UserTambah = ({ history }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const dispatch = useDispatch();
-
-    const { loading, error, success } = useSelector((state: any) => state.userCreate);
+    const [createUser, { isLoading: loading, error, isSuccess: success }] = useCreateUserMutation();
 
     useEffect(() => {
         if (success) {
@@ -21,9 +18,13 @@ const UserTambah = ({ history }) => {
         }
     }, [history, success])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createUser(username, password))
+        try {
+            await createUser({ username, password }).unwrap();
+        } catch (err) {
+            // error is handled by the hook
+        }
     }
 
     return (
@@ -31,7 +32,7 @@ const UserTambah = ({ history }) => {
             <Card style={{ width: '25rem' }} className="mt-3" >
                 <Card.Body>
                     <Card.Title>Tambah User</Card.Title>
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{(error as any)?.data?.message || 'Error'}</Message>}
                     {loading && <Loader />}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="username">

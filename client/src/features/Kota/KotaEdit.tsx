@@ -1,13 +1,12 @@
+import { useGetKotaByIdQuery, useUpdateKotaMutation } from '@/entities/kota/api/kotaApi';
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
-import { detailKota, editKota } from '@/entities/kota/model/kotaActions';
-import { KOTA_UPDATE_RESET } from '@/entities/kota/model/kotaConstants';
 import Message from '@/shared/ui/Message';
-import { listProvinsi } from '@/entities/provinsi/model/provinsiActions';
+import { useGetProvinsisQuery } from '@/entities/provinsi/api/provinsiApi';
 
 const KotaEdit = ({ history, match }) => {
     const kotaId = match.params.id;
@@ -18,19 +17,19 @@ const KotaEdit = ({ history, match }) => {
     const [Antasena_Code, setAntasenaCode] = useState('');
     const [Provinsi_Code, setProvinsiId] = useState('');
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetKotaByIdQuery(kotaId, { skip: !kotaId });
+    const kota = queryData?.kota || queryData || {};
+    const [updateKotaApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateKotaMutation();
 
-    const kotaDetail = useSelector((state: any) => state.kotaDetail);
-    const { kota } = kotaDetail;
+    
 
-    const kotaUpdate = useSelector((state: any) => state.kotaUpdate);
     const { loading, error, success } = kotaUpdate;
 
-    const provinsiList = useSelector((state: any) => state.provinsiList);
-    const { provinsi } = provinsiList;
+    const { data: provinsiData } = useGetProvinsisQuery({ limit: 100 });
+    const provinsi = provinsiData?.provinsi || [];
 
     useEffect(() => {
-        dispatch(listProvinsi())
+        
         if (success) {
             dispatch({ type: KOTA_UPDATE_RESET })
             history.push('/location/kota')

@@ -1,19 +1,19 @@
+import { useGetKelurahanByIdQuery } from '@/entities/kelurahan/api/kelurahanApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { detailKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const KelurahanDetail = ({ match }) => {
     const kelurahanId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKelurahanByIdQuery(kelurahanId, { skip: !kelurahanId });
+        const kelurahan = queryData?.kelurahan || queryData || {};
 
-    const kelurahanDetail = useSelector((state: any) => state.kelurahanDetail);
-    const { loading, error, kelurahan } = kelurahanDetail;
+    
 
     useEffect(() => {
         dispatch(detailKelurahan(kelurahanId));

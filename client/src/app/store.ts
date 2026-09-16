@@ -1,140 +1,17 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import {
-    provinsiCreateReducer,
-    provinsiDeleteReducer,
-    provinsiDetailsReducer,
-    provinsiListReducer,
-    provinsiUpdateReducer
-} from '@/entities/provinsi/model/provinsiReducers';
-import {
-    kotaCreateReducer,
-    kotaDeleteReducer,
-    kotaDetailsReducer,
-    kotaListReducer,
-    kotaReducer,
-    kotaUpdateReducer
-} from '@/entities/kota/model/kotaReducers';
-import {
-    kecamatanCreateReducer,
-    kecamatanDeleteReducer,
-    kecamatanDetailsReducer,
-    kecamatanListReducer,
-    kecamatanUpdateReducer,
-} from '@/entities/kecamatan/model/kecamatanReducers';
-import {
-    kelurahanAllReducer,
-    kelurahanCreateReducer,
-    kelurahanDeleteReducer,
-    kelurahanDetailsReducer,
-    kelurahanListReducer,
-    kelurahanUpdateReducer,
-} from '@/entities/kelurahan/model/kelurahanReducers';
-import {
-    kodeposCreateReducer,
-    kodeposDeleteReducer,
-    kodeposDetailsReducer,
-    kodeposListReducer,
-    kodeposUpdateReducer,
-} from '@/entities/kodepos/model/kodeposReducers';
-import {
-    wilayahCreateReducer,
-    wilayahDeleteReducer,
-    wilayahDetailsReducer,
-    wilayahListReducer,
-    wilayahUpdateReducer,
-} from '@/entities/wilayah/model/wilayahReducers';
-import {
-    cabangCreateReducer,
-    cabangDeleteReducer,
-    cabangDetailsReducer,
-    cabangListReducer,
-    cabangUpdateReducer,
-} from '@/entities/cabang/model/cabangReducers';
-import {
-    outletCreateReducer,
-    outletDeleteReducer,
-    outletDetailsReducer,
-    outletListReducer,
-    outletUpdateReducer,
-} from '@/entities/outlet/model/outletReducers';
-import {
-    userCreateReducer,
-    userDeleteReducer,
-    userDetailsReducer,
-    userListReducer,
-    userLoginReducer,
-    userProfileReducer,
-    userUpdateReducer
-} from '@/entities/user/model/authReducers';
+import { configureStore } from '@reduxjs/toolkit';
+import { baseApi } from '@/shared/api/baseApi';
+import authReducer from '@/entities/user/model/authSlice';
 
-const reducer = combineReducers({
-    provinsiList: provinsiListReducer,
-    provinsiDetail: provinsiDetailsReducer,
-    provinsiCreate: provinsiCreateReducer,
-    provinsiUpdate: provinsiUpdateReducer,
-    provinsiDelete: provinsiDeleteReducer,
-    kotaList: kotaListReducer,
-    kotaAll: kotaReducer,
-    kotaDetail: kotaDetailsReducer,
-    kotaCreate: kotaCreateReducer,
-    kotaUpdate: kotaUpdateReducer,
-    kotaDelete: kotaDeleteReducer,
-    kecamatanList: kecamatanListReducer,
-    kecamatanDetail: kecamatanDetailsReducer,
-    kecamatanCreate: kecamatanCreateReducer,
-    kecamatanUpdate: kecamatanUpdateReducer,
-    kecamatanDelete: kecamatanDeleteReducer,
-    kelurahanList: kelurahanListReducer,
-    kelurahanAll: kelurahanAllReducer,
-    kelurahanDetail: kelurahanDetailsReducer,
-    kelurahanCreate: kelurahanCreateReducer,
-    kelurahanUpdate: kelurahanUpdateReducer,
-    kelurahanDelete: kelurahanDeleteReducer,
-    kodeposList: kodeposListReducer,
-    kodeposDetail: kodeposDetailsReducer,
-    kodeposCreate: kodeposCreateReducer,
-    kodeposUpdate: kodeposUpdateReducer,
-    kodeposDelete: kodeposDeleteReducer,
-    wilayahList: wilayahListReducer,
-    wilayahDetail: wilayahDetailsReducer,
-    wilayahCreate: wilayahCreateReducer,
-    wilayahUpdate: wilayahUpdateReducer,
-    wilayahDelete: wilayahDeleteReducer,
-    cabangList: cabangListReducer,
-    cabangDetail: cabangDetailsReducer,
-    cabangCreate: cabangCreateReducer,
-    cabangUpdate: cabangUpdateReducer,
-    cabangDelete: cabangDeleteReducer,
-    outletList: outletListReducer,
-    outletDetail: outletDetailsReducer,
-    outletCreate: outletCreateReducer,
-    outletUpdate: outletUpdateReducer,
-    outletDelete: outletDeleteReducer,
-    userLogin: userLoginReducer,
-    userCreate: userCreateReducer,
-    userList: userListReducer,
-    userDelete: userDeleteReducer,
-    userUpdate: userUpdateReducer,
-    userDetails: userDetailsReducer,
-    userProfile: userProfileReducer
-})
+const store = configureStore({
+    reducer: {
+        [baseApi.reducerPath]: baseApi.reducer,
+        userLogin: authReducer, // Keep the key as userLogin for backward compatibility if needed in some components
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(baseApi.middleware),
+});
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo'))
-    : null
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-const initialState = {
-    userLogin: { userInfo: userInfoFromStorage }
-}
-
-const middleware = [thunk]
-
-const store = createStore(
-    reducer,
-    initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
-)
-
-export default store
+export default store;

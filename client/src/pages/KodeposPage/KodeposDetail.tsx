@@ -1,19 +1,19 @@
+import { useGetKodeposByIdQuery } from '@/entities/kodepos/api/kodeposApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { detailKodepos } from '@/entities/kodepos/model/kodeposActions';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const KodeposDetail = ({ match }) => {
     const kodeposId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKodeposByIdQuery(kodeposId, { skip: !kodeposId });
+        const kodepos = queryData?.kodepos || queryData || {};
 
-    const kodeposDetail = useSelector((state: any) => state.kodeposDetail);
-    const { loading, error, kodepos } = kodeposDetail;
+    
 
     useEffect(() => {
         dispatch(detailKodepos(kodeposId));

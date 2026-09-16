@@ -1,12 +1,12 @@
+import { useGetKelurahanByIdQuery } from '@/entities/kelurahan/api/kelurahanApi';
 import React, { useEffect } from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux'
-import { detailKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
 
 const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKelurahanByIdQuery(kelurahanId, { skip: !kelurahanId });
+        const kelurahan = queryData?.kelurahan || queryData || {};
 
-    const { kelurahan } = useSelector((state: any) => state.kelurahanDetail);
 
     useEffect(() => {
         dispatch(detailKelurahan(kelurahanId));

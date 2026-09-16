@@ -5,8 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailWilayah, editWilayah } from '@/entities/wilayah/model/wilayahActions';
-import { WILAYAH_UPDATE_RESET } from '@/entities/wilayah/model/wilayahConstants';
 
 const initialState = { Region_Code: '', Region_Subname: '', Region_Name: '' }
 
@@ -16,9 +14,7 @@ const ModalEditRegion = ({ onClick, wilayahId }) => {
 
     const dispatch = useDispatch();
 
-    const { wilayah } = useSelector((state: any) => state.wilayahDetail);
 
-    const { loading, error, success } = useSelector((state: any) => state.wilayahUpdate);
 
     useEffect(() => {
         if (success) {

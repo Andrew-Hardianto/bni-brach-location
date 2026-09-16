@@ -1,3 +1,4 @@
+import { useGetKecamatanByIdQuery, useUpdateKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,9 +6,7 @@ import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { editKecamatan, detailKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
-import { listKota } from '@/entities/kota/model/kotaActions';
-import { KECAMATAN_UPDATE_RESET } from '@/entities/kecamatan/model/kecamatanConstants';
+import { useGetKotasQuery } from '@/entities/kota/api/kotaApi';
 
 const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabupaten_Code: '' }
 
@@ -16,19 +15,19 @@ const KecamatanEdit = ({ match, history }) => {
 
     const [data, setData] = useState(initialState)
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetKecamatanByIdQuery(kecamatanId, { skip: !kecamatanId });
+    const kecamatan = queryData?.kecamatan || queryData || {};
+    const [updateKecamatanApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateKecamatanMutation();
 
-    const kecamatanDetail = useSelector((state: any) => state.kecamatanDetail);
-    const { kecamatan } = kecamatanDetail;
+    
 
-    const kecamatanUpdate = useSelector((state: any) => state.kecamatanUpdate);
     const { loading, error, success } = kecamatanUpdate;
 
-    const kotaList = useSelector((state: any) => state.kotaList);
-    const { kota } = kotaList;
+    const { data: kotaData } = useGetKotasQuery({ limit: 100 });
+    const kota = kotaData?.kota || [];
 
     useEffect(() => {
-        dispatch(listKota())
+        
         if (success) {
             dispatch({ type: KECAMATAN_UPDATE_RESET })
             history.push('/location/kecamatan')

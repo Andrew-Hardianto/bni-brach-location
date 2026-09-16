@@ -6,10 +6,9 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailCabang, editCabang } from '@/entities/cabang/model/cabangActions';
-import { CABANG_UPDATE_RESET } from '@/entities/cabang/model/cabangConstants';
-import { listWilayah } from '@/entities/wilayah/model/wilayahActions';
+import { useGetWilayahsQuery } from '@/entities/wilayah/api/wilayahApi';
 import Apikey from '@/shared/ui/Apikey';
+import { useGetCabangByIdQuery, useUpdateCabangMutation } from '@/entities/cabang/api/cabangApi';
 
 const initialState = {
     Branch_Code: '',
@@ -28,35 +27,40 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
 
     const dispatch = useDispatch();
 
-    const cabangDetail = useSelector((state: any) => state.cabangDetail);
-    const { cabang } = cabangDetail;
+    const { data: cabangData, isLoading: loadingDetail, error: errorDetail } = useGetCabangByIdQuery(cabangId);
+    
+    const [updateCabang, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateCabangMutation();
 
-    const cabangUpdate = useSelector((state: any) => state.cabangUpdate);
-    const { loading, error, success } = cabangUpdate;
-
-    const wilayahList = useSelector((state: any) => state.wilayahList);
-    const { wilayah } = wilayahList;
+    const { data: wilayahData } = useGetWilayahsQuery({ limit: 100 });
+    const wilayah = wilayahData?.wilayah || [];
 
     useEffect(() => {
-        dispatch(listWilayah());
-        if (success) {
-            dispatch({ type: CABANG_UPDATE_RESET })
-            window.location.reload()
-            onClick()
-        } else {
-            if (!cabang?.cabang?.Branch_Name || cabang?.cabang?.ID_Branch !== cabangId) {
-                dispatch(detailCabang(cabangId));
-            }
-            setData(cabang?.cabang)
+        ;
+    }, [dispatch]);
+    
+    useEffect(() => {
+        if (cabangData?.cabang) {
+            setData(cabangData.cabang);
         }
-    }, [dispatch, cabangId, cabang?.cabang?.ID_Branch, success])
+    }, [cabangData]);
 
-    const submitHandler = (e) => {
+    useEffect(() => {
+        if (successUpdate) {
+            window.location.reload();
+            onClick();
+        }
+    }, [successUpdate, onClick]);
+
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(editCabang({ ...data }))
+        try {
+            await updateCabang({ id: cabangId, body: { ...data } }).unwrap();
+        } catch (err) {
+            console.error(err);
+        }
     }
 
-    const coords = [isNaN(cabang?.cabang?.Latitude) ? -6.241586 : cabang?.cabang?.Latitude, isNaN(cabang?.cabang?.Longitude) ? 106.992416 : cabang?.cabang?.Longitude];
+    const coords = [isNaN(data?.Latitude) ? -6.241586 : data?.Latitude, isNaN(data?.Longitude) ? 106.992416 : data?.Longitude];
 
     const [draggable, setDraggable] = useState(false)
     const markerRef = useRef(null)
@@ -65,8 +69,7 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
             dragend() {
                 const marker = markerRef.current?.getLatLng()
                 if (marker != null) {
-                    // setPosition(marker.getLatLng())
-                    setData({ Latitude: marker.lat, Longitude: marker.lng })
+                    setData(prev => ({ ...prev, Latitude: marker.lat, Longitude: marker.lng }))
                 }
             },
         }),
@@ -76,13 +79,16 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
         setDraggable((d) => !d)
     }, [])
 
+    const loading = loadingDetail || loadingUpdate;
+    const error = errorDetail || errorUpdate;
+
     return (
         <div>
             <Modal.Header closeButton>
                 <Modal.Title>Edit Kelurahan</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {error && <Message variant="danger" >{error}</Message>}
+                {error && <Message variant="danger" >{typeof error === 'string' ? error : 'An error occurred'}</Message>}
                 {loading && <Loader />}
                 <Form>
                     <Form.Group controlId="Branch_Code">
@@ -91,9 +97,8 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             type="text"
                             placeholder="Masukkan Kode Cabang..."
                             name="Branch_Code"
-                            value={data?.Branch_Code}
-                            onChange={(e) => setData({ ...data, Branch_Code: e.target.value }, [])}
-                        // onChange={(e) => setKode(e.target.value)}
+                            value={data?.Branch_Code || ''}
+                            onChange={(e) => setData({ ...data, Branch_Code: e.target.value })}
                         />
                     </Form.Group>
                     <Form.Group controlId="Branch_Name">
@@ -102,9 +107,8 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             type="text"
                             placeholder="Masukkan Nama Cabang..."
                             name="Branch_Name"
-                            value={data?.Branch_Name}
+                            value={data?.Branch_Name || ''}
                             onChange={(e) => setData({ ...data, Branch_Name: e.target.value })}
-                        // onChange={(e) => setNama(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group controlId="Address">
@@ -115,9 +119,8 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             as="textarea"
                             rows={3}
                             name="Address"
-                            value={data?.Address}
+                            value={data?.Address || ''}
                             onChange={(e) => setData({ ...data, Address: e.target.value })}
-                        // onChange={(e) => setAlamat(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Group controlId="Region_Code">
@@ -126,15 +129,14 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             as="select"
                             custom
                             name="Region_Code"
-                            value={data?.Region_Code}
+                            value={data?.Region_Code || ''}
                             onChange={(e) => setData({ ...data, Region_Code: e.target.value })}
-                        // onChange={(e) => setKodeWilayah(e.target.value)}
                         >
                             <option value="">- Pilih Wilayah -</option>
                             {wilayah
-                                .filter(wil => wil?.Region_Code.toString().includes(data?.Branch_Code.toString().substring(0, 2)))
-                                .map((data) => (
-                                    <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
+                                ?.filter(wil => wil?.Region_Code.toString().includes(data?.Branch_Code?.toString().substring(0, 2) || ''))
+                                .map((item) => (
+                                    <option key={item.ID_Region} value={item.Region_Code} >{item.Region_Name}</option>
                                 ))}
                         </Form.Control>
                     </Form.Group>
@@ -144,9 +146,8 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             type="text"
                             placeholder="Masukkan BI Location Code..."
                             name="BI_Location_Code"
-                            value={data?.BI_Location_Code}
+                            value={data?.BI_Location_Code || ''}
                             onChange={(e) => setData({ ...data, BI_Location_Code: e.target.value })}
-                        // onChange={(e) => setBiLocationCode(e.target.value)}
                         />
                     </Form.Group>
                     <Form.Row>
@@ -156,9 +157,8 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                                 type="text"
                                 placeholder="Masukkan Latitude..."
                                 name="Latitude"
-                                value={data?.Latitude}
+                                value={data?.Latitude || ''}
                                 onChange={(e) => setData({ ...data, Latitude: e.target.value })}
-                            // onChange={(e) => setLatitude(e.target.value)}
                             />
                         </Form.Group>
 
@@ -168,9 +168,8 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                                 type="text"
                                 placeholder="Masukkan Longitude..."
                                 name="Longitude"
-                                value={data?.Longitude}
+                                value={data?.Longitude || ''}
                                 onChange={(e) => setData({ ...data, Longitude: e.target.value })}
-                            // onChange={(e) => setLongitude(e.target.value)}
                             />
                         </Form.Group>
                     </Form.Row>
@@ -180,10 +179,10 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
                             as="select"
                             custom
                             name="Status"
-                            value={data?.Status}
+                            value={data?.Status || ''}
                             onChange={(e) => setData({ ...data, Status: e.target.value })}
                         >
-                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value={data?.Status || ''}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
                             <option value="Y" >Aktif</option>
                             <option value="N" >Tidak Aktif</option>
                         </Form.Control>
@@ -221,4 +220,4 @@ const ModalEditBranch = ({ onClick, cabangId }) => {
     )
 }
 
-export default ModalEditBranch
+export default ModalEditBranch;

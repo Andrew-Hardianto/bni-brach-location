@@ -1,40 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailUser, updateUser } from '@/entities/user/model/authActions';
-import { USER_UPDATE_RESET } from '@/entities/user/model/authConstants';
+import { useGetUserByIdQuery, useUpdateUserMutation } from '@/entities/user/api/authApi';
 
 const ModalEditUser = ({ onClick, userId }) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const dispatch = useDispatch();
-
-    const { loading, error, success } = useSelector((state: any) => state.userUpdate);
-
-    const { user } = useSelector((state: any) => state.userDetails);
+    const { data: user } = useGetUserByIdQuery(userId, { skip: !userId });
+    const [updateUser, { isLoading: loading, error, isSuccess: success }] = useUpdateUserMutation();
 
     useEffect(() => {
         if (success) {
-            dispatch({ type: USER_UPDATE_RESET })
-            window.location.reload()
             onClick()
-        } else {
-            if (user.Username || user.ID_User !== userId) {
-                dispatch(detailUser(userId))
-                setUsername(user.Username)
-            }
         }
-    }, [dispatch, success, success, userId, user.ID_User])
+        if (user) {
+            setUsername(user.Username || '')
+        }
+    }, [success, user, onClick])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(updateUser({ ID_User: userId, username, password }))
+        try {
+            await updateUser({ id: userId, body: { username, password } }).unwrap();
+        } catch (err) {
+            // error is handled by the hook
+        }
     }
 
     return (
@@ -43,7 +37,7 @@ const ModalEditUser = ({ onClick, userId }) => {
                 <Modal.Title>Edit Kelurahan</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {error && <Message variant="danger" >{error}</Message>}
+                {error && <Message variant="danger" >{(error as any)?.data?.message || 'Error'}</Message>}
                 {loading && <Loader />}
                 <Form>
                     <Form.Group controlId="username">

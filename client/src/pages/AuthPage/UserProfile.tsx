@@ -1,32 +1,29 @@
 import React, { useEffect } from 'react';
 import { Card, Col, Image, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { profileUser } from '@/entities/user/model/authActions';
+import { useGetProfileQuery } from '@/entities/user/api/authApi';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const UserProfile = ({ history }) => {
 
-    const dispatch = useDispatch()
-
-    const { user, loading, error } = useSelector((state: any) => state.userProfile)
-
-    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     useEffect(() => {
-        if (userInfo) {
-            dispatch(profileUser())
-        } else {
+        if (!userInfo) {
             history.push('/login')
         }
-    }, [dispatch, userInfo, history])
+    }, [userInfo, history])
+
+    const { data: user, isLoading: loading, error } = useGetProfileQuery(undefined, {
+        skip: !userInfo,
+    });
 
     return (
         <div className="home">
             {loading ? <Loader />
-                : error ? (<Message variant="danger" >{error}</Message>)
+                : error ? (<Message variant="danger" >{(error as any)?.data?.message || 'Error'}</Message>)
                     : (
                         <Card style={{ width: '35rem' }} className="shadow" >
                             <Card.Header>

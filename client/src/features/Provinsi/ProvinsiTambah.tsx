@@ -1,10 +1,10 @@
+import { useCreateProvinsiMutation } from '@/entities/provinsi/api/provinsiApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
-import { createProvinsi } from '@/entities/provinsi/model/provinsiActions';
 import Message from '@/shared/ui/Message';
 
 const ProvinsiTambah = ({ history }) => {
@@ -13,10 +13,9 @@ const ProvinsiTambah = ({ history }) => {
     const [biLocationCode, setBiLocationCode] = useState('');
     const [Status, setStatus] = useState('');
 
-    const dispatch = useDispatch();
+    const [createProvinsiApi, { isLoading: loading, error, isSuccess: success }] = useCreateProvinsiMutation();
 
-    const provinsiCreate = useSelector((state: any) => state.provinsiCreate);
-    const { loading, error, success } = provinsiCreate;
+    
 
     useEffect(() => {
         if (success) {

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { detailProvinsi } from '@/entities/provinsi/model/provinsiActions';
 
 const ModalDetail = ({ onClick, provinsiId }) => {
     const dispatch = useDispatch();
 
-    const { provinsi } = useSelector((state: any) => state.provinsiDetail);
 
     useEffect(() => {
         dispatch(detailProvinsi(provinsiId));

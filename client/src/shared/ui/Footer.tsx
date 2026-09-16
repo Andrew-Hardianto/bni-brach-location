@@ -1,14 +1,13 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { logout } from '@/entities/user/model/authActions'
+import { logoutUser } from '@/entities/user/model/authSlice'
 
 const Footer = () => {
-
     const dispatch = useDispatch()
 
     const logoutHandler = () => {
-        dispatch(logout())
+        dispatch(logoutUser())
     }
 
     return (

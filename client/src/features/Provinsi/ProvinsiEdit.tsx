@@ -1,11 +1,10 @@
+import { useGetProvinsiByIdQuery, useUpdateProvinsiMutation } from '@/entities/provinsi/api/provinsiApi';
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
-import { detailProvinsi, editProvinsi } from '@/entities/provinsi/model/provinsiActions';
-import { PROVINSI_UPDATE_RESET } from '@/entities/provinsi/model/provinsiConstants';
 import Message from '@/shared/ui/Message';
 
 const initialState = { Provinsi_Code: '', Provinsi_Name: '', BI_Location_Code: '', Status: '' }
@@ -15,12 +14,12 @@ const ProvinsiEdit = ({ history, match }) => {
 
     const [data, setData] = useState(initialState);
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetProvinsiByIdQuery(provinsiId, { skip: !provinsiId });
+    const provinsi = queryData?.provinsi || queryData || {};
+    const [updateProvinsiApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateProvinsiMutation();
 
-    const provinsiDetail = useSelector((state: any) => state.provinsiDetail);
-    const { provinsi } = provinsiDetail;
+    
 
-    const provinsiUpdate = useSelector((state: any) => state.provinsiUpdate);
     const { loading, error, success } = provinsiUpdate;
 
     useEffect(() => {

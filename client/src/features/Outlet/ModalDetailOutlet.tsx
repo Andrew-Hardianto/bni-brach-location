@@ -1,17 +1,17 @@
+import { useGetOutletByIdQuery } from '@/entities/outlet/api/outletApi';
 import React, { useEffect } from 'react';
 import { Button, Table, Modal } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 
-import { detailOutlet } from '@/entities/outlet/model/outletActions';
 import Apikey from '@/shared/ui/Apikey';
 
 const ModalDetailOutlet = ({ onClick, outletId }) => {
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetOutletByIdQuery(outletId, { skip: !outletId });
+        const outlet = queryData?.outlet || queryData || {};
 
-    const { outlet } = useSelector((state: any) => state.outletDetail);
 
     useEffect(() => {
         dispatch(detailOutlet(outletId));

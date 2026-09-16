@@ -1,12 +1,12 @@
+import { useGetKotaByIdQuery } from '@/entities/kota/api/kotaApi';
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { detailKota } from '@/entities/kota/model/kotaActions';
+import { useSelector } from 'react-redux';
 
 const ModalDetailKota = ({ onClick, kotaId }) => {
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKotaByIdQuery(kotaId, { skip: !kotaId });
+        const kota = queryData?.kota || queryData || {};
 
-    const { kota } = useSelector((state: any) => state.kotaDetail);
 
     useEffect(() => {
         dispatch(detailKota(kotaId));

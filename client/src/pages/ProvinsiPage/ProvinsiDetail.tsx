@@ -1,18 +1,18 @@
+import { useGetProvinsiByIdQuery } from '@/entities/provinsi/api/provinsiApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { detailProvinsi } from '@/entities/provinsi/model/provinsiActions';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const ProvinsiDetail = ({ match }) => {
     const provinsiId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetProvinsiByIdQuery(provinsiId, { skip: !provinsiId });
+        const provinsi = queryData?.provinsi || queryData || {};
 
-    const provinsiDetail = useSelector((state: any) => state.provinsiDetail);
-    const { loading, error, provinsi } = provinsiDetail;
+    
 
     useEffect(() => {
         dispatch(detailProvinsi(provinsiId));

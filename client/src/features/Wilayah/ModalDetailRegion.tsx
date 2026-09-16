@@ -3,13 +3,11 @@ import { Card, Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { detailWilayah } from '@/entities/wilayah/model/wilayahActions';
 
 const ModalDetailRegion = ({ onClick, wilayahId }) => {
 
     const dispatch = useDispatch();
 
-    const { loading, error, wilayah } = useSelector((state: any) => state.wilayahDetail);
 
     useEffect(() => {
         dispatch(detailWilayah(wilayahId));

@@ -3,9 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { KOTA_UPDATE_RESET } from '@/entities/kota/model/kotaConstants';
-import { detailKota, editKota } from '@/entities/kota/model/kotaActions';
-import { listProvinsi } from '@/entities/provinsi/model/provinsiActions';
+import { useGetProvinsisQuery } from '@/entities/provinsi/api/provinsiApi';
 
 
 const ModalEditKota = ({ onClick, kotaId }) => {
@@ -20,11 +18,8 @@ const ModalEditKota = ({ onClick, kotaId }) => {
 
     const dispatch = useDispatch();
 
-    const { kota } = useSelector((state: any) => state.kotaDetail);
 
-    const { loading, error, success } = useSelector((state: any) => state.kotaUpdate);
 
-    const { provinsi } = useSelector((state: any) => state.provinsiList);
 
     useEffect(() => {
         if (success) {
@@ -35,7 +30,7 @@ const ModalEditKota = ({ onClick, kotaId }) => {
             if (!kota?.kota?.Kabkota_Name || kota?.kota?.ID_Kabkota !== kotaId) {
                 dispatch(detailKota(kotaId));
             }
-            dispatch(listProvinsi())
+            
             setKode(kota.kota?.Kabkota_Code)
             setNama(kota.kota?.Kabkota_Name)
             setBiCode(kota.kota?.BI_Location_Code)

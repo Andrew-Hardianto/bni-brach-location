@@ -1,20 +1,20 @@
+import { useGetKotaByIdQuery } from '@/entities/kota/api/kotaApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailKota } from '@/entities/kota/model/kotaActions';
 
 const KotaDetail = ({ match }) => {
 
     const kotaId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKotaByIdQuery(kotaId, { skip: !kotaId });
+        const kota = queryData?.kota || queryData || {};
 
-    const kotaDetail = useSelector((state: any) => state.kotaDetail);
-    const { loading, error, kota } = kotaDetail;
+    
 
     useEffect(() => {
         dispatch(detailKota(kotaId));

@@ -1,3 +1,4 @@
+import { useGetOutletByIdQuery, useUpdateOutletMutation } from '@/entities/outlet/api/outletApi';
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Button, Card, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -6,9 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { OUTLET_UPDATE_RESET } from '@/entities/outlet/model/outletConstants';
-import { detailOutlet, editOutlet } from '@/entities/outlet/model/outletActions';
-import { listCabang } from '@/entities/cabang/model/cabangActions';
+import { useGetCabangsQuery } from '@/entities/cabang/api/cabangApi';
 import Apikey from '@/shared/ui/Apikey';
 
 const initialState = {
@@ -25,19 +24,19 @@ const OutletEdit = ({ history, match }) => {
 
     const [data, setData] = useState(initialState);
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetOutletByIdQuery(outletId, { skip: !outletId });
+    const outlet = queryData?.outlet || queryData || {};
+    const [updateOutletApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateOutletMutation();
 
-    const outletDetail = useSelector((state: any) => state.outletDetail);
-    const { outlet } = outletDetail;
+    
 
-    const outletUpdate = useSelector((state: any) => state.outletUpdate);
     const { loading, error, success } = outletUpdate;
 
-    const cabangList = useSelector((state: any) => state.cabangList);
-    const { cabang } = cabangList;
+    const { data: cabangData } = useGetCabangsQuery({ limit: 100 });
+    const cabang = cabangData?.cabang || [];
 
     useEffect(() => {
-        dispatch(listCabang());
+        ;
         if (success) {
             dispatch({ type: OUTLET_UPDATE_RESET })
             history.push('/location/outlet')

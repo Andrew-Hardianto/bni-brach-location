@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import ErrorResponse from '../utils/errorResponse';
 import db from '../config/db';
@@ -6,7 +7,7 @@ const Kelurahan = db.Kelurahan;
 const Op = db.Sequelize.Op;
 
 // get all data
-export const getKodepos = asyncHandler(async (req: any, res: any) => {
+export const getKodepos = asyncHandler(async (req: any, res: Response) => {
         const page = req.query.page ? parseInt(req.query.page as string) : null;
         const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
         
@@ -41,7 +42,7 @@ res.status(200).json({
 })
 
 // get by id data
-export const getByIdKodepos = asyncHandler(async (req: any, res: any) => {
+export const getByIdKodepos = asyncHandler(async (req: any, res: Response) => {
         const kodepos = await Kodepos.findByPk(req.params.id, { include: ["kota", "provinsi", "kecamatan", "kelurahan"] });
 
         res.status(200).json({
@@ -51,7 +52,7 @@ export const getByIdKodepos = asyncHandler(async (req: any, res: any) => {
 })
 
 // add Kodepos
-export const createKodepos = asyncHandler(async (req: any, res: any, next: any) => {
+export const createKodepos = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Postcode, Kelurahan_Code, Status } = req.body;
 
         if (!Postcode) return next(new ErrorResponse('Kodepos harus diisi!', 400));
@@ -84,7 +85,7 @@ export const createKodepos = asyncHandler(async (req: any, res: any, next: any) 
 })
 
 // update Kodepos
-export const updateKodepos = asyncHandler(async (req: any, res: any, next: any) => {
+export const updateKodepos = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Postcode, Kelurahan_Code, Status } = req.body;
 
         if (!Postcode) return next(new ErrorResponse('Kodepos harus diisi!', 400));
@@ -118,7 +119,7 @@ export const updateKodepos = asyncHandler(async (req: any, res: any, next: any) 
 })
 
 // delete Kodepos
-export const deleteKodepos = asyncHandler(async (req: any, res: any, next: any) => {
+export const deleteKodepos = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const id = await Kodepos.findAll({
             where: {
                 ID_Postcode: req.params.id

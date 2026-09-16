@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Loader from '@/shared/ui/Loader'
 import Message from '@/shared/ui/Message'
-import { login } from '@/entities/user/model/authActions'
+import { useLoginMutation } from '@/entities/user/api/authApi'
+import { setCredentials } from '@/entities/user/model/authSlice'
 
 const Login = ({ location, history }) => {
 
@@ -12,7 +13,7 @@ const Login = ({ location, history }) => {
 
     const dispatch = useDispatch()
 
-    const { loading, error, userInfo } = useSelector((state: any) => state.userLogin)
+    const [loginApi, { isLoading: loading, error }] = useLoginMutation()
 
     const redirect = location.search ? location.search.split('=')[1] : '/location/provinsi'
 
@@ -22,10 +23,14 @@ const Login = ({ location, history }) => {
         }
     }, [history, userInfo, redirect])
 
-
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault()
-        dispatch(login(username, password))
+        try {
+            const result = await loginApi({ username, password }).unwrap()
+            dispatch(setCredentials(result))
+        } catch (err) {
+            // error is handled by the hook
+        }
     }
 
     return (
@@ -41,7 +46,7 @@ const Login = ({ location, history }) => {
                                             <div className="text-center">
                                                 <h1 className="h4 text-gray-900 font-weight-bold mb-4">LOGIN</h1>
                                             </div>
-                                            {error && <Message variant='danger'>{error}</Message>}
+                                            {error && <Message variant='danger'>{(error as any)?.data?.message || 'Failed to login'}</Message>}
                                             {loading && <Loader />}
                                             <form className="user" onSubmit={submitHandler}>
                                                 <div className="form-group">

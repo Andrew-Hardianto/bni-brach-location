@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -11,9 +11,9 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
-import { deleteKodepos, listKodepos } from '@/entities/kodepos/model/kodeposActions';
-import { KODEPOS_CREATE_RESET } from '@/entities/kodepos/model/kodeposConstants';
 import ModalDetailKodepos from '@/features/Kodepos/ModalDetailKodepos';
+import { useGetKodepossQuery, useDeleteKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
+import { useGetKodepossQuery, useDeleteKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
 import ModalEditKodepos from '@/features/Kodepos/ModalEditKodepos';
 
 const Kodepos = ({ history }) => {
@@ -23,13 +23,21 @@ const Kodepos = ({ history }) => {
     const [showEdit, setShowEdit] = useState(false);
     const [kodeposId, setKodeposId] = useState();
 
-    const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [keyword, setKeyword] = useState('');
+    
+    const { data: queryData, isLoading: loading, error } = useGetKodepossQuery({ page, limit, keyword });
+    const kodepos = data?.kodepos || [];
+    const pagination = data?.pagination || {};
+    
+    const [deleteKodeposApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteKodeposMutation();
+    
 
-    const { loading, error, kodepos, pagination } = useSelector((state: any) => state.kodeposList);
+    
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kodeposDelete);
+    
 
-    const { userInfo } = useSelector((state: any) => state.userLogin);
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -45,25 +53,25 @@ const Kodepos = ({ history }) => {
     }, []);
 
     useEffect(() => {
-        if (userInfo) {
-            dispatch({ type: KODEPOS_CREATE_RESET })
-            dispatch(listKodepos())
-        } else {
+        if (!userInfo) {
             history.push('/login')
         }
-    }, [dispatch, success, history])
+    }, [userInfo, history])
 
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        dispatch(listKodepos(page, sizePerPage, searchText || ''));
+        setPage(page);
+        setLimit(sizePerPage);
+        setKeyword(searchText || '');
     }
 
 
-    const deletehandler = (id) => {
+    const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
-            dispatch(deleteKodepos(id))
+            await deleteKodeposApi(id);
         }
     }
+    
 
     const columns = [
         {
@@ -120,11 +128,11 @@ const Kodepos = ({ history }) => {
                     <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">DATA KODEPOS</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error}</Message>) : (
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
                                             
                                         <>
                                         {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
                                             keyField="ID_Postcode"

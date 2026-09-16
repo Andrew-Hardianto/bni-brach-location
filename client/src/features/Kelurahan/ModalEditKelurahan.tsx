@@ -5,9 +5,7 @@ import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailKelurahan, editKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
-import { listKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
-import { KELURAHAN_UPDATE_RESET } from '@/entities/kelurahan/model/kelurahanConstants';
+import { useGetKecamatansQuery } from '@/entities/kecamatan/api/kecamatanApi';
 
 const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '', Status: '' }
 
@@ -17,14 +15,11 @@ const ModalEditKelurahan = ({ onClick, kelurahanId }) => {
 
     const dispatch = useDispatch();
 
-    const { kelurahan } = useSelector((state: any) => state.kelurahanDetail);
 
-    const { loading, error, success } = useSelector((state: any) => state.kelurahanUpdate);
 
-    const { kecamatan } = useSelector((state: any) => state.kecamatanList);
 
     useEffect(() => {
-        dispatch(listKecamatan())
+        
         if (success) {
             dispatch({ type: KELURAHAN_UPDATE_RESET })
             window.location.reload()

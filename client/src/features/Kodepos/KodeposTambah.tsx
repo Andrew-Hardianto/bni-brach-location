@@ -1,3 +1,4 @@
+import { useCreateKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,8 +6,7 @@ import { Link } from 'react-router-dom';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { listKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
-import { createKodepos } from '@/entities/kodepos/model/kodeposActions';
+import { useGetKelurahansQuery } from '@/entities/kelurahan/api/kelurahanApi';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
@@ -20,16 +20,15 @@ const KodeposTambah = ({ history }) => {
     const [Status, setStatus] = useState('');
 
 
-    const dispatch = useDispatch();
+    const [createKodeposApi, { isLoading: loading, error, isSuccess: success }] = useCreateKodeposMutation();
 
-    const kodeposCreate = useSelector((state: any) => state.kodeposCreate);
-    const { loading, error, success } = kodeposCreate;
+    
 
-    const kelurahanList = useSelector((state: any) => state.kelurahanList);
-    const { kelurahan } = kelurahanList;
+    const { data: kelurahanData } = useGetKelurahansQuery({ limit: 100 });
+    const kelurahan = kelurahanData?.kelurahan || [];
 
     useEffect(() => {
-        dispatch(listKelurahan())
+        
         if (success) {
             history.push('/location/kodepos')
         }

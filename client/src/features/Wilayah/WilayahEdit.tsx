@@ -1,3 +1,4 @@
+import { useGetWilayahByIdQuery, useUpdateWilayahMutation } from '@/entities/wilayah/api/wilayahApi';
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -5,8 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailWilayah, editWilayah } from '@/entities/wilayah/model/wilayahActions';
-import { WILAYAH_UPDATE_RESET } from '@/entities/wilayah/model/wilayahConstants';
 
 const initialState = { Region_Code: '', Region_Subname: '', Region_Name: '' }
 
@@ -15,12 +14,12 @@ const WilayahEdit = ({ match, history }) => {
 
     const [data, setData] = useState(initialState);
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetWilayahByIdQuery(wilayahId, { skip: !wilayahId });
+    const wilayah = queryData?.wilayah || queryData || {};
+    const [updateWilayahApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateWilayahMutation();
 
-    const wilayahDetail = useSelector((state: any) => state.wilayahDetail);
-    const { wilayah } = wilayahDetail;
+    
 
-    const wilayahUpdate = useSelector((state: any) => state.wilayahUpdate);
     const { loading, error, success } = wilayahUpdate;
 
     useEffect(() => {

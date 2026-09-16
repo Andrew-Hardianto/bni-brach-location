@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import ErrorResponse from '../utils/errorResponse';
 import db from '../config/db';
@@ -5,7 +6,7 @@ const Provinsi = db.Provinsi;
 const Op = db.Sequelize.Op;
 
 // get all data
-export const getProvinsi = asyncHandler(async (req: any, res: any) => {
+export const getProvinsi = asyncHandler(async (req: any, res: Response) => {
         const page = req.query.page ? parseInt(req.query.page as string) : null;
         const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
         
@@ -40,7 +41,7 @@ res.status(200).json({
 })
 
 // get by id data
-export const getByIdProvinsi = asyncHandler(async (req: any, res: any, next: any) => {
+export const getByIdProvinsi = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const provinsi = await Provinsi.findByPk(req.params.id);
         // const provinsi = await Provinsi.findOne({ where: { ID_Provinsi: req.params.id } });
         if (!provinsi) return next(new ErrorResponse('Provinsi tidak ditemukan!', 400))
@@ -49,7 +50,7 @@ export const getByIdProvinsi = asyncHandler(async (req: any, res: any, next: any
 })
 
 // add Provinsi
-export const createProvinsi = asyncHandler(async (req: any, res: any, next: any) => {
+export const createProvinsi = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Provinsi_Code, Provinsi_Name } = req.body;
 
         const checkkode = await Provinsi.findOne(
@@ -73,7 +74,7 @@ export const createProvinsi = asyncHandler(async (req: any, res: any, next: any)
 })
 
 // update Provinsi
-export const updateProvinsi = asyncHandler(async (req: any, res: any, next: any) => {
+export const updateProvinsi = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Provinsi_Code, Provinsi_Name } = req.body;
 
         if (!Provinsi_Code || !Provinsi_Name) return next(new ErrorResponse('kode provinsi/Nama harus diisi', 400))
@@ -95,7 +96,7 @@ export const updateProvinsi = asyncHandler(async (req: any, res: any, next: any)
 })
 
 // delete Provinsi
-export const deleteProvinsi = asyncHandler(async (req: any, res: any, next: any) => {
+export const deleteProvinsi = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const id = await Provinsi.findAll({
             where: {
                 ID_Provinsi: req.params.id

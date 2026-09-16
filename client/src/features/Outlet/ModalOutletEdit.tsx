@@ -6,9 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { OUTLET_UPDATE_RESET } from '@/entities/outlet/model/outletConstants';
-import { detailOutlet, editOutlet } from '@/entities/outlet/model/outletActions';
-import { listCabang } from '@/entities/cabang/model/cabangActions';
+import { useGetCabangsQuery } from '@/entities/cabang/api/cabangApi';
 import Apikey from '@/shared/ui/Apikey';
 
 const initialState = {
@@ -27,14 +25,11 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
 
     const dispatch = useDispatch();
 
-    const { outlet } = useSelector((state: any) => state.outletDetail);
 
-    const { loading, error, success } = useSelector((state: any) => state.outletUpdate);
 
-    const { cabang } = useSelector((state: any) => state.cabangList);
 
     useEffect(() => {
-        dispatch(listCabang());
+        ;
         if (success) {
             dispatch({ type: OUTLET_UPDATE_RESET })
             window.location.reload()

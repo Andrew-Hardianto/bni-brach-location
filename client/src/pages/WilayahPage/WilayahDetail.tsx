@@ -1,19 +1,19 @@
+import { useGetWilayahByIdQuery } from '@/entities/wilayah/api/wilayahApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailWilayah } from '@/entities/wilayah/model/wilayahActions';
 
 const WilayahDetail = ({ match }) => {
     const wilayahId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetWilayahByIdQuery(wilayahId, { skip: !wilayahId });
+        const wilayah = queryData?.wilayah || queryData || {};
 
-    const wilayahDetail = useSelector((state: any) => state.wilayahDetail);
-    const { loading, error, wilayah } = wilayahDetail;
+    
 
     useEffect(() => {
         dispatch(detailWilayah(wilayahId));

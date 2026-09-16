@@ -1,3 +1,4 @@
+import { useCreateWilayahMutation } from '@/entities/wilayah/api/wilayahApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,17 +6,15 @@ import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { createWilayah } from '@/entities/wilayah/model/wilayahActions';
 
 const initialState = { Region_Code: '', Region_Subname: '', Region_Name: '', Status: '' }
 
 const WilayahTambah = ({ history }) => {
     const [data, setData] = useState(initialState)
 
-    const dispatch = useDispatch();
+    const [createWilayahApi, { isLoading: loading, error, isSuccess: success }] = useCreateWilayahMutation();
 
-    const wilayahCreate = useSelector((state: any) => state.wilayahCreate);
-    const { loading, error, success } = wilayahCreate;
+    
 
     useEffect(() => {
         if (success) {

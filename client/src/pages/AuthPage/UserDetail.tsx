@@ -1,28 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { detailUser } from '@/entities/user/model/authActions';
+import { useGetUserByIdQuery } from '@/entities/user/api/authApi';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const UserDetail = ({ match }) => {
     const userId = match.params.id;
 
-    const dispatch = useDispatch();
-
-    const { loading, error, user } = useSelector((state: any) => state.userDetails);
-
-    useEffect(() => {
-        dispatch(detailUser(userId));
-    }, [dispatch, userId])
+    const { data: user, isLoading: loading, error } = useGetUserByIdQuery(userId);
 
     return (
         <div className="home">
             {loading ? <Loader />
-                : error ? (<Message variant="danger" >{error}</Message>)
-                    : (
+                : error ? (<Message variant="danger" >{(error as any)?.data?.message || 'Error'}</Message>)
+                    : user ? (
                         <Card style={{ width: '35rem' }} className="shadow" >
                             <Card.Body>
                                 <Card.Title className="text-center font-weight-bold">DETAIL USER</Card.Title>
@@ -47,7 +40,7 @@ const UserDetail = ({ match }) => {
                                 </Link>
                             </Card.Body>
                         </Card>
-                    )}
+                    ) : null}
         </div>
     )
 }

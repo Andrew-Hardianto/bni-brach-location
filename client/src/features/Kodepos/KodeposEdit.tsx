@@ -1,3 +1,4 @@
+import { useGetKodeposByIdQuery, useUpdateKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,12 +6,9 @@ import { Link } from 'react-router-dom';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { listKelurahan, allKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
-import { detailKodepos, editKodepos } from '@/entities/kodepos/model/kodeposActions';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { KODEPOS_UPDATE_RESET } from '@/entities/kodepos/model/kodeposConstants';
 
 const initialState = { Kodepos_Code: '', Kelurahan_Code: '' }
 
@@ -25,19 +23,18 @@ const KodeposEdit = ({ history, match }) => {
     const [display, setDisplay] = useState(false);
     const wrapperRef = useRef(null)
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetKodeposByIdQuery(kodeposId, { skip: !kodeposId });
+    const kodepos = queryData?.kodepos || queryData || {};
+    const [updateKodeposApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateKodeposMutation();
 
-    const kodeposDetail = useSelector((state: any) => state.kodeposDetail);
-    const { kodepos } = kodeposDetail;
+    
 
-    const kodeposUpdate = useSelector((state: any) => state.kodeposUpdate);
     const { loading, error, success } = kodeposUpdate;
 
-    const kelurahanAll = useSelector((state: any) => state.kelurahanAll);
     const { kelurahan } = kelurahanAll;
 
     useEffect(() => {
-        // dispatch(listKelurahan())
+        // 
         dispatch(allKelurahan(Kelurahan_Code))
         if (success) {
             dispatch({ type: KODEPOS_UPDATE_RESET })

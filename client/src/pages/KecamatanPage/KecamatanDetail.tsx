@@ -1,19 +1,19 @@
+import { useGetKecamatanByIdQuery } from '@/entities/kecamatan/api/kecamatanApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { detailKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const KecamatanDetail = ({ match }) => {
     const kecamatanId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKecamatanByIdQuery(kecamatanId, { skip: !kecamatanId });
+        const kecamatan = queryData?.kecamatan || queryData || {};
 
-    const kecamatanDetail = useSelector((state: any) => state.kecamatanDetail);
-    const { loading, error, kecamatan } = kecamatanDetail;
+    
 
     useEffect(() => {
         dispatch(detailKecamatan(kecamatanId));

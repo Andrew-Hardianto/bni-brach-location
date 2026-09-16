@@ -1,3 +1,4 @@
+import { useCreateKotaMutation } from '@/entities/kota/api/kotaApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,24 +6,22 @@ import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { createKota } from '@/entities/kota/model/kotaActions';
-import { listProvinsi } from '@/entities/provinsi/model/provinsiActions';
+import { useGetProvinsisQuery } from '@/entities/provinsi/api/provinsiApi';
 
 const initialState = { Kabkota_Code: '', Kabkota_Name: '', BI_Location_Code: '', Antasena_Code: '', Provinsi_Code: '', Kabkota_Flag: '', Status: '' }
 
 const KotaTambah = ({ history }) => {
     const [data, setData] = useState(initialState)
 
-    const dispatch = useDispatch();
+    const [createKotaApi, { isLoading: loading, error, isSuccess: success }] = useCreateKotaMutation();
 
-    const kotaCreate = useSelector((state: any) => state.kotaCreate);
-    const { loading, error, success } = kotaCreate;
+    
 
-    const provinsiList = useSelector((state: any) => state.provinsiList);
-    const { provinsi } = provinsiList;
+    const { data: provinsiData } = useGetProvinsisQuery({ limit: 100 });
+    const provinsi = provinsiData?.provinsi || [];
 
     useEffect(() => {
-        dispatch(listProvinsi())
+        
         if (success) {
             history.push('/location/kota')
         }

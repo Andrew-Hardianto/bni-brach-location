@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import { useSelector } from 'react-redux';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -11,10 +10,9 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
-import { CABANG_CREATE_RESET } from '@/entities/cabang/model/cabangConstants';
-import { deleteCabang, listCabang } from '@/entities/cabang/model/cabangActions';
 import ModalDetailBranch from '@/features/Cabang/ModalDetailBranch';
 import ModalEditBranch from '@/features/Cabang/ModalEditBranch';
+import { useGetCabangsQuery, useDeleteCabangMutation } from '@/entities/cabang/api/cabangApi';
 
 const Cabang = ({ history }) => {
     const { SearchBar } = Search;
@@ -23,13 +21,16 @@ const Cabang = ({ history }) => {
     const [showEdit, setShowEdit] = useState(false);
     const [cabangId, setCabangId] = useState();
 
-    const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [keyword, setKeyword] = useState('');
 
-    const { loading, error, cabang, pagination } = useSelector((state: any) => state.cabangList);
+    const { data: queryData, isLoading: loading, error } = useGetCabangsQuery({ page, limit, keyword });
+    const cabang = data?.cabang || [];
+    const pagination = data?.pagination || {};
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.cabangDelete);
+    const [deleteCabangApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteCabangMutation();
 
-    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -45,23 +46,20 @@ const Cabang = ({ history }) => {
     }, []);
 
     useEffect(() => {
-        if (userInfo) {
-            dispatch({ type: CABANG_CREATE_RESET })
-            dispatch(listCabang())
-        } else {
+        if (!userInfo) {
             history.push('/login')
         }
-    }, [dispatch, success, history])
-
+    }, [userInfo, history])
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        dispatch(listCabang(page, sizePerPage, searchText || ''));
+        setPage(page);
+        setLimit(sizePerPage);
+        setKeyword(searchText || '');
     }
 
-
-    const deletehandler = (id) => {
+    const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
-            dispatch(deleteCabang(id))
+            await deleteCabangApi(id);
         }
     }
 
@@ -89,16 +87,6 @@ const Cabang = ({ history }) => {
             formatter: (rowContent, row) => {
                 return (
                     <div className="">
-                        {/* <LinkContainer to={`/location/branch/detail/${row.ID_Branch}`}>
-                            <Button variant="info" size="sm">
-                                <i className="fas fa-info"></i>
-                            </Button>
-                        </LinkContainer>
-                        <LinkContainer to={`/location/branch/edit/${row.ID_Branch}`} className="ml-2">
-                            <Button variant="success" size="sm">
-                                <i className="fas fa-edit"></i>
-                            </Button>
-                        </LinkContainer> */}
                         <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Branch)}>
                             <i className="fas fa-info"></i>
                         </Button>
@@ -120,61 +108,59 @@ const Cabang = ({ history }) => {
     }];
 
     return (
-        <div className="home">
-            <div className="container-fluid">
-                <Container>
-                    <Card className="mt-3 shadow-lg" >
-                                    <Card.Body>
-                                        <Card.Title className="font-weight-bold text-center">Data Branch</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error}</Message>) : (
-                                            
-                                        <>
-                                        {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger" >{error}</Message>}
-                                        <ToolkitProvider
-                                            bootstrap4
-                                            keyField="ID_Cabang"
-                                            data={cabang}
-                                            columns={columns}
-                                            search
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        <Row className="mb-3">
-                                                            <Col sm={9} className="mb-2">
-                                                                <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
-                                                            </Col>
-                                                            <Col sm={3}>
-                                                                <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
-                                                            </Col>
-                                                        </Row>
-                                                        <BootstrapTable
-                                                            {...props.baseProps}
-                                                            remote={{ search: true, pagination: true }}
-                                                            onTableChange={handleTableChange}
-                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                            defaultSorted={defaultSortedBy}
-                                                            wrapperClasses="table-responsive"
-                                                            rowClasses="text-nowrap"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
-                                    
-                                        </>
-                                        )}
-                                    </Card.Body>
-                                </Card>
-                    <Modal size="lg" show={show} onHide={handleClose}>
-                        <ModalDetailBranch onClick={handleClose} cabangId={cabangId} />
-                    </Modal>
-                    <Modal size="lg" show={showEdit} onHide={handleCloseEdit}>
-                        <ModalEditBranch onClick={handleCloseEdit} cabangId={cabangId} />
-                    </Modal>
-                </Container>
-            </div>
+        <div className="container-fluid">
+            <Container>
+                <Card className="mt-3 shadow-lg" >
+                    <Card.Body>
+                        <Card.Title className="font-weight-bold text-center">Data Branch</Card.Title>
+                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
+                            
+                        <>
+                        {loadingDelete && <Loader />}
+                        {errorDelete && <Message variant="danger" >{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
+                        <ToolkitProvider
+                            bootstrap4
+                            keyField="ID_Cabang"
+                            data={cabang}
+                            columns={columns}
+                            search
+                        >
+                            {
+                                props => (
+                                    <div>
+                                        <Row className="mb-3">
+                                            <Col sm={9} className="mb-2">
+                                                <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
+                                            </Col>
+                                            <Col sm={3}>
+                                                <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
+                                            </Col>
+                                        </Row>
+                                        <BootstrapTable
+                                            {...props.baseProps}
+                                            remote={{ search: true, pagination: true }}
+                                            onTableChange={handleTableChange}
+                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
+                                            defaultSorted={defaultSortedBy}
+                                            wrapperClasses="table-responsive"
+                                            rowClasses="text-nowrap"
+                                        />
+                                    </div>
+                                )
+                            }
+                        </ToolkitProvider>
+                    
+                        </>
+                        )}
+                    </Card.Body>
+                </Card>
+                <Modal size="lg" show={show} onHide={handleClose}>
+                    <ModalDetailBranch onClick={handleClose} cabangId={cabangId} />
+                </Modal>
+                <Modal size="lg" show={showEdit} onHide={handleCloseEdit}>
+                    <ModalEditBranch onClick={handleCloseEdit} cabangId={cabangId} />
+                </Modal>
+            </Container>
         </div>
     )
 }

@@ -1,10 +1,10 @@
+import { useGetCabangByIdQuery } from '@/entities/cabang/api/cabangApi';
 import React, { useEffect } from 'react';
 import { Card, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 
-import { detailCabang } from '@/entities/cabang/model/cabangActions';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 import Apikey from '@/shared/ui/Apikey';
@@ -12,10 +12,10 @@ import Apikey from '@/shared/ui/Apikey';
 const CabangDetail = ({ match }) => {
     const cabangId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetCabangByIdQuery(cabangId, { skip: !cabangId });
+        const cabang = queryData?.cabang || queryData || {};
 
-    const cabangDetail = useSelector((state: any) => state.cabangDetail);
-    const { loading, error, cabang } = cabangDetail;
+    
 
     useEffect(() => {
         dispatch(detailCabang(cabangId));

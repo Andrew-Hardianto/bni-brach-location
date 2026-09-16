@@ -1,3 +1,4 @@
+import { useGetKelurahanByIdQuery, useUpdateKelurahanMutation } from '@/entities/kelurahan/api/kelurahanApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,9 +6,7 @@ import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailKelurahan, editKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
-import { listKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
-import { KELURAHAN_UPDATE_RESET } from '@/entities/kelurahan/model/kelurahanConstants';
+import { useGetKecamatansQuery } from '@/entities/kecamatan/api/kecamatanApi';
 
 const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '', Status: '' }
 
@@ -16,19 +15,19 @@ const KelurahanEdit = ({ history, match }) => {
 
     const [data, setData] = useState(initialState);
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetKelurahanByIdQuery(kelurahanId, { skip: !kelurahanId });
+    const kelurahan = queryData?.kelurahan || queryData || {};
+    const [updateKelurahanApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateKelurahanMutation();
 
-    const kelurahanDetail = useSelector((state: any) => state.kelurahanDetail);
-    const { kelurahan } = kelurahanDetail;
+    
 
-    const kelurahanUpdate = useSelector((state: any) => state.kelurahanUpdate);
     const { loading, error, success } = kelurahanUpdate;
 
-    const kecamatanList = useSelector((state: any) => state.kecamatanList);
-    const { kecamatan } = kecamatanList;
+    const { data: kecamatanData } = useGetKecamatansQuery({ limit: 100 });
+    const kecamatan = kecamatanData?.kecamatan || [];
 
     useEffect(() => {
-        dispatch(listKecamatan())
+        
         if (success) {
             dispatch({ type: KELURAHAN_UPDATE_RESET })
             history.push('/location/kelurahan')

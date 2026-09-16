@@ -1,14 +1,13 @@
+import { useGetProvinsisQuery, useDeleteProvinsiMutation } from '@/entities/provinsi/api/provinsiApi';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
-import { deleteProvinsi, listProvinsi } from '@/entities/provinsi/model/provinsiActions';
-import { PROVINSI_CREATE_RESET, PROVINSI_UPDATE_RESET } from '@/entities/provinsi/model/provinsiConstants';
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
@@ -22,13 +21,21 @@ const Provinsi = ({ history }) => {
     const [showEdit, setShowEdit] = useState(false);
     const [provinsiId, setProvinsiId] = useState();
 
-    const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [keyword, setKeyword] = useState('');
+    
+    const { data: queryData, isLoading: loading, error } = useGetProvinsisQuery({ page, limit, keyword });
+    const provinsi = data?.provinsi || [];
+    const pagination = data?.pagination || {};
+    
+    const [deleteProvinsiApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteProvinsiMutation();
+    
 
-    const { loading, error, provinsi, pagination } = useSelector((state: any) => state.provinsiList);
+    
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.provinsiDelete);
+    
 
-    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -44,26 +51,25 @@ const Provinsi = ({ history }) => {
     }, []);
 
     useEffect(() => {
-        if (userInfo) {
-            dispatch({ type: PROVINSI_CREATE_RESET })
-            dispatch({ type: PROVINSI_UPDATE_RESET })
-            dispatch(listProvinsi())
-        } else {
+        if (!userInfo) {
             history.push('/login')
         }
-    }, [dispatch, success, history])
+    }, [userInfo, history])
 
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        dispatch(listProvinsi(page, sizePerPage, searchText || ''));
+        setPage(page);
+        setLimit(sizePerPage);
+        setKeyword(searchText || '');
     }
 
 
-    const deletehandler = (id) => {
+    const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
-            dispatch(deleteProvinsi(id))
+            await deleteProvinsiApi(id);
         }
     }
+    
 
     const columns = [{
         dataField: 'Provinsi_Code',
@@ -123,11 +129,11 @@ const Provinsi = ({ history }) => {
                     <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="text-center font-weight-bold">DATA PROVINSI</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error}</Message>) : (
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
                                             
                                         <>
                                         {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
                                             keyField="ID_Provinsi"

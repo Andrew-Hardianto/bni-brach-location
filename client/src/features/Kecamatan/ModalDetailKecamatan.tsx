@@ -1,12 +1,12 @@
+import { useGetKecamatanByIdQuery } from '@/entities/kecamatan/api/kecamatanApi';
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { detailKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
+import { useSelector } from 'react-redux';
 
 const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKecamatanByIdQuery(kecamatanId, { skip: !kecamatanId });
+        const kecamatan = queryData?.kecamatan || queryData || {};
 
-    const { kecamatan } = useSelector((state: any) => state.kecamatanDetail);
 
     useEffect(() => {
         dispatch(detailKecamatan(kecamatanId));

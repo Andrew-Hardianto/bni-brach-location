@@ -1,3 +1,4 @@
+import { useCreateKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,8 +6,7 @@ import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { createKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
-import { listKota } from '@/entities/kota/model/kotaActions';
+import { useGetKotasQuery } from '@/entities/kota/api/kotaApi';
 
 const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabkota_Code: '', Status: '' }
 
@@ -14,16 +14,15 @@ const KecamatanTambah = ({ history }) => {
 
     const [data, setData] = useState(initialState)
 
-    const dispatch = useDispatch();
+    const [createKecamatanApi, { isLoading: loading, error, isSuccess: success }] = useCreateKecamatanMutation();
 
-    const kecamatanCreate = useSelector((state: any) => state.kecamatanCreate);
-    const { loading, error, success } = kecamatanCreate;
+    
 
-    const kotaList = useSelector((state: any) => state.kotaList);
-    const { kota } = kotaList;
+    const { data: kotaData } = useGetKotasQuery({ limit: 100 });
+    const kota = kotaData?.kota || [];
 
     useEffect(() => {
-        dispatch(listKota())
+        
         if (success) {
             history.push('/location/kecamatan')
         }

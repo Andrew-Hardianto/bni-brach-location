@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 const Topbar = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const { userInfo } = useSelector((state: any) => state.userLogin);
 
     useEffect(() => {
         const storedTheme = localStorage.getItem('theme');

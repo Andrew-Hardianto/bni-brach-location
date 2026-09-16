@@ -1,13 +1,14 @@
+import { useGetKodeposByIdQuery } from '@/entities/kodepos/api/kodeposApi';
 import React, { useEffect } from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux'
-import { detailKodepos } from '@/entities/kodepos/model/kodeposActions';
 
 const ModalDetailKodepos = ({ onClick, kodeposId }) => {
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKodeposByIdQuery(kodeposId, { skip: !kodeposId });
+        const kodepos = queryData?.kodepos || queryData || {};
 
-    const { loading, error, kodepos } = useSelector((state: any) => state.kodeposDetail);
+    
 
     useEffect(() => {
         dispatch(detailKodepos(kodeposId));

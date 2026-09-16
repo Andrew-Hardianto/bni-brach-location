@@ -1,3 +1,4 @@
+import { useCreateCabangMutation } from '@/entities/cabang/api/cabangApi';
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { Button, Card, Col, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,8 +8,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { createCabang } from '@/entities/cabang/model/cabangActions';
-import { listWilayah } from '@/entities/wilayah/model/wilayahActions';
+import { useGetWilayahsQuery } from '@/entities/wilayah/api/wilayahApi';
 import Apikey from '@/shared/ui/Apikey';
 
 const initialState = {
@@ -22,8 +22,6 @@ const initialState = {
 }
 
 const CabangTambah = ({ history }) => {
-    // const [data, setData] = useState(initialState)
-
     const [Branch_Code, setKode] = useState('');
     const [Branch_Name, setNama] = useState('');
     const [Address, setAlamat] = useState('');
@@ -35,26 +33,28 @@ const CabangTambah = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const cabangCreate = useSelector((state: any) => state.cabangCreate);
-    const { loading, error, success } = cabangCreate;
+    const [createCabang, { isLoading: loading, error, isSuccess: success }] = useCreateCabangMutation();
 
-    const wilayahList = useSelector((state: any) => state.wilayahList);
-    const { wilayah } = wilayahList;
+    const { data: wilayahData } = useGetWilayahsQuery({ limit: 100 });
+    const wilayah = wilayahData?.wilayah || [];
 
     useEffect(() => {
-        dispatch(listWilayah())
+        
+    }, [dispatch])
+
+    useEffect(() => {
         if (success) {
             history.push('/location/branch')
         }
     }, [history, success])
 
-    // const handleChange = (e) => {
-    //     setData({ ...data, [e.target.name]: e.target.value })
-    // }
-
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createCabang(Branch_Code, Branch_Name, BI_Location_Code, Address, Region_Code, Latitude, Longitude, Status))
+        try {
+            await createCabang({ Branch_Code, Branch_Name, BI_Location_Code, Address, Region_Code, Latitude, Longitude, Status }).unwrap();
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     const coords = { lat: -6.241586, lng: 106.992416 };
@@ -67,8 +67,6 @@ const CabangTambah = ({ history }) => {
             dragend() {
                 const marker = markerRef.current.getLatLng()
                 if (marker != null) {
-                    // setPosition(marker.getLatLng())
-                    // setData({ latitude: marker.lat, longitude: marker.lng })
                     setLatitude(marker.lat)
                     setLongitude(marker.lng)
                 }
@@ -80,16 +78,13 @@ const CabangTambah = ({ history }) => {
         setDraggable((d) => !d)
     }, []);
 
-    // console.log(Branch_Code)
-    // console.log(Region_Code)
-
     return (
         <div className="home">
             <Card style={{ width: '35rem' }} className="mt-3">
                 <Card.Body>
                     <Card.Title>Tambah Branch</Card.Title>
                     {loading && <Loader />}
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{typeof error === 'string' ? error : 'An error occurred'}</Message>}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="Branch_Code">
                             <Form.Label>Kode Cabang</Form.Label>
@@ -129,7 +124,7 @@ const CabangTambah = ({ history }) => {
                                 onChange={(e) => setKodeWilayah(e.target.value)}
                             >
                                 <option value="">- Pilih Wilayah -</option>
-                                {wilayah.map((data) => (
+                                {wilayah?.map((data) => (
                                     <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
                                 ))}
                             </Form.Control>
@@ -211,4 +206,4 @@ const CabangTambah = ({ history }) => {
     )
 }
 
-export default CabangTambah
+export default CabangTambah;

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 // import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -11,9 +11,9 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
-import { deleteKecamatan, listKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
-import { KECAMATAN_CREATE_RESET, KECAMATAN_UPDATE_RESET } from '@/entities/kecamatan/model/kecamatanConstants';
 import ModalDetailKecamatan from '@/features/Kecamatan/ModalDetailKecamatan';
+import { useGetKecamatansQuery, useDeleteKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
+import { useGetKecamatansQuery, useDeleteKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
 import ModalEditKecamatan from '@/features/Kecamatan/ModalEditKecamatan';
 
 const Kecamatan = ({ history }) => {
@@ -23,13 +23,21 @@ const Kecamatan = ({ history }) => {
     const [showEdit, setShowEdit] = useState(false);
     const [kecamatanId, setKecamatanId] = useState();
 
-    const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [keyword, setKeyword] = useState('');
+    
+    const { data: queryData, isLoading: loading, error } = useGetKecamatansQuery({ page, limit, keyword });
+    const kecamatan = data?.kecamatan || [];
+    const pagination = data?.pagination || {};
+    
+    const [deleteKecamatanApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteKecamatanMutation();
+    
 
-    const { loading, error, kecamatan, pagination } = useSelector((state: any) => state.kecamatanList);
+    
 
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.kecamatanDelete);
+    
 
-    const { userInfo } = useSelector((state: any) => state.userLogin)
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -45,26 +53,25 @@ const Kecamatan = ({ history }) => {
     }, []);
 
     useEffect(() => {
-        if (userInfo) {
-            dispatch({ type: KECAMATAN_CREATE_RESET })
-            dispatch({ type: KECAMATAN_UPDATE_RESET })
-            dispatch(listKecamatan())
-        } else {
+        if (!userInfo) {
             history.push('/login')
         }
-    }, [dispatch, success, history])
+    }, [userInfo, history])
 
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        dispatch(listKecamatan(page, sizePerPage, searchText || ''));
+        setPage(page);
+        setLimit(sizePerPage);
+        setKeyword(searchText || '');
     }
 
 
-    const deletehandler = (id) => {
+    const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
-            dispatch(deleteKecamatan(id))
+            await deleteKecamatanApi(id);
         }
     }
+    
 
     const columns = [{
         dataField: 'Kecamatan_Code',
@@ -120,12 +127,12 @@ const Kecamatan = ({ history }) => {
             <div className="container-fluid">
                 <Container>
                     {loading ? <Loader />
-                        : error ? <Message variant="danger">{error}</Message>
+                        : error ? <Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>
                             : (
                                 <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
                                             keyField="ID_Kecamatan"

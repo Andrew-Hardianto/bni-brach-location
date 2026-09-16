@@ -1,3 +1,4 @@
+import { useCreateKelurahanMutation } from '@/entities/kelurahan/api/kelurahanApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -5,8 +6,7 @@ import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { createKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
-import { listKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
+import { useGetKecamatansQuery } from '@/entities/kecamatan/api/kecamatanApi';
 
 const initialState = { Kelurahan_Code: '', Kelurahan_Name: '', Kecamatan_Code: '', Status: '' }
 
@@ -14,16 +14,15 @@ const KelurahanTambah = ({ history }) => {
 
     const [data, setData] = useState(initialState);
 
-    const dispatch = useDispatch();
+    const [createKelurahanApi, { isLoading: loading, error, isSuccess: success }] = useCreateKelurahanMutation();
 
-    const kelurahanCreate = useSelector((state: any) => state.kelurahanCreate);
-    const { loading, error, success } = kelurahanCreate;
+    
 
-    const kecamatanList = useSelector((state: any) => state.kecamatanList);
-    const { kecamatan } = kecamatanList;
+    const { data: kecamatanData } = useGetKecamatansQuery({ limit: 100 });
+    const kecamatan = kecamatanData?.kecamatan || [];
 
     useEffect(() => {
-        dispatch(listKecamatan())
+        
         if (success) {
             history.push('/location/kelurahan')
         }

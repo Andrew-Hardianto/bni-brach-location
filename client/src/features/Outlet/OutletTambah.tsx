@@ -1,11 +1,11 @@
+import { useCreateOutletMutation } from '@/entities/outlet/api/outletApi';
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { Button, Card, Col, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-import { listCabang } from '@/entities/cabang/model/cabangActions';
-import { createOutlet } from '@/entities/outlet/model/outletActions';
+import { useGetCabangsQuery } from '@/entities/cabang/api/cabangApi';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
@@ -34,16 +34,15 @@ const OutletTambah = ({ history }) => {
     const [Longitude, setLongitude] = useState('');
     const [Status, setStatus] = useState('');
 
-    const dispatch = useDispatch();
+    const [createOutletApi, { isLoading: loading, error, isSuccess: success }] = useCreateOutletMutation();
 
-    const outletCreate = useSelector((state: any) => state.outletCreate);
-    const { loading, error, success } = outletCreate;
+    
 
-    const cabangList = useSelector((state: any) => state.cabangList);
-    const { cabang } = cabangList;
+    const { data: cabangData } = useGetCabangsQuery({ limit: 100 });
+    const cabang = cabangData?.cabang || [];
 
     useEffect(() => {
-        dispatch(listCabang());
+        ;
         if (success) {
             history.push('/location/outlet')
         }

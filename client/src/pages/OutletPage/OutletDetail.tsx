@@ -1,21 +1,21 @@
+import { useGetOutletByIdQuery } from '@/entities/outlet/api/outletApi';
 import React, { useEffect } from 'react';
 import { Card, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { detailOutlet } from '@/entities/outlet/model/outletActions';
 import Apikey from '@/shared/ui/Apikey';
 
 const OutletDetail = ({ match }) => {
     const outletId = match.params.id;
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetOutletByIdQuery(outletId, { skip: !outletId });
+        const outlet = queryData?.outlet || queryData || {};
 
-    const outletDetail = useSelector((state: any) => state.outletDetail);
-    const { loading, error, outlet } = outletDetail;
+    
 
     useEffect(() => {
         dispatch(detailOutlet(outletId));

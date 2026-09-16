@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import ErrorResponse from '../utils/errorResponse';
 import db from '../config/db';
@@ -6,7 +7,7 @@ const Kecamatan = db.Kecamatan;
 const Op = db.Sequelize.Op;
 
 // get all data
-export const getKecamatan = asyncHandler(async (req: any, res: any) => {
+export const getKecamatan = asyncHandler(async (req: any, res: Response) => {
         const page = req.query.page ? parseInt(req.query.page as string) : null;
         const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
         
@@ -41,7 +42,7 @@ res.status(200).json({
 })
 
 // get by id data
-export const getByIdKecamatan = asyncHandler(async (req: any, res: any, next: any) => {
+export const getByIdKecamatan = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
     const kecamatan = await Kecamatan.findByPk(req.params.id, { include: ["kota", "provinsi"] });
 
     if (!kecamatan) return next(new ErrorResponse(`Kecamatan dengan id ${req.params.id} idak ditemukan`, 404));
@@ -53,7 +54,7 @@ export const getByIdKecamatan = asyncHandler(async (req: any, res: any, next: an
 })
 
 // add kecamatan
-export const createKecamatan = asyncHandler(async (req: any, res: any, next: any) => {
+export const createKecamatan = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
     const { Kecamatan_Code, Kecamatan_Name, Kabkota_Code, BI_Location_Code, Antasena_Code, Status } = req.body;
 
     const checkkode = await Kecamatan.findOne(
@@ -94,7 +95,7 @@ export const createKecamatan = asyncHandler(async (req: any, res: any, next: any
 })
 
 // update kecamatan
-export const updateKecamatan = asyncHandler(async (req: any, res: any, next: any) => {
+export const updateKecamatan = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
     const { Kecamatan_Code, Kecamatan_Name, Kabkota_Code, BI_Location_Code, Antasena_Code, Status } = req.body;
 
     if (!Kecamatan_Code || !Kecamatan_Name) return next(new ErrorResponse('Kode Kecamatan/Nama Kecamatan harus diisi!', 400));
@@ -131,7 +132,7 @@ export const updateKecamatan = asyncHandler(async (req: any, res: any, next: any
 })
 
 // delete kecamatan
-export const deleteKecamatan = asyncHandler(async (req: any, res: any, next: any) => {
+export const deleteKecamatan = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
     const id = await Kecamatan.findAll({
         where: {
             ID_Kecamatan: req.params.id

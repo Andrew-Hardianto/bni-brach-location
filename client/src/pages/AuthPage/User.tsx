@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-// import { LinkContainer } from 'react-router-bootstrap';
+import { useSelector } from 'react-redux';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -10,8 +9,7 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { USER_CREATE_RESET } from '@/entities/user/model/authConstants';
-import { deleteUser, listUsers } from '@/entities/user/model/authActions';
+import { useGetUsersQuery, useDeleteUserMutation } from '@/entities/user/api/authApi';
 import ModalDetailUser from '@/features/Auth/ModalDetailUser';
 import ModalEditUser from '@/features/Auth/ModalEditUser';
 
@@ -22,12 +20,8 @@ const User = () => {
     const [showEdit, setShowEdit] = useState(false);
     const [userId, setUserId] = useState();
 
-    const dispatch = useDispatch();
-
-    const { loading, error, users } = useSelector((state: any) => state.userList);
-    const { userInfo } = useSelector((state: any) => state.userLogin);
-
-    const { loading: loadingDelete, error: errorDelete, success } = useSelector((state: any) => state.userDelete);
+    const { data: users = [], isLoading: loading, error } = useGetUsersQuery();
+    const [deleteUser, { isLoading: loadingDelete, error: errorDelete }] = useDeleteUserMutation();
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -42,15 +36,13 @@ const User = () => {
         setShowEdit(true);
     }, []);
 
-    useEffect(() => {
-
-        dispatch({ type: USER_CREATE_RESET })
-        dispatch(listUsers())
-    }, [dispatch, success])
-
-    const deletehandler = (id) => {
+    const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
-            dispatch(deleteUser(id))
+            try {
+                await deleteUser(id).unwrap();
+            } catch (err) {
+                // error is handled by the hook
+            }
         }
     }
 
@@ -66,18 +58,8 @@ const User = () => {
                 return (
                     <div className="">
                         {
-                            userInfo.user.ID_User !== row.ID_User ? (
+                            userInfo?.user?.ID_User !== row.ID_User ? (
                                 <>
-                                    {/* <LinkContainer to={`/user/detail/${row.ID_User}`}>
-                                        <Button variant="info" size="sm">
-                                            <i className="fas fa-info"></i>
-                                        </Button>
-                                    </LinkContainer>
-                                    <LinkContainer to={`/user/edit/${row.ID_User}`} className="ml-2">
-                                        <Button variant="success" size="sm">
-                                            <i className="fas fa-edit"></i>
-                                        </Button>
-                                    </LinkContainer> */}
                                     <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_User)}>
                                         <i className="fas fa-info"></i>
                                     </Button>
@@ -90,11 +72,6 @@ const User = () => {
                                 </>
                             ) : (
                                 <>
-                                    {/* <LinkContainer to={`/user/detail/${row.ID_User}`}>
-                                        <Button variant="info" size="sm">
-                                            <i className="fas fa-info"></i>
-                                        </Button>
-                                    </LinkContainer> */}
                                     <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_User)}>
                                         <i className="fas fa-info"></i>
                                     </Button>
@@ -109,7 +86,7 @@ const User = () => {
 
     const defaultSortedBy = [{
         dataField: "Username",
-        order: "asc"  // or desc
+        order: "asc" as const // or desc
     }];
 
     return (
@@ -117,12 +94,12 @@ const User = () => {
             <div className="container-fluid">
                 <Container>
                     {loading ? <Loader />
-                        : error ? (<Message variant="danger" >{error}</Message>)
+                        : error ? (<Message variant="danger" >{(error as any)?.data?.message || 'Error'}</Message>)
                             : (
                                 <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger" >{error}</Message>}
+                                        {errorDelete && <Message variant="danger" >{(errorDelete as any)?.data?.message || 'Error deleting user'}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
                                             keyField="ID_User"

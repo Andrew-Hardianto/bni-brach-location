@@ -5,12 +5,9 @@ import { Link } from 'react-router-dom';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-import { listKelurahan, allKelurahan } from '@/entities/kelurahan/model/kelurahanActions';
-import { detailKodepos, editKodepos } from '@/entities/kodepos/model/kodeposActions';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { KODEPOS_UPDATE_RESET } from '@/entities/kodepos/model/kodeposConstants';
 
 const ModalEditKodepos = ({ onClick, kodeposId }) => {
 
@@ -24,11 +21,8 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
 
     const dispatch = useDispatch();
 
-    const { kodepos } = useSelector((state: any) => state.kodeposDetail);
 
-    const { loading, error, success } = useSelector((state: any) => state.kodeposUpdate);
 
-    const { kelurahan } = useSelector((state: any) => state.kelurahanAll);
 
     useEffect(() => {
         dispatch(allKelurahan(Kelurahan_Code))

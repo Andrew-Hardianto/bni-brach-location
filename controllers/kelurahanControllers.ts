@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import ErrorResponse from '../utils/errorResponse';
 import db from '../config/db';
@@ -7,7 +8,7 @@ const Op = db.Sequelize.Op;
 import fs from 'fs';
 
 // get all data
-export const getKelurahan = asyncHandler(async (req: any, res: any) => {
+export const getKelurahan = asyncHandler(async (req: any, res: Response) => {
         const page = req.query.page ? parseInt(req.query.page as string) : null;
         const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
         
@@ -42,7 +43,7 @@ res.status(200).json({
 })
 
 // get by id data
-export const getByIdKelurahan = asyncHandler(async (req: any, res: any) => {
+export const getByIdKelurahan = asyncHandler(async (req: any, res: Response) => {
         const kelurahan = await Kelurahan.findByPk(req.params.id, { include: ["kota", "provinsi", "kecamatan"] });
 
         res.status(200).json({
@@ -52,7 +53,7 @@ export const getByIdKelurahan = asyncHandler(async (req: any, res: any) => {
 })
 
 // add Kelurahan
-export const createKelurahan = asyncHandler(async (req: any, res: any, next: any) => {
+export const createKelurahan = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Kelurahan_Code, Kelurahan_Name, Kecamatan_Code, Status } = req.body;
 
         const checkkode = await Kelurahan.findOne(
@@ -97,7 +98,7 @@ export const createKelurahan = asyncHandler(async (req: any, res: any, next: any
 })
 
 // update Kelurahan
-export const updateKelurahan = asyncHandler(async (req: any, res: any, next: any) => {
+export const updateKelurahan = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Kelurahan_Code, Kelurahan_Name, Kecamatan_Code, Status } = req.body;
 
         if (!Kelurahan_Code || !Kelurahan_Name) return next(new ErrorResponse('Kode Kelurahan/Nama Kelurahan harus diisi!', 400));
@@ -131,7 +132,7 @@ export const updateKelurahan = asyncHandler(async (req: any, res: any, next: any
 })
 
 // delete Kelurahan
-export const deleteKelurahan = asyncHandler(async (req: any, res: any, next: any) => {
+export const deleteKelurahan = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const id = await Kelurahan.findAll({
             where: {
                 ID_Kelurahan: req.params.id
@@ -168,7 +169,7 @@ const getPagingData = (data, page, limit) => {
 };
 
 // get all data
-export const getListKelurahan = asyncHandler(async (req: any, res: any) => {
+export const getListKelurahan = asyncHandler(async (req: any, res: Response) => {
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
         const Kelurahan_Name = req.query.name

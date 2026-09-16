@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import ErrorResponse from '../utils/errorResponse';
 import db from '../config/db';
@@ -5,7 +6,7 @@ const Kota = db.Kota;
 const Op = db.Sequelize.Op;
 
 // get all kota
-export const getKota = asyncHandler(async (req: any, res: any) => {
+export const getKota = asyncHandler(async (req: any, res: Response) => {
         const page = req.query.page ? parseInt(req.query.page as string) : null;
         const limit = req.query.limit ? parseInt(req.query.limit as string) : null;
         
@@ -40,7 +41,7 @@ res.status(200).json({
 })
 
 // get kota by id
-export const getByIdKota = asyncHandler(async (req: any, res: any, next: any) => {
+export const getByIdKota = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const kota = await Kota.findByPk(req.params.id, { include: ["provinsi"] });
 
         if (!kota) return next(new ErrorResponse(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
@@ -52,7 +53,7 @@ export const getByIdKota = asyncHandler(async (req: any, res: any, next: any) =>
 })
 
 // add kota
-export const addKota = asyncHandler(async (req: any, res: any, next: any) => {
+export const addKota = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Kabkota_Code, Kabkota_Name, Kabkota_Flag } = req.body;
 
         const checkkode = await Kota.findOne(
@@ -76,7 +77,7 @@ export const addKota = asyncHandler(async (req: any, res: any, next: any) => {
 })
 
 // update kota 
-export const updateKota = asyncHandler(async (req: any, res: any, next: any) => {
+export const updateKota = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { Kabkota_Code, Kabkota_Name } = req.body;
 
         if (!Kabkota_Code || !Kabkota_Name) return next(new ErrorResponse('Kode Kota/Nama Kota harus diisi!', 400));
@@ -94,7 +95,7 @@ export const updateKota = asyncHandler(async (req: any, res: any, next: any) => 
 })
 
 // delete kota
-export const deleteKota = asyncHandler(async (req: any, res: any, next: any) => {
+export const deleteKota = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const kota = await Kota.findByPk(req.params.id);
 
         if (!kota) return next(new ErrorResponse(`Kota dengan id ${req.params.id} idak ditemukan`, 404));
@@ -112,7 +113,7 @@ export const deleteKota = asyncHandler(async (req: any, res: any, next: any) => 
 })
 
 // kota
-export const getListKota = asyncHandler(async (req: any, res: any) => {
+export const getListKota = asyncHandler(async (req: any, res: Response) => {
         const kota = await Kota.findAll();
 
         res.status(200).json({

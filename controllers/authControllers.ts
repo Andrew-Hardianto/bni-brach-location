@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../middleware/asyncHandler';
 import ErrorResponse from '../utils/errorResponse';
 import db from '../config/db';
@@ -6,7 +7,7 @@ const Op = db.Sequelize.Op;
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/generateToken';
 // login
-export const login = asyncHandler(async (req: any, res: any, next: any) => {
+export const login = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { username, password } = req.body
 
         if (!username || !password) return next(new ErrorResponse('Mohon isi semua kolom', 400))
@@ -30,7 +31,7 @@ export const login = asyncHandler(async (req: any, res: any, next: any) => {
 })
 
 // current user
-export const getMe = asyncHandler(async (req: any, res: any) => {
+export const getMe = asyncHandler(async (req: any, res: Response) => {
         const user = await User.findByPk(req.user.ID_User)
 
         res.status(200).json(user)
@@ -38,7 +39,7 @@ export const getMe = asyncHandler(async (req: any, res: any) => {
 })
 
 // create user
-export const createUser = asyncHandler(async (req: any, res: any, next: any) => {
+export const createUser = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { username, password } = req.body
 
         if (!username || !password) return next(new ErrorResponse('Mohon isi semua kolom', 400))
@@ -60,7 +61,7 @@ export const createUser = asyncHandler(async (req: any, res: any, next: any) => 
 })
 
 // get All user
-export const getAllUser = asyncHandler(async (req: any, res: any, next: any) => {
+export const getAllUser = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const user = await User.findAll()
 
         res.status(200).json({
@@ -71,7 +72,7 @@ export const getAllUser = asyncHandler(async (req: any, res: any, next: any) => 
 })
 
 // get user
-export const getUser = asyncHandler(async (req: any, res: any, next: any) => {
+export const getUser = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const user = await User.findByPk(req.params.id)
 
         res.status(200).json({
@@ -82,7 +83,7 @@ export const getUser = asyncHandler(async (req: any, res: any, next: any) => {
 })
 
 // get user
-// exports.updateUser = asyncHandler(async (req: any, res: any, next: any) => {
+// exports.updateUser = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
 //     try {
 
 //         const user = await User.update(req.body, {
@@ -99,7 +100,7 @@ export const getUser = asyncHandler(async (req: any, res: any, next: any) => {
 //})
 
 // get update user
-export const updateUser = asyncHandler(async (req: any, res: any, next: any) => {
+export const updateUser = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         const { username, password } = req.body
 
         if (password) {
@@ -136,7 +137,7 @@ export const updateUser = asyncHandler(async (req: any, res: any, next: any) => 
 })
 
 // get delete user
-export const deleteUser = asyncHandler(async (req: any, res: any, next: any) => {
+export const deleteUser = asyncHandler(async (req: any, res: Response, next: NextFunction) => {
         await User.destroy({
             where: {
                 ID_User: req.params.id

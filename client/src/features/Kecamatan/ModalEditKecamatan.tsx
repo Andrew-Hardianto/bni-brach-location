@@ -3,11 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
-import { KOTA_UPDATE_RESET } from '@/entities/kota/model/kotaConstants';
-import { detailKota, editKota, listKota } from '@/entities/kota/model/kotaActions';
-import { listProvinsi } from '@/entities/provinsi/model/provinsiActions';
-import { KECAMATAN_UPDATE_RESET } from '@/entities/kecamatan/model/kecamatanConstants';
-import { detailKecamatan, editKecamatan } from '@/entities/kecamatan/model/kecamatanActions';
+import { useGetProvinsisQuery } from '@/entities/provinsi/api/provinsiApi';
 
 const initialState = { Kecamatan_Code: '', Kecamatan_Name: '', Kabkota_Code: '', Status: '' }
 
@@ -17,14 +13,11 @@ const ModalEditKecamatan = ({ onClick, kecamatanId }) => {
 
     const dispatch = useDispatch();
 
-    const { kecamatan } = useSelector((state: any) => state.kecamatanDetail);
 
-    const { loading, error, success } = useSelector((state: any) => state.kecamatanUpdate);
 
-    const { kota } = useSelector((state: any) => state.kotaList);
 
     useEffect(() => {
-        dispatch(listKota())
+        
         if (success) {
             dispatch({ type: KECAMATAN_UPDATE_RESET })
             window.location.reload()
