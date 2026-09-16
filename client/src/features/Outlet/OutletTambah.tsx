@@ -1,7 +1,6 @@
 import { useCreateOutletMutation } from '@/entities/outlet/api/outletApi';
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { Button, Card, Col, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
@@ -11,21 +10,7 @@ import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 import Apikey from '@/shared/ui/Apikey';
 
-const initialState = {
-    kode: '',
-    nama: '',
-    alamat: '',
-    namaCabang: '',
-    kodeCabang: '',
-    latitude: '',
-    longitude: '',
-    biLocationCode: '',
-    kodepos: '',
-}
-
 const OutletTambah = ({ history }) => {
-    // const [data, setData] = useState(initialState)
-
     const [Outlet_Code, setKode] = useState('');
     const [Outlet_Name, setNama] = useState('');
     const [Address, setAlamat] = useState('');
@@ -36,25 +21,18 @@ const OutletTambah = ({ history }) => {
 
     const [createOutletApi, { isLoading: loading, error, isSuccess: success }] = useCreateOutletMutation();
 
-    
-
     const { data: cabangData } = useGetCabangsQuery({ limit: 100 });
     const cabang = cabangData?.cabang || [];
 
     useEffect(() => {
-        ;
         if (success) {
             history.push('/location/outlet')
         }
     }, [history, success])
 
-    // const handleChange = (e) => {
-    //     setData({ ...data, [e.target.name]: e.target.value })
-    // }
-
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createOutlet(Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude, Status))
+        await createOutletApi({ Outlet_Code, Outlet_Name, Address, Branch_Code, Latitude, Longitude, Status });
     }
 
     const coords = { lat: -6.241586, lng: 106.992416 };
@@ -67,8 +45,7 @@ const OutletTambah = ({ history }) => {
             dragend() {
                 const marker = markerRef.current.getLatLng()
                 if (marker != null) {
-                    // setPosition(marker.getLatLng())
-                    // setData({ latitude: marker.lat, longitude: marker.lng })
+                    setPosition(marker)
                     setLatitude(marker.lat);
                     setLongitude(marker.lng);
                 }
@@ -86,7 +63,7 @@ const OutletTambah = ({ history }) => {
                 <Card.Body>
                     <Card.Title>Tambah Outlet</Card.Title>
                     {loading && <Loader />}
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{(error as any)?.data?.message || 'Gagal menambahkan'}</Message>}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="Outlet_Code">
                             <Form.Label>Kode Outlet</Form.Label>
@@ -128,9 +105,8 @@ const OutletTambah = ({ history }) => {
                             >
                                 <option value="">- Pilih Cabang -</option>
                                 {cabang
-                                    // .filter(cab => cab.Branch_Code.toString().includes(Outlet_Code.toString().substring(0, 4)))
-                                    .map((data) => (
-                                        <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
+                                    .map((cab) => (
+                                        <option key={cab.ID_Branch} value={cab.Branch_Code || ''} >{cab.Branch_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>
@@ -141,6 +117,7 @@ const OutletTambah = ({ history }) => {
                                     type="text"
                                     placeholder="Masukkan Latitude..."
                                     name="latitude"
+                                    value={Latitude || ''}
                                     onChange={(e) => setLatitude(e.target.value)}
                                 />
                             </Form.Group>
@@ -150,6 +127,7 @@ const OutletTambah = ({ history }) => {
                                     type="text"
                                     placeholder="Masukkan Longitude..."
                                     name="longitude"
+                                    value={Longitude || ''}
                                     onChange={(e) => setLongitude(e.target.value)}
                                 />
                             </Form.Group>
@@ -160,7 +138,7 @@ const OutletTambah = ({ history }) => {
                                 as="select"
                                 custom
                                 name="Status"
-                                value={Status}
+                                value={Status || ''}
                                 onChange={(e) => setStatus(e.target.value)}
                             >
                                 <option value="">- Pilih Status -</option>
@@ -170,7 +148,7 @@ const OutletTambah = ({ history }) => {
                         </Form.Group>
                         <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
-                                attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url={Apikey.maptiler.url}
                             />
                             <Marker

@@ -1,7 +1,6 @@
 import { useGetKecamatanByIdQuery, useUpdateKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -19,29 +18,26 @@ const KecamatanEdit = ({ match, history }) => {
     const kecamatan = queryData?.kecamatan || queryData || {};
     const [updateKecamatanApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateKecamatanMutation();
 
-    
-
-    const { loading, error, success } = kecamatanUpdate;
-
     const { data: kotaData } = useGetKotasQuery({ limit: 100 });
     const kota = kotaData?.kota || [];
 
     useEffect(() => {
-        
-        if (success) {
-            dispatch({ type: KECAMATAN_UPDATE_RESET })
+        if (successUpdate) {
             history.push('/location/kecamatan')
         } else {
-            if (!kecamatan?.kecamatan?.Kecamatan_Name || kecamatan?.kecamatan?.ID_Kecamatan !== kecamatanId) {
-                dispatch(detailKecamatan(kecamatanId));
+            if (kecamatan) {
+                setData({
+                    Kecamatan_Code: kecamatan?.Kecamatan_Code || '',
+                    Kecamatan_Name: kecamatan?.Kecamatan_Name || '',
+                    Kabupaten_Code: kecamatan?.Kabupaten_Code || kecamatan?.Kabkota_Code || ''
+                })
             }
-            setData(kecamatan?.kecamatan)
         }
-    }, [dispatch, history, kecamatanId, kecamatan.kecamatan?.ID_Kecamatan, success])
+    }, [history, kecamatan, successUpdate])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(editKecamatan({ ...data }))
+        await updateKecamatanApi({ id: kecamatanId, body: { ...data } });
     }
 
     return (
@@ -49,8 +45,8 @@ const KecamatanEdit = ({ match, history }) => {
             <Card style={{ width: '25rem' }} className="mt-3" >
                 <Card.Body>
                     <Card.Title>Edit Kecamatan</Card.Title>
-                    {loading && <Loader />}
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {(loadingDetail || loadingUpdate) && <Loader />}
+                    {(errorDetail || errorUpdate) && <Message variant="danger" >{(errorDetail as any)?.data?.message || (errorUpdate as any)?.data?.message || 'Terjadi kesalahan'}</Message>}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="Kecamatan_Code">
                             <Form.Label>Kode Kecamatan</Form.Label>
@@ -58,7 +54,7 @@ const KecamatanEdit = ({ match, history }) => {
                                 type="text"
                                 placeholder="Masukkan Kode Kecamatan..."
                                 name="Kecamatan_Code"
-                                value={data?.Kecamatan_Code}
+                                value={data?.Kecamatan_Code || ''}
                                 onChange={(e) => setData({ ...data, Kecamatan_Code: e.target.value })}
                             />
                         </Form.Group>
@@ -69,7 +65,7 @@ const KecamatanEdit = ({ match, history }) => {
                                 type="text"
                                 placeholder="Masukkan Nama Kecamatan..."
                                 name="Kecamatan_Name"
-                                value={data?.Kecamatan_Name}
+                                value={data?.Kecamatan_Name || ''}
                                 onChange={(e) => setData({ ...data, Kecamatan_Name: e.target.value })}
                             />
                         </Form.Group>
@@ -79,13 +75,13 @@ const KecamatanEdit = ({ match, history }) => {
                                 as="select"
                                 custom
                                 name="Kabupaten_Code"
-                                value={data?.Kabupaten_Code}
+                                value={data?.Kabupaten_Code || ''}
                                 onChange={(e) => setData({ ...data, Kabupaten_Code: e.target.value })}
                             >
                                 <option value="">- Pilih Kota -</option>
                                 {kota?.filter((kt) => kt.Kabupaten_Code.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
                                     .map((data) => (
-                                        <option key={data.ID_Kabupaten} value={data.Kabupaten_Code} >{data.Kabupaten_Name}</option>
+                                        <option key={data.ID_Kabupaten} value={data.Kabupaten_Code || ''} >{data.Kabupaten_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>

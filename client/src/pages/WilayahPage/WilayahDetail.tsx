@@ -1,8 +1,7 @@
 import { useGetWilayahByIdQuery } from '@/entities/wilayah/api/wilayahApi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
@@ -11,18 +10,12 @@ const WilayahDetail = ({ match }) => {
     const wilayahId = match.params.id;
 
     const { data: queryData, isLoading: loading, error } = useGetWilayahByIdQuery(wilayahId, { skip: !wilayahId });
-        const wilayah = queryData?.wilayah || queryData || {};
-
-    
-
-    useEffect(() => {
-        dispatch(detailWilayah(wilayahId));
-    }, [dispatch, wilayahId,])
+    const wilayah = queryData?.wilayah || queryData || {};
 
     return (
         <div className="home">
             {loading ? <Loader />
-                : error ? (<Message variant="danger" >{error}</Message>)
+                : error ? (<Message variant="danger" >{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>)
                     : (
                         <Card style={{ width: '30rem' }} className="shadow">
                             <Card.Body>
@@ -37,7 +30,7 @@ const WilayahDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {wilayah.wilayah?.Region_Code}
+                                                    : {wilayah?.Region_Code}
                                                 </Card.Text>
                                             </td>
                                         </tr>
@@ -49,7 +42,7 @@ const WilayahDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {wilayah.wilayah?.Region_Subname}
+                                                    : {wilayah?.Region_Subname}
                                                 </Card.Text>
                                             </td>
                                         </tr>
@@ -61,7 +54,7 @@ const WilayahDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {wilayah.wilayah?.Region_Name}
+                                                    : {wilayah?.Region_Name}
                                                 </Card.Text>
                                             </td>
                                         </tr>

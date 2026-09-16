@@ -1,7 +1,6 @@
 import { useCreateWilayahMutation } from '@/entities/wilayah/api/wilayahApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -14,8 +13,6 @@ const WilayahTambah = ({ history }) => {
 
     const [createWilayahApi, { isLoading: loading, error, isSuccess: success }] = useCreateWilayahMutation();
 
-    
-
     useEffect(() => {
         if (success) {
             history.push('/location/region')
@@ -26,9 +23,9 @@ const WilayahTambah = ({ history }) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createWilayah(data))
+        await createWilayahApi(data);
     }
 
     return (
@@ -37,7 +34,7 @@ const WilayahTambah = ({ history }) => {
                 <Card.Body>
                     <Card.Title>Tambah Wilayah</Card.Title>
                     {loading && <Loader />}
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="Region_Code">
                             <Form.Label>Kode Wilayah</Form.Label>

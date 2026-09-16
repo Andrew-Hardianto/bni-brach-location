@@ -1,7 +1,6 @@
 import { useCreateProvinsiMutation } from '@/entities/provinsi/api/provinsiApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -23,9 +22,9 @@ const ProvinsiTambah = ({ history }) => {
         }
     }, [history, success])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createProvinsi(kode, nama, biLocationCode, Status))
+        await createProvinsiApi({ Provinsi_Code: kode, Provinsi_Name: nama, BI_Location_Code: biLocationCode, Status: Status })
     }
 
     return (
@@ -33,14 +32,14 @@ const ProvinsiTambah = ({ history }) => {
             <Card style={{ width: '25rem' }} className="mt-3" >
                 <Card.Body>
                     <Card.Title>Tambah Provinsi</Card.Title>
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{(error as any)?.data?.message || 'Gagal menambah data'}</Message>}
                     {loading && <Loader />}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="id">
                             <Form.Label>Kode Provinsi</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={kode}
+                                value={kode || ''}
                                 onChange={(e) => setKode(e.target.value)}
                             />
                         </Form.Group>
@@ -49,7 +48,7 @@ const ProvinsiTambah = ({ history }) => {
                             <Form.Label>Nama Provinsi</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={nama}
+                                value={nama || ''}
                                 onChange={(e) => setNama(e.target.value)}
                             />
                         </Form.Group>
@@ -58,7 +57,7 @@ const ProvinsiTambah = ({ history }) => {
                             <Form.Control
                                 type="text"
                                 name="biLocationCode"
-                                value={biLocationCode}
+                                value={biLocationCode || ''}
                                 onChange={(e) => setBiLocationCode(e.target.value)}
                             />
                         </Form.Group>
@@ -68,7 +67,7 @@ const ProvinsiTambah = ({ history }) => {
                                 as="select"
                                 custom
                                 name="Status"
-                                value={Status}
+                                value={Status || ''}
                                 onChange={(e) => setStatus(e.target.value)}
                             >
                                 <option value="">- Pilih Status -</option>

@@ -1,74 +1,39 @@
 import { useGetKodeposByIdQuery, useUpdateKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-
+import { useGetKelurahansQuery } from '@/entities/kelurahan/api/kelurahanApi';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
-const initialState = { Kodepos_Code: '', Kelurahan_Code: '' }
 
 const KodeposEdit = ({ history, match }) => {
     const kodeposId = match.params.id;
 
-    const [data, setData] = useState(initialState);
     const [Kodepos_Code, setKodeposCode] = useState('');
-    const [Kelurahan_Code, setKelurahanCode] = useState('');
-    const [Code, setCode] = useState();
+    const [Kelurahan_Code, setKelurahanCode] = useState<any>([]);
     const [nama, setNama] = useState('');
-    const [display, setDisplay] = useState(false);
-    const wrapperRef = useRef(null)
 
     const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetKodeposByIdQuery(kodeposId, { skip: !kodeposId });
     const kodepos = queryData?.kodepos || queryData || {};
     const [updateKodeposApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateKodeposMutation();
 
-    
-
-    const { loading, error, success } = kodeposUpdate;
-
-    const { kelurahan } = kelurahanAll;
+    const { data: kelurahanData } = useGetKelurahansQuery({ limit: 1000 });
+    const kelurahan = kelurahanData?.kelurahan || [];
 
     useEffect(() => {
-        // 
-        dispatch(allKelurahan(Kelurahan_Code))
-        if (success) {
-            dispatch({ type: KODEPOS_UPDATE_RESET })
+        if (successUpdate) {
             history.push('/location/kodepos')
-        } else {
-            if (kodepos?.kodepos?.ID_Kodepos !== kodeposId) {
-                dispatch(detailKodepos(kodeposId));
-            }
-            // setData(kodepos?.kodepos)
-            setKelurahanCode(kodepos?.kodepos?.Kelurahan_Code)
-            setNama(kodepos?.kodepos?.kelurahan?.Kelurahan_Name)
-            setCode(kodepos?.kodepos?.Kelurahan_Code)
-            setKodeposCode(kodepos?.kodepos?.Kodepos_Code)
+        } else if (kodepos?.ID_Kodepos) {
+            setKelurahanCode([{ Kelurahan_Code: kodepos?.Kelurahan_Code, Kelurahan_Name: kodepos?.kelurahan?.Kelurahan_Name }]);
+            setNama(kodepos?.kelurahan?.Kelurahan_Name || '')
+            setKodeposCode(kodepos?.Kodepos_Code || '')
         }
-    }, [dispatch, history, kodeposId, kodepos?.kodepos?.ID_Kodepos, success]);
+    }, [history, kodepos, successUpdate]);
 
-    // useEffect(() => {
-    //     window.addEventListener("mousedown", handleClickOutside);
-    //     return () => {
-    //         window.removeEventListener("mousedown", handleClickOutside);
-    //     };
-    // });
-
-    // const handleClickOutside = event => {
-    //     const { current: wrap } = wrapperRef;
-    //     if (wrap && !wrap.contains(event.target)) {
-    //         setDisplay(false);
-    //     }
-    // };
-
-    // const updatePokeDex = val => {
-    //     setKelurahanCode(val);
-    //     setDisplay(false);
-    // };
 
     function filterBy(option, state) {
         if (state.selected.length) {
@@ -77,17 +42,10 @@ const KodeposEdit = ({ history, match }) => {
         return option?.Kelurahan_Name.toLowerCase().indexOf(state.text.toLowerCase()) > -1;
     }
 
-    // const handleChange = (e) => {
-    //     setData({ ...data, [e.target.name]: e.target.value })
-    // }
-
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        if (Kelurahan_Code[0]?.Kelurahan_Code == undefined) {
-            dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code }))
-        }
-        dispatch(editKodepos({ ID_Kodepos: kodeposId, Kodepos_Code, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code }))
-        console.log(Kelurahan_Code)
+        const kelCode = Kelurahan_Code[0]?.Kelurahan_Code || Kelurahan_Code;
+        await updateKodeposApi({ id: kodeposId, body: { Kodepos_Code, Kelurahan_Code: kelCode } });
     }
 
     // console.log(Kelurahan_Code)
@@ -121,7 +79,7 @@ const KodeposEdit = ({ history, match }) => {
                                 type="text"
                                 placeholder="Masukkan Kode Pos..."
                                 name="Kodepos_Code"
-                                value={Kodepos_Code}
+                                value={Kodepos_Code || ''}
                                 onChange={(e) => setKodeposCode(e.target.value)}
                             />
                         </Form.Group>
@@ -132,7 +90,7 @@ const KodeposEdit = ({ history, match }) => {
                                 onClick={() => setDisplay(!display)}
                                 placeholder="Masukkan Kode Kelurahan..."
                                 name="Kelurahan_Code"
-                                value={Kelurahan_Code}
+                                value={Kelurahan_Code || ''}
                                 onChange={(e) => setKelurahanCode(e.target.value)}
                                 autoComplete="off"
                             /> */}
@@ -169,7 +127,7 @@ const KodeposEdit = ({ history, match }) => {
                             {/* <AsyncPaginate
                                 options={initialOptions}
                                 loadOptions={loadOptions}
-                                value={Kelurahan_Code}
+                                value={Kelurahan_Code || ''}
                                 onChange={(e) => setKelurahanCode(e)}
                                 getOptionValue={(option) => option.Kelurahan_Code}
                                 getOptionLabel={(option) => option.Kelurahan_Name}

@@ -1,18 +1,11 @@
 import { useGetKodeposByIdQuery } from '@/entities/kodepos/api/kodeposApi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux'
 
 const ModalDetailKodepos = ({ onClick, kodeposId }) => {
 
-    const { data: queryData, isLoading: loading, error } = useGetKodeposByIdQuery(kodeposId, { skip: !kodeposId });
-        const kodepos = queryData?.kodepos || queryData || {};
-
-    
-
-    useEffect(() => {
-        dispatch(detailKodepos(kodeposId));
-    }, [dispatch, kodeposId])
+    const { data: queryData } = useGetKodeposByIdQuery(kodeposId, { skip: !kodeposId });
+    const kodepos = queryData?.kodepos || queryData || {};
 
     return (
         <div>
@@ -30,7 +23,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kodepos?.kodepos?.Postcode}
+                                    : {kodepos?.Postcode}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -42,7 +35,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kodepos?.kodepos?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                    : {kodepos?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -54,7 +47,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kodepos?.kodepos?.Kelurahan_Code}
+                                    : {kodepos?.Kelurahan_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -66,7 +59,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kodepos?.kodepos?.kelurahan?.Kelurahan_Name}
+                                    : {kodepos?.kelurahan?.Kelurahan_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -78,7 +71,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kodepos?.kodepos?.Kecamatan_Code}
+                                    : {kodepos?.Kecamatan_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -90,7 +83,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kodepos?.kodepos?.kecamatan?.Kecamatan_Name}
+                                    : {kodepos?.kecamatan?.Kecamatan_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -102,7 +95,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kodepos?.kodepos?.Kabkota_Code}
+                                    : {kodepos?.Kabkota_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -114,7 +107,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kodepos?.kodepos?.kota?.Kabkota_Name}
+                                    : {kodepos?.kota?.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -126,7 +119,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kodepos?.kodepos?.Provinsi_Code}
+                                    : {kodepos?.Provinsi_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -138,7 +131,7 @@ const ModalDetailKodepos = ({ onClick, kodeposId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kodepos?.kodepos?.provinsi?.Provinsi_Name}
+                                    : {kodepos?.provinsi?.Provinsi_Name}
                                 </Card.Text>
                             </td>
                         </tr>

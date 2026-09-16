@@ -1,7 +1,6 @@
 import { useCreateKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
@@ -16,19 +15,16 @@ const initialState = { Postcode: '', Kelurahan_Code: '' }
 const KodeposTambah = ({ history }) => {
     const [data, setData] = useState(initialState);
     const [Postcode, setKodeposCode] = useState('');
-    const [Kelurahan_Code, setKelurahanCode] = useState('');
+    const [Kelurahan_Code, setKelurahanCode] = useState<any>([]);
     const [Status, setStatus] = useState('');
 
 
     const [createKodeposApi, { isLoading: loading, error, isSuccess: success }] = useCreateKodeposMutation();
 
-    
-
-    const { data: kelurahanData } = useGetKelurahansQuery({ limit: 100 });
+    const { data: kelurahanData } = useGetKelurahansQuery({ limit: 1000 });
     const kelurahan = kelurahanData?.kelurahan || [];
 
     useEffect(() => {
-        
         if (success) {
             history.push('/location/kodepos')
         }
@@ -45,13 +41,10 @@ const KodeposTambah = ({ history }) => {
         return option?.Kelurahan_Name.toLowerCase().indexOf(state.text.toLowerCase()) > -1;
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        // dispatch(createKodepos(data))
-        dispatch(createKodepos({ Postcode, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code, Status }))
-        // console.log(Postcode)
+        await createKodeposApi({ Postcode, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code, Status });
     }
-
 
     return (
         <div className="home">
@@ -80,7 +73,7 @@ const KodeposTambah = ({ history }) => {
                             >
                                 <option value="">- Pilih Kelurahan -</option>
                                 {kelurahan.map((data) => (
-                                    <option key={data.ID_Kelurahan} value={data.Kelurahan_Code} >{data.Kelurahan_Name}</option>
+                                    <option key={data.ID_Kelurahan} value={data.Kelurahan_Code || ''} >{data.Kelurahan_Name}</option>
                                 ))}
                             </Form.Control> */}
                             <Typeahead

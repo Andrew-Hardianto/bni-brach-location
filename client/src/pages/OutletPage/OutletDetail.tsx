@@ -1,7 +1,6 @@
 import { useGetOutletByIdQuery } from '@/entities/outlet/api/outletApi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card, Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 
@@ -17,12 +16,10 @@ const OutletDetail = ({ match }) => {
 
     
 
-    useEffect(() => {
-        dispatch(detailOutlet(outletId));
-    }, [dispatch, outletId])
+    
 
     // const coords = { lat: outlet.outlet?.latitude, lng: outlet.outlet?.longitude };
-    const coords = [isNaN(outlet.outlet?.Latitude) ? -6.241586 : outlet?.outlet?.Latitude, isNaN(outlet.outlet?.Longitude) ? 106.992416 : outlet?.outlet?.Longitude];
+    const coords = [isNaN(outlet.outlet?.Latitude) ? -6.241586 : outlet?.outlet?.Latitude, isNaN(outlet.outlet?.Longitude) ? 106.992416 : outlet?.outlet?.Longitude] as [number, number];
 
     return (
         <div className="home">
@@ -71,7 +68,7 @@ const OutletDetail = ({ match }) => {
                                 </Table>
                                 <MapContainer style={{ width: "600px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                                     <TileLayer
-                                        attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                         url={Apikey.maptiler.url}
                                     />
                                     <Marker

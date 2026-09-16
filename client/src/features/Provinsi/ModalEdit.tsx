@@ -1,36 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useGetProvinsiByIdQuery, useUpdateProvinsiMutation } from '@/entities/provinsi/api/provinsiApi';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const initialState = { Provinsi_Code: '', Provinsi_Name: '', BI_Location_Code: '', Status: '' }
 
 const ModalEdit = ({ onClick, provinsiId }) => {
-    const dispatch = useDispatch();
-    const history = useHistory()
-
     const [data, setData] = useState(initialState);
 
-
+    const { data: queryData, isLoading: loadingDetail } = useGetProvinsiByIdQuery(provinsiId, { skip: !provinsiId });
+    const provinsi = queryData?.provinsi || queryData || {};
+    const [updateProvinsiApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateProvinsiMutation();
 
     useEffect(() => {
-        if (success) {
-            dispatch({ type: PROVINSI_UPDATE_RESET })
+        if (successUpdate) {
             window.location.reload()
             onClick()
         } else {
-            if (!provinsi?.Provinsi_Name || provinsi?.ID_Provinsi !== provinsiId) {
-                dispatch(detailProvinsi(provinsiId));
+            if (provinsi && provinsi.ID_Provinsi === provinsiId) {
+                setData(provinsi)
             }
-            setData(provinsi)
         }
-    }, [dispatch, history, provinsiId, provinsi.ID_Provinsi, success])
+    }, [provinsiId, provinsi, successUpdate, onClick])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(editProvinsi({ ...data }))
+        await updateProvinsiApi({ id: provinsiId, body: { ...data } });
     }
 
     return (
@@ -39,14 +35,14 @@ const ModalEdit = ({ onClick, provinsiId }) => {
                 <Modal.Title>Data Provinsi</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {error && <Message variant="danger" >{error}</Message>}
-                {loading && <Loader />}
+                {errorUpdate && <Message variant="danger" >{(errorUpdate as any)?.data?.message || 'Gagal mengubah data'}</Message>}
+                {(loadingDetail || loadingUpdate) && <Loader />}
                 <Form>
                     <Form.Group controlId="id">
                         <Form.Label>Kode Provinsi</Form.Label>
                         <Form.Control
                             type="text"
-                            value={data?.Provinsi_Code}
+                            value={data?.Provinsi_Code || ''}
                             onChange={(e) => setData({ ...data, Provinsi_Code: e.target.value })}
                         />
                     </Form.Group>
@@ -56,7 +52,7 @@ const ModalEdit = ({ onClick, provinsiId }) => {
                         <Form.Control
                             type="text"
                             name="nama"
-                            value={data?.Provinsi_Name}
+                            value={data?.Provinsi_Name || ''}
                             onChange={(e) => setData({ ...data, Provinsi_Name: e.target.value })}
                         />
                     </Form.Group>
@@ -65,7 +61,7 @@ const ModalEdit = ({ onClick, provinsiId }) => {
                         <Form.Control
                             type="text"
                             name="BI_Location_Code"
-                            value={data?.BI_Location_Code}
+                            value={data?.BI_Location_Code || ''}
                             onChange={(e) => setData({ ...data, BI_Location_Code: e.target.value })}
                         />
                     </Form.Group>
@@ -75,10 +71,10 @@ const ModalEdit = ({ onClick, provinsiId }) => {
                             as="select"
                             custom
                             name="Status"
-                            value={data?.Status}
+                            value={data?.Status || ''}
                             onChange={(e) => setData({ ...data, Status: e.target.value })}
                         >
-                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value={data?.Status || ''}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
                             <option value="Y" >Aktif</option>
                             <option value="N" >Tidak Aktif</option>
                         </Form.Control>

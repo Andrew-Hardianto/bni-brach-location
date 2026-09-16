@@ -13,7 +13,6 @@ import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import ModalDetailKelurahan from '@/features/Kelurahan/ModalDetailKelurahan';
 import { useGetKelurahansQuery, useDeleteKelurahanMutation } from '@/entities/kelurahan/api/kelurahanApi';
-import { useGetKelurahansQuery, useDeleteKelurahanMutation } from '@/entities/kelurahan/api/kelurahanApi';
 import ModalEditKelurahan from '@/features/Kelurahan/ModalEditKelurahan';
 
 const Kelurahan = ({ history }) => {
@@ -27,9 +26,12 @@ const Kelurahan = ({ history }) => {
     const [limit, setLimit] = useState(10);
     const [keyword, setKeyword] = useState('');
     
+    const userLogin = useSelector((state: any) => state.userLogin);
+    const { userInfo } = useSelector((state: any) => state.userLogin);
+
     const { data: queryData, isLoading: loading, error } = useGetKelurahansQuery({ page, limit, keyword });
-    const kelurahan = data?.kelurahan || [];
-    const pagination = data?.pagination || {};
+    const kelurahan = queryData?.kelurahan || [];
+    const pagination = queryData?.pagination || {};
     
     const [deleteKelurahanApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteKelurahanMutation();
     
@@ -128,14 +130,14 @@ const Kelurahan = ({ history }) => {
                     <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">DATA KELURAHAN</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>) : (
                                             
                                         <>
                                         {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
+                                        {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
-                                            keyField="ID_Kelurahan"
+                                            keyField="Kelurahan_Code"
                                             data={kelurahan}
                                             columns={columns}
                                             search

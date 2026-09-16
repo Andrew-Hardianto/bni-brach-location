@@ -14,6 +14,8 @@ import ModalDetailUser from '@/features/Auth/ModalDetailUser';
 import ModalEditUser from '@/features/Auth/ModalEditUser';
 
 const User = () => {
+    const { userInfo } = useSelector((state: any) => state.userLogin);
+
     const { SearchBar } = Search;
 
     const [show, setShow] = useState(false);

@@ -44,7 +44,7 @@ const ModalEditUser = ({ onClick, userId }) => {
                         <Form.Label>Username</Form.Label>
                         <Form.Control
                             type="text"
-                            value={username}
+                            value={username || ''}
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </Form.Group>
@@ -53,7 +53,7 @@ const ModalEditUser = ({ onClick, userId }) => {
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                             type="password"
-                            value={password}
+                            value={password || ''}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </Form.Group>

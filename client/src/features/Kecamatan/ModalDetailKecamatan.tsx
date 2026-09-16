@@ -1,17 +1,10 @@
 import { useGetKecamatanByIdQuery } from '@/entities/kecamatan/api/kecamatanApi';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 
 const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
     const { data: queryData, isLoading: loading, error } = useGetKecamatanByIdQuery(kecamatanId, { skip: !kecamatanId });
-        const kecamatan = queryData?.kecamatan || queryData || {};
-
-
-    useEffect(() => {
-        dispatch(detailKecamatan(kecamatanId));
-    }, [dispatch, kecamatanId])
-
+    const kecamatan = queryData?.kecamatan || queryData || {};
 
     return (
         <div>
@@ -29,7 +22,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kecamatan.kecamatan?.Kecamatan_Code}
+                                    : {kecamatan?.Kecamatan_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -41,7 +34,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kecamatan.kecamatan?.Kecamatan_Name}
+                                    : {kecamatan?.Kecamatan_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -53,7 +46,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kecamatan.kecamatan?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                    : {kecamatan?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -65,7 +58,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kecamatan.kecamatan?.Kabkota_Code}
+                                    : {kecamatan?.Kabkota_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -77,7 +70,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kecamatan.kecamatan?.kota?.Kabkota_Name}
+                                    : {kecamatan?.kota?.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -89,7 +82,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kecamatan.kecamatan?.Provinsi_Code}
+                                    : {kecamatan?.Provinsi_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -101,7 +94,7 @@ const ModalDetailKecamatan = ({ onClick, kecamatanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kecamatan.kecamatan?.provinsi?.Provinsi_Name}
+                                    : {kecamatan?.provinsi?.Provinsi_Name}
                                 </Card.Text>
                             </td>
                         </tr>

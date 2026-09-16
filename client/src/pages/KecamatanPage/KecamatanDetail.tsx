@@ -1,7 +1,6 @@
 import { useGetKecamatanByIdQuery } from '@/entities/kecamatan/api/kecamatanApi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -11,13 +10,9 @@ const KecamatanDetail = ({ match }) => {
     const kecamatanId = match.params.id;
 
     const { data: queryData, isLoading: loading, error } = useGetKecamatanByIdQuery(kecamatanId, { skip: !kecamatanId });
-        const kecamatan = queryData?.kecamatan || queryData || {};
+    const kecamatan = queryData?.kecamatan || queryData || {};
+    console.log(kecamatan);
 
-    
-
-    useEffect(() => {
-        dispatch(detailKecamatan(kecamatanId));
-    }, [dispatch, kecamatanId])
 
     return (
         <div className="home">

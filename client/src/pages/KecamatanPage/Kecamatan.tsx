@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 // import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -12,7 +11,6 @@ import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import ModalDetailKecamatan from '@/features/Kecamatan/ModalDetailKecamatan';
-import { useGetKecamatansQuery, useDeleteKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
 import { useGetKecamatansQuery, useDeleteKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
 import ModalEditKecamatan from '@/features/Kecamatan/ModalEditKecamatan';
 
@@ -28,8 +26,8 @@ const Kecamatan = ({ history }) => {
     const [keyword, setKeyword] = useState('');
     
     const { data: queryData, isLoading: loading, error } = useGetKecamatansQuery({ page, limit, keyword });
-    const kecamatan = data?.kecamatan || [];
-    const pagination = data?.pagination || {};
+    const kecamatan = queryData?.kecamatan || [];
+    const pagination = queryData?.pagination || {};
     
     const [deleteKecamatanApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteKecamatanMutation();
     
@@ -51,13 +49,6 @@ const Kecamatan = ({ history }) => {
         setKecamatanId(data);
         setShowEdit(true);
     }, []);
-
-    useEffect(() => {
-        if (!userInfo) {
-            history.push('/login')
-        }
-    }, [userInfo, history])
-
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
         setPage(page);
@@ -127,15 +118,15 @@ const Kecamatan = ({ history }) => {
             <div className="container-fluid">
                 <Container>
                     {loading ? <Loader />
-                        : error ? <Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>
+                        : error ? <Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>
                             : (
                                 <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
+                                        {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
-                                            keyField="ID_Kecamatan"
+                                            keyField="Kecamatan_Code"
                                             data={kecamatan}
                                             columns={columns}
                                             search

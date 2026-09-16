@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Toast } from 'react-bootstrap'
 
-const Message = ({ variant, children }) => {
+const Message = ({ variant = 'info', children }) => {
     const [show, setShow] = useState(true);
 
     useEffect(() => {
@@ -27,10 +27,6 @@ const Message = ({ variant, children }) => {
             </Toast>
         </div>
     )
-}
-
-Message.defaultProps = {
-    variant: 'info',
 }
 
 export default Message

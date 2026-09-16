@@ -1,7 +1,6 @@
 import { useCreateKotaMutation } from '@/entities/kota/api/kotaApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -15,13 +14,10 @@ const KotaTambah = ({ history }) => {
 
     const [createKotaApi, { isLoading: loading, error, isSuccess: success }] = useCreateKotaMutation();
 
-    
-
     const { data: provinsiData } = useGetProvinsisQuery({ limit: 100 });
     const provinsi = provinsiData?.provinsi || [];
 
     useEffect(() => {
-        
         if (success) {
             history.push('/location/kota')
         }
@@ -31,18 +27,18 @@ const KotaTambah = ({ history }) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createKota(data))
+        await createKotaApi(data)
     }
-    console.log(data)
+    
     return (
         <div className="home">
             <Card style={{ width: '25rem' }} className="mt-3">
                 <Card.Body>
                     <Card.Title>Tambah Kota</Card.Title>
                     {loading && <Loader />}
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{(error as any)?.data?.message || 'Error occurred'}</Message>}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="Kabkota_Code">
                             <Form.Label>Kode Kota</Form.Label>
@@ -88,7 +84,7 @@ const KotaTambah = ({ history }) => {
                                 <option value="">- Pilih Provinsi -</option>
                                 {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(data.Kabkota_Code.toString().substring(0, 2)))
                                     .map((prov) => (
-                                        <option value={prov.Provinsi_Code} >{prov.Provinsi_Name}</option>
+                                        <option key={prov.ID_Provinsi} value={prov.Provinsi_Code || ''} >{prov.Provinsi_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>

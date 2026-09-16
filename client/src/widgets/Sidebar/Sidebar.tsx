@@ -8,6 +8,8 @@ const Sidebar = () => {
   const [openLocation, setOpenLocation] = useState(false);
   const [openBranch, setOpenBranch] = useState(false);
   const location = useLocation();
+  const { userInfo } = useSelector((state: any) => state.userLogin);
+
 
 
   if (!userInfo) return <></>;

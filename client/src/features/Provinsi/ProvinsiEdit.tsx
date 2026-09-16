@@ -2,7 +2,6 @@ import { useGetProvinsiByIdQuery, useUpdateProvinsiMutation } from '@/entities/p
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
@@ -20,23 +19,19 @@ const ProvinsiEdit = ({ history, match }) => {
 
     
 
-    const { loading, error, success } = provinsiUpdate;
-
     useEffect(() => {
-        if (success) {
-            dispatch({ type: PROVINSI_UPDATE_RESET })
+        if (successUpdate) {
             history.push('/location/provinsi')
         } else {
-            if (!provinsi.Provinsi_Name || provinsi.ID_Provinsi !== provinsiId) {
-                dispatch(detailProvinsi(provinsiId));
+            if (provinsi && provinsi.ID_Provinsi === provinsiId) {
+                setData(provinsi)
             }
-            setData(provinsi)
         }
-    }, [dispatch, history, provinsiId, provinsi.ID_Provinsi, success])
+    }, [history, provinsiId, provinsi, successUpdate])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(editProvinsi({ ...data }))
+        await updateProvinsiApi({ id: provinsiId, body: { ...data } });
     }
 
     return (
@@ -44,14 +39,14 @@ const ProvinsiEdit = ({ history, match }) => {
             <Card style={{ width: '25rem' }} className="mt-3" >
                 <Card.Body>
                     <Card.Title>Edit Provinsi</Card.Title>
-                    {error && <Message variant="danger" >{error}</Message>}
-                    {loading && <Loader />}
+                    {errorUpdate && <Message variant="danger" >{(errorUpdate as any)?.data?.message || 'Gagal mengubah data'}</Message>}
+                    {(loadingDetail || loadingUpdate) && <Loader />}
                     <Form onSubmit={submitHandler} >
                         <Form.Group controlId="id">
                             <Form.Label>Kode Provinsi</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={data?.Provinsi_Code}
+                                value={data?.Provinsi_Code || ''}
                                 onChange={(e) => setData({ ...data, Provinsi_Code: e.target.value })}
                             />
                         </Form.Group>
@@ -61,7 +56,7 @@ const ProvinsiEdit = ({ history, match }) => {
                             <Form.Control
                                 type="text"
                                 name="nama"
-                                value={data?.Provinsi_Name}
+                                value={data?.Provinsi_Name || ''}
                                 onChange={(e) => setData({ ...data, Provinsi_Name: e.target.value })}
                             />
                         </Form.Group>
@@ -70,7 +65,7 @@ const ProvinsiEdit = ({ history, match }) => {
                             <Form.Control
                                 type="text"
                                 name="BI_Location_Code"
-                                value={data?.BI_Location_Code}
+                                value={data?.BI_Location_Code || ''}
                                 onChange={(e) => setData({ ...data, BI_Location_Code: e.target.value })}
                             />
                         </Form.Group>
@@ -80,10 +75,10 @@ const ProvinsiEdit = ({ history, match }) => {
                                 as="select"
                                 custom
                                 name="Status"
-                                value={data?.Status}
+                                value={data?.Status || ''}
                                 onChange={(e) => setData({ ...data, Status: e.target.value })}
                             >
-                                <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                                <option value={data?.Status || ''}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
                                 <option value="Y" >Aktif</option>
                                 <option value="N" >Tidak Aktif</option>
                             </Form.Control>

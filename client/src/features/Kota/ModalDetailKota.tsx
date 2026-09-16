@@ -1,17 +1,14 @@
 import { useGetKotaByIdQuery } from '@/entities/kota/api/kotaApi';
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 
 const ModalDetailKota = ({ onClick, kotaId }) => {
     const { data: queryData, isLoading: loading, error } = useGetKotaByIdQuery(kotaId, { skip: !kotaId });
-        const kota = queryData?.kota || queryData || {};
+    const kota = queryData?.kota || queryData || {};
 
 
-    useEffect(() => {
-        dispatch(detailKota(kotaId));
-    }, [dispatch,])
-    console.log(kota)
+
+
     return (
         <div>
             <Modal.Header closeButton>
@@ -28,7 +25,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kota.kota?.Kabkota_Code}
+                                    : {kota?.Kabkota_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -40,7 +37,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kota.kota?.Kabkota_Name}
+                                    : {kota?.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -52,7 +49,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kota?.kota?.Kabkota_Flag}
+                                    : {kota?.Kabkota_Flag}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -64,7 +61,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kota?.kota?.Status === 'Y' ? 'Aktif' : 'TIdak Aktif'}
+                                    : {kota?.Status === 'Y' ? 'Aktif' : 'TIdak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -76,7 +73,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kota.kota?.Provinsi_Code}
+                                    : {kota?.Provinsi_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -88,7 +85,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kota.kota?.provinsi?.Provinsi_Name}
+                                    : {kota?.provinsi?.Provinsi_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -100,7 +97,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kota.kota?.BI_Location_Code}
+                                    : {kota?.BI_Location_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -112,7 +109,7 @@ const ModalDetailKota = ({ onClick, kotaId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kota.kota?.Antasena_Code}
+                                    : {kota?.Antasena_Code}
                                 </Card.Text>
                             </td>
                         </tr>

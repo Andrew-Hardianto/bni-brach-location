@@ -1,7 +1,7 @@
 import { useGetKelurahanByIdQuery } from '@/entities/kelurahan/api/kelurahanApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -15,14 +15,12 @@ const KelurahanDetail = ({ match }) => {
 
     
 
-    useEffect(() => {
-        dispatch(detailKelurahan(kelurahanId));
-    }, [dispatch, kelurahanId])
+    
 
     return (
         <div className="home">
             {loading ? <Loader />
-                : error ? (<Message variant="danger" >{error}</Message>)
+                : error ? (<Message variant="danger" >{(error as any)?.data?.message || (error as any)?.error || 'Terjadi Kesalahan'}</Message>)
                     : (
                         <Card style={{ width: '40rem' }}>
                             <Card.Body>

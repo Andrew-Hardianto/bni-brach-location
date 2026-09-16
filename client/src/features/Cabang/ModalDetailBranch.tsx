@@ -10,9 +10,9 @@ import Message from '@/shared/ui/Message';
 const ModalDetailBranch = ({ onClick, cabangId }) => {
 
     const { data: queryData, isLoading: loading, error } = useGetCabangByIdQuery(cabangId);
-    const cabang = data?.cabang;
+    const cabang = queryData?.cabang;
 
-    const coords = [isNaN(cabang?.Latitude) ? -6.241586 : cabang?.Latitude, isNaN(cabang?.Longitude) ? 106.992416 : cabang?.Longitude];
+    const coords = [isNaN(cabang?.Latitude) ? -6.241586 : cabang?.Latitude, isNaN(cabang?.Longitude) ? 106.992416 : cabang?.Longitude] as [number, number];
 
     return (
         <div>
@@ -70,7 +70,7 @@ const ModalDetailBranch = ({ onClick, cabangId }) => {
                         </table>
                         <MapContainer style={{ width: "600px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
-                                attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url={Apikey.maptiler.url}
                             />
                             <Marker

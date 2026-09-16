@@ -15,6 +15,8 @@ import ModalEditBranch from '@/features/Cabang/ModalEditBranch';
 import { useGetCabangsQuery, useDeleteCabangMutation } from '@/entities/cabang/api/cabangApi';
 
 const Cabang = ({ history }) => {
+    const { userInfo } = useSelector((state: any) => state.userLogin);
+
     const { SearchBar } = Search;
 
     const [show, setShow] = useState(false);
@@ -26,8 +28,8 @@ const Cabang = ({ history }) => {
     const [keyword, setKeyword] = useState('');
 
     const { data: queryData, isLoading: loading, error } = useGetCabangsQuery({ page, limit, keyword });
-    const cabang = data?.cabang || [];
-    const pagination = data?.pagination || {};
+    const cabang = queryData?.cabang || [];
+    const pagination = queryData?.pagination || {};
 
     const [deleteCabangApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteCabangMutation();
 
@@ -113,44 +115,44 @@ const Cabang = ({ history }) => {
                 <Card className="mt-3 shadow-lg" >
                     <Card.Body>
                         <Card.Title className="font-weight-bold text-center">Data Branch</Card.Title>
-                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
-                            
-                        <>
-                        {loadingDelete && <Loader />}
-                        {errorDelete && <Message variant="danger" >{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
-                        <ToolkitProvider
-                            bootstrap4
-                            keyField="ID_Cabang"
-                            data={cabang}
-                            columns={columns}
-                            search
-                        >
-                            {
-                                props => (
-                                    <div>
-                                        <Row className="mb-3">
-                                            <Col sm={9} className="mb-2">
-                                                <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
-                                            </Col>
-                                            <Col sm={3}>
-                                                <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
-                                            </Col>
-                                        </Row>
-                                        <BootstrapTable
-                                            {...props.baseProps}
-                                            remote={{ search: true, pagination: true }}
-                                            onTableChange={handleTableChange}
-                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                            defaultSorted={defaultSortedBy}
-                                            wrapperClasses="table-responsive"
-                                            rowClasses="text-nowrap"
-                                        />
-                                    </div>
-                                )
-                            }
-                        </ToolkitProvider>
-                    
-                        </>
+                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>) : (
+
+                            <>
+                                {loadingDelete && <Loader />}
+                                {errorDelete && <Message variant="danger" >{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
+                                <ToolkitProvider
+                                    bootstrap4
+                                    keyField="Branch_Code"
+                                    data={cabang}
+                                    columns={columns}
+                                    search
+                                >
+                                    {
+                                        props => (
+                                            <div>
+                                                <Row className="mb-3">
+                                                    <Col sm={9} className="mb-2">
+                                                        <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
+                                                    </Col>
+                                                    <Col sm={3}>
+                                                        <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
+                                                    </Col>
+                                                </Row>
+                                                <BootstrapTable
+                                                    {...props.baseProps}
+                                                    remote={{ search: true, pagination: true }}
+                                                    onTableChange={handleTableChange}
+                                                    pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
+                                                    defaultSorted={defaultSortedBy}
+                                                    wrapperClasses="table-responsive"
+                                                    rowClasses="text-nowrap"
+                                                />
+                                            </div>
+                                        )
+                                    }
+                                </ToolkitProvider>
+
+                            </>
                         )}
                     </Card.Body>
                 </Card>

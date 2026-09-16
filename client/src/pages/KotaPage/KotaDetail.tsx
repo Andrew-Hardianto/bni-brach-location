@@ -1,8 +1,7 @@
 import { useGetKotaByIdQuery } from '@/entities/kota/api/kotaApi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
@@ -12,18 +11,12 @@ const KotaDetail = ({ match }) => {
     const kotaId = match.params.id;
 
     const { data: queryData, isLoading: loading, error } = useGetKotaByIdQuery(kotaId, { skip: !kotaId });
-        const kota = queryData?.kota || queryData || {};
-
-    
-
-    useEffect(() => {
-        dispatch(detailKota(kotaId));
-    }, [dispatch, kotaId])
+    const kota = queryData?.kota || queryData || {};
 
     return (
         <div className="home">
             {loading ? <Loader />
-                : error ? (<Message variant="danger" >{error}</Message>)
+                : error ? (<Message variant="danger" >{(error as any)?.data?.message || 'Error occurred'}</Message>)
                     : (
                         <Card style={{ width: '35rem' }} className="shadow" >
                             <Card.Body>
@@ -98,7 +91,7 @@ const KotaDetail = ({ match }) => {
                                             </td>
                                             <td>
                                                 <Card.Text>
-                                                    : {kota.kota?.provinsi.Provinsi_Name}
+                                                    : {kota.kota?.provinsi?.Provinsi_Name}
                                                 </Card.Text>
                                             </td>
                                         </tr>

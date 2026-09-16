@@ -1,17 +1,10 @@
 import { useGetKelurahanByIdQuery } from '@/entities/kelurahan/api/kelurahanApi';
 import React, { useEffect } from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux'
 
 const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
     const { data: queryData, isLoading: loading, error } = useGetKelurahanByIdQuery(kelurahanId, { skip: !kelurahanId });
-        const kelurahan = queryData?.kelurahan || queryData || {};
-
-
-    useEffect(() => {
-        dispatch(detailKelurahan(kelurahanId));
-    }, [dispatch, kelurahanId])
-
+    const kelurahan = queryData?.kelurahan || queryData || {};
 
     return (
         <div>
@@ -29,7 +22,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kelurahan?.kelurahan?.Kelurahan_Code}
+                                    : {kelurahan?.Kelurahan_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -41,7 +34,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.Kelurahan_Name}
+                                    : {kelurahan?.Kelurahan_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -53,7 +46,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                    : {kelurahan?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -65,7 +58,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kelurahan?.kelurahan?.Kecamatan_Code}
+                                    : {kelurahan?.Kecamatan_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -77,7 +70,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.kecamatan?.Kecamatan_Name}
+                                    : {kelurahan?.kecamatan?.Kecamatan_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -89,7 +82,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kelurahan?.kelurahan?.Kabkota_Code}
+                                    : {kelurahan?.Kabkota_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -101,7 +94,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.kota?.Kabkota_Name}
+                                    : {kelurahan?.kota?.Kabkota_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -113,7 +106,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {kelurahan?.kelurahan?.Provinsi_Code}
+                                    : {kelurahan?.Provinsi_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -125,7 +118,7 @@ const ModalDetailKelurahan = ({ onClick, kelurahanId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {kelurahan?.kelurahan?.provinsi?.Provinsi_Name}
+                                    : {kelurahan?.provinsi?.Provinsi_Name}
                                 </Card.Text>
                             </td>
                         </tr>

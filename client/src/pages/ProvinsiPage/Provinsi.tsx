@@ -2,7 +2,6 @@ import { useGetProvinsisQuery, useDeleteProvinsiMutation } from '@/entities/prov
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -24,18 +23,12 @@ const Provinsi = ({ history }) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [keyword, setKeyword] = useState('');
-    
+
     const { data: queryData, isLoading: loading, error } = useGetProvinsisQuery({ page, limit, keyword });
-    const provinsi = data?.provinsi || [];
-    const pagination = data?.pagination || {};
-    
+    const provinsi = queryData?.provinsi || [];
+    const pagination = queryData?.pagination || {};
+
     const [deleteProvinsiApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteProvinsiMutation();
-    
-
-    
-
-    
-
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -50,11 +43,7 @@ const Provinsi = ({ history }) => {
         setShowEdit(true);
     }, []);
 
-    useEffect(() => {
-        if (!userInfo) {
-            history.push('/login')
-        }
-    }, [userInfo, history])
+
 
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
@@ -69,7 +58,7 @@ const Provinsi = ({ history }) => {
             await deleteProvinsiApi(id);
         }
     }
-    
+
 
     const columns = [{
         dataField: 'Provinsi_Code',
@@ -93,20 +82,10 @@ const Provinsi = ({ history }) => {
         formatter: (rowContent, row) => {
             return (
                 <div className="">
-                    {/* <LinkContainer to={`/location/provinsi/detail/${row.ID_Provinsi}`}>
-                        <Button variant="info" className="btn-sm">
-                            <i className="fas fa-info"></i>
-                        </Button>
-                    </LinkContainer>
-                    <LinkContainer to={`/location/provinsi/edit/${row.ID_Provinsi}`} className="ml-2">
-                        <Button variant="success" className="btn-sm">
-                            <i className="fas fa-edit"></i>
-                        </Button>
-                    </LinkContainer> */}
-                    <Button variant="info" key={row.ID_Provinsi} className="btn-sm mr-2" onClick={() => handleShow(row.ID_Provinsi)}>
+                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Provinsi)}>
                         <i className="fas fa-info"></i>
                     </Button>
-                    <Button variant="success" key={row.ID_Provinsi} className="btn-sm" onClick={() => handleShowEdit(row.ID_Provinsi)}>
+                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Provinsi)}>
                         <i className="fas fa-edit"></i>
                     </Button>
                     <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Provinsi)}>
@@ -127,49 +106,49 @@ const Provinsi = ({ history }) => {
             <div className="container-fluid">
                 <Container>
                     <Card className="mt-3 shadow-lg" >
-                                    <Card.Body>
-                                        <Card.Title className="text-center font-weight-bold">DATA PROVINSI</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
-                                            
-                                        <>
-                                        {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
-                                        <ToolkitProvider
-                                            bootstrap4
-                                            keyField="ID_Provinsi"
-                                            data={provinsi}
-                                            columns={columns}
-                                            search
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        <Row className="mb-3">
-                                                            <Col sm={9} className="mb-2">
-                                                                <Link to="/location/provinsi/tambah" className="btn btn-primary">Tambah Provinsi</Link>
-                                                            </Col>
-                                                            <Col sm={3}>
-                                                                <SearchBar placeholder="Cari Provinsi..." {...props.searchProps} />
-                                                            </Col>
-                                                        </Row>
-                                                        <BootstrapTable
-                                                            {...props.baseProps}
-                                                            remote={{ search: true, pagination: true }}
-                                                            onTableChange={handleTableChange}
-                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                            defaultSorted={defaultSortedBy}
-                                                            wrapperClasses="table-responsive"
-                                                            rowClasses="text-nowrap"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
-                                    
-                                        </>
-                                        )}
-                                    </Card.Body>
-                                </Card>
+                        <Card.Body>
+                            <Card.Title className="text-center font-weight-bold">DATA PROVINSI</Card.Title>
+                            {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>) : (
+
+                                <>
+                                    {loadingDelete && <Loader />}
+                                    {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
+                                    <ToolkitProvider
+                                        bootstrap4
+                                        keyField="Provinsi_Code"
+                                        data={provinsi}
+                                        columns={columns}
+                                        search
+                                    >
+                                        {
+                                            props => (
+                                                <div>
+                                                    <Row className="mb-3">
+                                                        <Col sm={9} className="mb-2">
+                                                            <Link to="/location/provinsi/tambah" className="btn btn-primary">Tambah Provinsi</Link>
+                                                        </Col>
+                                                        <Col sm={3}>
+                                                            <SearchBar placeholder="Cari Provinsi..." {...props.searchProps} />
+                                                        </Col>
+                                                    </Row>
+                                                    <BootstrapTable
+                                                        {...props.baseProps}
+                                                        remote={{ search: true, pagination: true }}
+                                                        onTableChange={handleTableChange}
+                                                        pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
+                                                        defaultSorted={defaultSortedBy}
+                                                        wrapperClasses="table-responsive"
+                                                        rowClasses="text-nowrap"
+                                                    />
+                                                </div>
+                                            )
+                                        }
+                                    </ToolkitProvider>
+
+                                </>
+                            )}
+                        </Card.Body>
+                    </Card>
                 </Container>
                 <Modal show={show} onHide={handleClose}>
                     <ModalDetail onClick={handleClose} provinsiId={provinsiId} />

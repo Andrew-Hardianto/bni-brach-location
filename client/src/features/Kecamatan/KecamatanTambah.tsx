@@ -1,7 +1,6 @@
 import { useCreateKecamatanMutation } from '@/entities/kecamatan/api/kecamatanApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -16,25 +15,22 @@ const KecamatanTambah = ({ history }) => {
 
     const [createKecamatanApi, { isLoading: loading, error, isSuccess: success }] = useCreateKecamatanMutation();
 
-    
-
     const { data: kotaData } = useGetKotasQuery({ limit: 100 });
     const kota = kotaData?.kota || [];
 
     useEffect(() => {
-        
         if (success) {
             history.push('/location/kecamatan')
         }
-    }, [dispatch, history, success])
+    }, [history, success])
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createKecamatan(data))
+        await createKecamatanApi(data);
     }
     console.log(data)
     return (
@@ -51,7 +47,7 @@ const KecamatanTambah = ({ history }) => {
                                 type="text"
                                 placeholder="Masukkan Kode Kecamatan..."
                                 name="Kecamatan_Code"
-                                // value={data.kode}
+                                // value={data.kode || ''}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -62,7 +58,7 @@ const KecamatanTambah = ({ history }) => {
                                 type="text"
                                 placeholder="Masukkan Nama Kecamatan..."
                                 name="Kecamatan_Name"
-                                // value={nama}
+                                // value={nama || ''}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -72,13 +68,13 @@ const KecamatanTambah = ({ history }) => {
                                 as="select"
                                 custom
                                 name="Kabkota_Code"
-                                // value={kotaId}
+                                // value={kotaId || ''}
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Kota -</option>
                                 {kota?.filter((kt) => kt.Kabkota_Code?.toString().includes(data?.Kecamatan_Code.toString().substring(0, 4)))
                                     .map((data) => (
-                                        <option key={data?.ID_Kabkota} value={data?.Kabkota_Code} >{data.Kabkota_Name}</option>
+                                        <option key={data?.ID_Kabkota} value={data?.Kabkota_Code || ''} >{data.Kabkota_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>

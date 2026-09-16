@@ -1,47 +1,37 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
+import { useGetKodeposByIdQuery, useUpdateKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
+import { useGetKelurahansQuery } from '@/entities/kelurahan/api/kelurahanApi';
 
 const ModalEditKodepos = ({ onClick, kodeposId }) => {
-
     const [Postcode, setKodeposCode] = useState('');
-    const [Kelurahan_Code, setKelurahanCode] = useState('');
+    const [Kelurahan_Code, setKelurahanCode] = useState<any>([]);
     const [Status, setStatus] = useState('');
-    const [Code, setCode] = useState();
     const [nama, setNama] = useState('');
-    const [display, setDisplay] = useState(false);
-    const wrapperRef = useRef(null)
-
-    const dispatch = useDispatch();
-
-
-
+    
+    const { data: queryData } = useGetKodeposByIdQuery(kodeposId, { skip: !kodeposId });
+    const kodepos = queryData?.kodepos || queryData || {};
+    
+    const [updateKodeposApi, { isLoading: loading, error, isSuccess }] = useUpdateKodeposMutation();
+    const { data: kelurahansData } = useGetKelurahansQuery({ limit: 1000 });
+    const kelurahan = kelurahansData?.kelurahan || [];
 
     useEffect(() => {
-        dispatch(allKelurahan(Kelurahan_Code))
-        if (success) {
-            dispatch({ type: KODEPOS_UPDATE_RESET })
-            window.location.reload()
-            onClick()
-        } else {
-            if (kodepos?.kodepos?.ID_Postcode !== kodeposId) {
-                dispatch(detailKodepos(kodeposId));
-            }
-            // setData(kodepos?.kodepos)
-            setKelurahanCode(kodepos?.kodepos?.Kelurahan_Code)
-            setNama(kodepos?.kodepos?.kelurahan?.Kelurahan_Name)
-            setCode(kodepos?.kodepos?.Kelurahan_Code)
-            setKodeposCode(kodepos?.kodepos?.Postcode)
-            setStatus(kodepos?.kodepos?.Status)
+        if (isSuccess) {
+            window.location.reload();
+            onClick();
+        } else if (kodepos?.ID_Postcode) {
+            setKelurahanCode([{ Kelurahan_Code: kodepos?.Kelurahan_Code, Kelurahan_Name: kodepos?.kelurahan?.Kelurahan_Name }]);
+            setNama(kodepos?.kelurahan?.Kelurahan_Name || '');
+            setKodeposCode(kodepos?.Postcode || '');
+            setStatus(kodepos?.Status || '');
         }
-    }, [dispatch, kodeposId, kodepos?.kodepos?.ID_Postcode, success]);
+    }, [kodepos, isSuccess, onClick]);
 
     function filterBy(option, state) {
         if (state.selected.length) {
@@ -50,12 +40,10 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
         return option?.Kelurahan_Name.toLowerCase().indexOf(state.text.toLowerCase()) > -1;
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        if (Kelurahan_Code[0]?.Kelurahan_Code == undefined) {
-            dispatch(editKodepos({ ID_Postcode: kodeposId, Postcode, Kelurahan_Code, Status }))
-        }
-        dispatch(editKodepos({ ID_Postcode: kodeposId, Postcode, Status, Kelurahan_Code: Kelurahan_Code[0]?.Kelurahan_Code }))
+        const kelCode = Kelurahan_Code[0]?.Kelurahan_Code || Kelurahan_Code;
+        await updateKodeposApi({ id: kodeposId, body: { Postcode, Kelurahan_Code: kelCode, Status } });
     }
 
     return (
@@ -73,7 +61,7 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
                             type="text"
                             placeholder="Masukkan Kode Pos..."
                             name="Postcode"
-                            value={Postcode}
+                            value={Postcode || ''}
                             onChange={(e) => setKodeposCode(e.target.value)}
                         />
                     </Form.Group>
@@ -102,10 +90,10 @@ const ModalEditKodepos = ({ onClick, kodeposId }) => {
                             as="select"
                             custom
                             name="Status"
-                            value={Status}
+                            value={Status || ''}
                             onChange={(e) => setStatus(e.target.value)}
                         >
-                            <option value={Status}>{Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
+                            <option value={Status || ''}>{Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
                             <option value="Y" >Aktif</option>
                             <option value="N" >Tidak Aktif</option>
                         </Form.Control>

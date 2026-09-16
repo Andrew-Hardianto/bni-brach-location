@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button, Modal, Card } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useGetProvinsiByIdQuery } from '@/entities/provinsi/api/provinsiApi';
 
 const ModalDetail = ({ onClick, provinsiId }) => {
-    const dispatch = useDispatch();
-
-
-    useEffect(() => {
-        dispatch(detailProvinsi(provinsiId));
-    }, [dispatch,])
+    const { data: queryData } = useGetProvinsiByIdQuery(provinsiId, { skip: !provinsiId });
+    const provinsi = queryData?.provinsi || queryData || {};
 
     return (
         <div>

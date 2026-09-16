@@ -1,8 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -13,8 +11,8 @@ import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import ModalDetailKodepos from '@/features/Kodepos/ModalDetailKodepos';
 import { useGetKodepossQuery, useDeleteKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
-import { useGetKodepossQuery, useDeleteKodeposMutation } from '@/entities/kodepos/api/kodeposApi';
 import ModalEditKodepos from '@/features/Kodepos/ModalEditKodepos';
+import { useSelector } from 'react-redux';
 
 const Kodepos = ({ history }) => {
     const { SearchBar } = Search;
@@ -26,18 +24,14 @@ const Kodepos = ({ history }) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [keyword, setKeyword] = useState('');
-    
+
     const { data: queryData, isLoading: loading, error } = useGetKodepossQuery({ page, limit, keyword });
-    const kodepos = data?.kodepos || [];
-    const pagination = data?.pagination || {};
-    
+    const kodepos = queryData?.kodepos || [];
+    const pagination = queryData?.pagination || {};
+
     const [deleteKodeposApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteKodeposMutation();
-    
 
-    
-
-    
-
+    const { userInfo } = useSelector((state: any) => state.userLogin);
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -59,6 +53,7 @@ const Kodepos = ({ history }) => {
     }, [userInfo, history])
 
 
+
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
         setPage(page);
         setLimit(sizePerPage);
@@ -71,7 +66,7 @@ const Kodepos = ({ history }) => {
             await deleteKodeposApi(id);
         }
     }
-    
+
 
     const columns = [
         {
@@ -126,49 +121,49 @@ const Kodepos = ({ history }) => {
             <div className="container-fluid">
                 <Container>
                     <Card className="mt-3 shadow-lg" >
-                                    <Card.Body>
-                                        <Card.Title className="font-weight-bold text-center">DATA KODEPOS</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
-                                            
-                                        <>
-                                        {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
-                                        <ToolkitProvider
-                                            bootstrap4
-                                            keyField="ID_Postcode"
-                                            data={kodepos}
-                                            columns={columns}
-                                            search
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        <Row className="mb-3">
-                                                            <Col sm={9} className="mb-2">
-                                                                <Link to="/location/kodepos/tambah" className="btn btn-primary">Tambah Kodepos</Link>
-                                                            </Col>
-                                                            <Col sm={3}>
-                                                                <SearchBar placeholder="Cari Kodepos..." {...props.searchProps} />
-                                                            </Col>
-                                                        </Row>
-                                                        <BootstrapTable
-                                                            {...props.baseProps}
-                                                            remote={{ search: true, pagination: true }}
-                                                            onTableChange={handleTableChange}
-                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                            defaultSorted={defaultSortedBy}
-                                                            wrapperClasses="table-responsive"
-                                                            rowClasses="text-nowrap"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
-                                    
-                                        </>
-                                        )}
-                                    </Card.Body>
-                                </Card>
+                        <Card.Body>
+                            <Card.Title className="font-weight-bold text-center">DATA KODEPOS</Card.Title>
+                            {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>) : (
+
+                                <>
+                                    {loadingDelete && <Loader />}
+                                    {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
+                                    <ToolkitProvider
+                                        bootstrap4
+                                        keyField="Postcode"
+                                        data={kodepos}
+                                        columns={columns}
+                                        search
+                                    >
+                                        {
+                                            props => (
+                                                <div>
+                                                    <Row className="mb-3">
+                                                        <Col sm={9} className="mb-2">
+                                                            <Link to="/location/kodepos/tambah" className="btn btn-primary">Tambah Kodepos</Link>
+                                                        </Col>
+                                                        <Col sm={3}>
+                                                            <SearchBar placeholder="Cari Kodepos..." {...props.searchProps} />
+                                                        </Col>
+                                                    </Row>
+                                                    <BootstrapTable
+                                                        {...props.baseProps}
+                                                        remote={{ search: true, pagination: true }}
+                                                        onTableChange={handleTableChange}
+                                                        pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
+                                                        defaultSorted={defaultSortedBy}
+                                                        wrapperClasses="table-responsive"
+                                                        rowClasses="text-nowrap"
+                                                    />
+                                                </div>
+                                            )
+                                        }
+                                    </ToolkitProvider>
+
+                                </>
+                            )}
+                        </Card.Body>
+                    </Card>
                     <Modal show={show} onHide={handleClose}>
                         <ModalDetailKodepos onClick={handleClose} kodeposId={kodeposId} />
                     </Modal>

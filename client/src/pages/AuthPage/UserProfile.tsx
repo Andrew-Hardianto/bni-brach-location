@@ -8,6 +8,8 @@ import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 
 const UserProfile = ({ history }) => {
+    const { userInfo } = useSelector((state: any) => state.userLogin);
+
 
 
     useEffect(() => {

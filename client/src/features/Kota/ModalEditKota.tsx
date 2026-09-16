@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 import { useGetProvinsisQuery } from '@/entities/provinsi/api/provinsiApi';
-
+import { useGetKotaByIdQuery, useUpdateKotaMutation } from '@/entities/kota/api/kotaApi';
 
 const ModalEditKota = ({ onClick, kotaId }) => {
 
@@ -16,34 +15,32 @@ const ModalEditKota = ({ onClick, kotaId }) => {
     const [Kabkota_Flag, setKabkotaFlag] = useState('');
     const [Status, setStatus] = useState('');
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loading, error } = useGetKotaByIdQuery(kotaId, { skip: !kotaId });
+    const kota = queryData?.kota || queryData || {};
 
+    const [updateKotaApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: success }] = useUpdateKotaMutation();
 
-
+    const { data: provinsiData } = useGetProvinsisQuery({ limit: 100 });
+    const provinsi = provinsiData?.provinsi || [];
 
     useEffect(() => {
         if (success) {
-            dispatch({ type: KOTA_UPDATE_RESET })
             window.location.reload()
             onClick()
         } else {
-            if (!kota?.kota?.Kabkota_Name || kota?.kota?.ID_Kabkota !== kotaId) {
-                dispatch(detailKota(kotaId));
-            }
-            
-            setKode(kota.kota?.Kabkota_Code)
-            setNama(kota.kota?.Kabkota_Name)
-            setBiCode(kota.kota?.BI_Location_Code)
-            setAntasenaCode(kota.kota?.Antasena_Code)
-            setProvinsiCode(kota.kota?.Provinsi_Code)
-            setKabkotaFlag(kota.kota?.Kabkota_Flag)
-            setStatus(kota.kota?.Status)
+            setKode(kota.kota?.Kabkota_Code || '')
+            setNama(kota.kota?.Kabkota_Name || '')
+            setBiCode(kota.kota?.BI_Location_Code || '')
+            setAntasenaCode(kota.kota?.Antasena_Code || '')
+            setProvinsiCode(kota.kota?.Provinsi_Code || '')
+            setKabkotaFlag(kota.kota?.Kabkota_Flag || '')
+            setStatus(kota.kota?.Status || '')
         }
-    }, [dispatch, kotaId, kota.kota?.ID_Kabkota, success])
+    }, [kota, success])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(editKota({ id: kotaId, Kabkota_Code, Kabkota_Name, BI_Location_Code, Antasena_Code, Provinsi_Code, Kabkota_Flag, Status }))
+        await updateKotaApi({ id: kotaId, body: { Kabkota_Code, Kabkota_Name, BI_Location_Code, Antasena_Code, Provinsi_Code, Kabkota_Flag, Status } })
     }
 
     return (
@@ -52,8 +49,8 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                 <Modal.Title>Edit Kota/Kabupaten</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {error && <Message variant="danger" >{error}</Message>}
-                {loading && <Loader />}
+                {errorUpdate && <Message variant="danger" >{(errorUpdate as any)?.data?.message || 'Update failed'}</Message>}
+                {(loading || loadingUpdate) && <Loader />}
                 <Form>
                     <Form.Group controlId="Kabkota_Code">
                         <Form.Label>Kode Kota</Form.Label>
@@ -61,7 +58,7 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                             type="text"
                             placeholder="Masukkan Kode Kota..."
                             name="Kabkota_Code"
-                            value={Kabkota_Code}
+                            value={Kabkota_Code || ''}
                             onChange={(e) => setKode(e.target.value)}
                         />
                     </Form.Group>
@@ -72,7 +69,7 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                             type="text"
                             placeholder="Masukkan Nama Provinsi..."
                             name="Kabkota_Name"
-                            value={Kabkota_Name}
+                            value={Kabkota_Name || ''}
                             onChange={(e) => setNama(e.target.value)}
                         />
                     </Form.Group>
@@ -82,7 +79,7 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                             type="text"
                             placeholder="Masukkan BI Code..."
                             name="BI_Location_Code"
-                            value={BI_Location_Code}
+                            value={BI_Location_Code || ''}
                             onChange={(e) => setBiCode(e.target.value)}
                         />
                     </Form.Group>
@@ -92,7 +89,7 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                             type="text"
                             placeholder="Masukkan Antasena Code..."
                             name="Antasena_Code"
-                            value={Antasena_Code}
+                            value={Antasena_Code || ''}
                             onChange={(e) => setAntasenaCode(e.target.value)}
                         />
                     </Form.Group>
@@ -102,16 +99,12 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                             as="select"
                             custom
                             name="Provinsi_Code"
-                            value={Provinsi_Code}
+                            value={Provinsi_Code || ''}
                             onChange={(e) => setProvinsiCode(e.target.value)}
                         >
-                            {/* <option value="">- Pilih Provinsi -</option> */}
-                            {/* {provinsi.map((prov, index) => (
-                                    <option key={index} value={prov?.Provinsi_Code} >{prov?.Provinsi_Name}</option>
-                                ))} */}
                             {provinsi?.filter(prov => prov.Provinsi_Code.toString().includes(Kabkota_Code?.toString().substring(0, 2)))
                                 .map((prov) => (
-                                    <option key={prov.ID_Provinsi} value={prov.Provinsi_Code} >{prov.Provinsi_Name}</option>
+                                    <option key={prov.ID_Provinsi} value={prov.Provinsi_Code || ''} >{prov.Provinsi_Name}</option>
                                 ))}
                         </Form.Control>
                     </Form.Group>
@@ -122,8 +115,8 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                             custom
                             name="Kabkota_Flag"
                             onChange={(e) => setKabkotaFlag(e.target.value)}
+                            value={Kabkota_Flag || ''}
                         >
-                            <option value="">{Kabkota_Flag}</option>
                             <option value="Kabupaten" >Kabupaten</option>
                             <option value="Kotamadya" >Kotamadya</option>
                             <option value="Other" >Other</option>
@@ -135,10 +128,9 @@ const ModalEditKota = ({ onClick, kotaId }) => {
                             as="select"
                             custom
                             name="Status"
-                            value={Status}
+                            value={Status || ''}
                             onChange={(e) => setStatus(e.target.value)}
                         >
-                            <option value={Status}>{Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
                             <option value="Y" >Aktif</option>
                             <option value="N" >Tidak Aktif</option>
                         </Form.Control>

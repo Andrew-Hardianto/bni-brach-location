@@ -13,9 +13,6 @@ import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import ModalDetailOutlet from '@/features/Outlet/ModalDetailOutlet';
 import { useGetOutletsQuery, useDeleteOutletMutation } from '@/entities/outlet/api/outletApi';
-import { useGetOutletsQuery, useDeleteOutletMutation } from '@/entities/outlet/api/outletApi';
-import { useGetOutletsQuery, useDeleteOutletMutation } from '@/entities/outlet/api/outletApi';
-import { useGetOutletsQuery, useDeleteOutletMutation } from '@/entities/outlet/api/outletApi';
 import ModalOutletEdit from '@/features/Outlet/ModalOutletEdit';
 
 const Outlet = ({ history }) => {
@@ -30,16 +27,13 @@ const Outlet = ({ history }) => {
     const [keyword, setKeyword] = useState('');
     
     const { data: queryData, isLoading: loading, error } = useGetOutletsQuery({ page, limit, keyword });
-    const outlet = data?.outlet || [];
-    const pagination = data?.pagination || {};
+    const outlet = queryData?.outlet || [];
+    const pagination = queryData?.pagination || {};
     
     const [deleteOutletApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteOutletMutation();
     
-
-    
-
-    
-
+    const userLogin = useSelector((state: any) => state.userLogin);
+    const { userInfo } = useSelector((state: any) => state.userLogin);
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -99,16 +93,6 @@ const Outlet = ({ history }) => {
             formatter: (rowContent, row) => {
                 return (
                     <div className="">
-                        {/* <LinkContainer to={`/location/outlet/detail/${row.ID_Outlet}`}>
-                            <Button variant="info" className="btn-sm">
-                                <i className="fas fa-info"></i>
-                            </Button>
-                        </LinkContainer>
-                        <LinkContainer to={`/location/outlet/edit/${row.ID_Outlet}`} className="ml-2">
-                            <Button variant="success" className="btn-sm">
-                                <i className="fas fa-edit"></i>
-                            </Button>
-                        </LinkContainer> */}
                         <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Outlet)}>
                             <i className="fas fa-info"></i>
                         </Button>
@@ -129,49 +113,49 @@ const Outlet = ({ history }) => {
             <div className="container-fluid">
                 <Container>
                     <Card className="mt-3 shadow-lg" >
-                                    <Card.Body>
-                                        <Card.Title className="font-weight-bold text-center">Data Outlet</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
-                                            
-                                        <>
-                                        {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
-                                        <ToolkitProvider
-                                            bootstrap4
-                                            keyField="ID_Outlet"
-                                            data={outlet}
-                                            columns={columns}
-                                            search
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        <Row className="mb-3">
-                                                            <Col sm={9} className="mb-2">
-                                                                <Link to="/location/outlet/tambah" className="btn btn-primary">Tambah Outlet</Link>
-                                                            </Col>
-                                                            <Col sm={3}>
-                                                                <SearchBar placeholder="Cari Outlet..." {...props.searchProps} />
-                                                            </Col>
-                                                        </Row>
-                                                        <Card.Title>Data Outlet</Card.Title>
-                                                        <BootstrapTable
-                                                            {...props.baseProps}
-                                                            remote={{ search: true, pagination: true }}
-                                                            onTableChange={handleTableChange}
-                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                            wrapperClasses="table-responsive"
-                                                            rowClasses="text-nowrap"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
-                                    
-                                        </>
-                                        )}
-                                    </Card.Body>
-                                </Card>
+                        <Card.Body>
+                            <Card.Title className="font-weight-bold text-center">Data Outlet</Card.Title>
+                            {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>) : (
+                                
+                            <>
+                            {loadingDelete && <Loader />}
+                            {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
+                            <ToolkitProvider
+                                bootstrap4
+                                keyField="Outlet_Code"
+                                data={outlet}
+                                columns={columns}
+                                search
+                            >
+                                {
+                                    props => (
+                                        <div>
+                                            <Row className="mb-3">
+                                                <Col sm={9} className="mb-2">
+                                                    <Link to="/location/outlet/tambah" className="btn btn-primary">Tambah Outlet</Link>
+                                                </Col>
+                                                <Col sm={3}>
+                                                    <SearchBar placeholder="Cari Outlet..." {...props.searchProps} />
+                                                </Col>
+                                            </Row>
+                                            <Card.Title>Data Outlet</Card.Title>
+                                            <BootstrapTable
+                                                {...props.baseProps}
+                                                remote={{ search: true, pagination: true }}
+                                                onTableChange={handleTableChange}
+                                                pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
+                                                wrapperClasses="table-responsive"
+                                                rowClasses="text-nowrap"
+                                            />
+                                        </div>
+                                    )
+                                }
+                            </ToolkitProvider>
+                        
+                            </>
+                            )}
+                        </Card.Body>
+                    </Card>
                     <Modal size="lg" show={show} onHide={handleClose}>
                         <ModalDetailOutlet onClick={handleClose} outletId={outletId} />
                     </Modal>

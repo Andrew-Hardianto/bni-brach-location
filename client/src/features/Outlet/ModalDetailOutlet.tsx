@@ -1,7 +1,6 @@
 import { useGetOutletByIdQuery } from '@/entities/outlet/api/outletApi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Table, Modal } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 
@@ -10,15 +9,9 @@ import Apikey from '@/shared/ui/Apikey';
 const ModalDetailOutlet = ({ onClick, outletId }) => {
 
     const { data: queryData, isLoading: loading, error } = useGetOutletByIdQuery(outletId, { skip: !outletId });
-        const outlet = queryData?.outlet || queryData || {};
+    const outlet = queryData?.outlet || queryData || {};
 
-
-    useEffect(() => {
-        dispatch(detailOutlet(outletId));
-    }, [dispatch, outletId])
-
-    // const coords = { lat: outlet.outlet?.latitude, lng: outlet.outlet?.longitude };
-    const coords = [isNaN(outlet.outlet?.Latitude) ? -6.241586 : outlet?.outlet?.Latitude, isNaN(outlet.outlet?.Longitude) ? 106.992416 : outlet?.outlet?.Longitude];
+    const coords = [isNaN(outlet.outlet?.Latitude) ? -6.241586 : outlet?.outlet?.Latitude, isNaN(outlet.outlet?.Longitude) ? 106.992416 : outlet?.outlet?.Longitude] as [number, number];
 
     return (
         <div>
@@ -31,58 +24,58 @@ const ModalDetailOutlet = ({ onClick, outletId }) => {
                         <tr>
                             <td width="150px">Kode Outlet</td>
                             <td width="30px"> : </td>
-                            <td>{outlet?.outlet?.Outlet_Code}</td>
+                            <td>{outlet?.Outlet_Code}</td>
                         </tr>
                         <tr>
                             <td width="150px">Nama Outlet</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{outlet?.outlet?.Outlet_Name}</td>
+                            <td className="font-weight-bold">{outlet?.Outlet_Name}</td>
                         </tr>
                         <tr>
                             <td width="150px">Status</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{outlet?.outlet?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</td>
+                            <td className="font-weight-bold">{outlet?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</td>
                         </tr>
                         <tr>
                             <td width="150px">Kode Cabang</td>
                             <td width="30px"> : </td>
-                            <td>{outlet?.outlet?.Branch_Code}</td>
+                            <td>{outlet?.Branch_Code}</td>
                         </tr>
                         <tr>
                             <td width="150px">Nama Cabang</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{outlet?.outlet?.cabang?.Branch_Name}</td>
+                            <td className="font-weight-bold">{outlet?.cabang?.Branch_Name}</td>
                         </tr>
                         <tr>
                             <td width="150px">Kode Wilayah</td>
                             <td width="30px"> : </td>
-                            <td>{outlet?.outlet?.Region_Code}</td>
+                            <td>{outlet?.Region_Code}</td>
                         </tr>
                         <tr>
                             <td width="150px">Sub Nama Wilayah</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{outlet?.outlet?.wilayah?.Region_Subname}</td>
+                            <td className="font-weight-bold">{outlet?.wilayah?.Region_Subname}</td>
                         </tr>
                         <tr>
                             <td width="150px">Nama Wilayah</td>
                             <td width="30px"> : </td>
-                            <td className="font-weight-bold">{outlet?.outlet?.wilayah?.Region_Name}</td>
+                            <td className="font-weight-bold">{outlet?.wilayah?.Region_Name}</td>
                         </tr>
                         <tr>
                             <td width="150px">Alamat</td>
                             <td width="30px"> : </td>
-                            <td className="text-wrap font-weight-bold">{outlet?.outlet?.Address}</td>
+                            <td className="text-wrap font-weight-bold">{outlet?.Address}</td>
                         </tr>
                     </tbody>
                 </Table>
                 <MapContainer style={{ width: "600px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                     <TileLayer
-                        attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url={Apikey.maptiler.url}
                     />
                     <Marker
                         position={coords}>
-                        <Tooltip>{outlet.outlet?.Address}</Tooltip>
+                        <Tooltip>{outlet?.Address}</Tooltip>
                     </Marker>
                 </MapContainer>
             </Modal.Body>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -12,7 +11,6 @@ import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
 import Message from '@/shared/ui/Message';
 import ModalDetailKota from '@/features/Kota/ModalDetailKota';
-import { useGetKotasQuery, useDeleteKotaMutation } from '@/entities/kota/api/kotaApi';
 import { useGetKotasQuery, useDeleteKotaMutation } from '@/entities/kota/api/kotaApi';
 import ModalEditKota from '@/features/Kota/ModalEditKota';
 
@@ -25,17 +23,17 @@ const Kota = ({ history }) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [keyword, setKeyword] = useState('');
-    
+
     const { data: queryData, isLoading: loading, error } = useGetKotasQuery({ page, limit, keyword });
-    const kota = data?.kota || [];
-    const pagination = data?.pagination || {};
-    
+    const kota = queryData?.kota || [];
+    const pagination = queryData?.pagination || {};
+
     const [deleteKotaApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteKotaMutation();
-    
 
-    
 
-    
+
+
+
 
 
     const handleClose = () => setShow(false);
@@ -50,12 +48,6 @@ const Kota = ({ history }) => {
         setKotaId(data);
         setShowEdit(true);
     }, []);
-
-    useEffect(() => {
-        if (!userInfo) {
-            history.push('/login')
-        }
-    }, [userInfo, history])
 
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
@@ -145,49 +137,49 @@ const Kota = ({ history }) => {
             <div className="container-fluid">
                 <Container>
                     <Card className="mt-3 shadow-lg" >
-                                    <Card.Body>
-                                        <Card.Title className="text-center font-weight-bold">DATA KOTA/KABUPATEN</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
-                                            
-                                        <>
-                                        {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
-                                        <ToolkitProvider
-                                            bootstrap4
-                                            keyField="ID_Kabkota"
-                                            data={kota}
-                                            columns={columns}
-                                            search
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        <Row className="mb-3">
-                                                            <Col sm={9} className="mb-2">
-                                                                <Link to="/location/kota/tambah" className="btn btn-primary">Tambah Kota</Link>
-                                                            </Col>
-                                                            <Col sm={3}>
-                                                                <SearchBar placeholder="Cari Kota/Kabupaten..." {...props.searchProps} />
-                                                            </Col>
-                                                        </Row>
-                                                        <BootstrapTable
-                                                            {...props.baseProps}
-                                                            remote={{ search: true, pagination: true }}
-                                                            onTableChange={handleTableChange}
-                                                            pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                            defaultSorted={defaultSortedBy}
-                                                            wrapperClasses="table-responsive"
-                                                            rowClasses="text-nowrap"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
-                                    
-                                        </>
-                                        )}
-                                    </Card.Body>
-                                </Card>
+                        <Card.Body>
+                            <Card.Title className="text-center font-weight-bold">DATA KOTA/KABUPATEN</Card.Title>
+                            {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>) : (
+
+                                <>
+                                    {loadingDelete && <Loader />}
+                                    {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
+                                    <ToolkitProvider
+                                        bootstrap4
+                                        keyField="Kabkota_Code"
+                                        data={kota}
+                                        columns={columns}
+                                        search
+                                    >
+                                        {
+                                            props => (
+                                                <div>
+                                                    <Row className="mb-3">
+                                                        <Col sm={9} className="mb-2">
+                                                            <Link to="/location/kota/tambah" className="btn btn-primary">Tambah Kota</Link>
+                                                        </Col>
+                                                        <Col sm={3}>
+                                                            <SearchBar placeholder="Cari Kota/Kabupaten..." {...props.searchProps} />
+                                                        </Col>
+                                                    </Row>
+                                                    <BootstrapTable
+                                                        {...props.baseProps}
+                                                        remote={{ search: true, pagination: true }}
+                                                        onTableChange={handleTableChange}
+                                                        pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
+                                                        defaultSorted={defaultSortedBy}
+                                                        wrapperClasses="table-responsive"
+                                                        rowClasses="text-nowrap"
+                                                    />
+                                                </div>
+                                            )
+                                        }
+                                    </ToolkitProvider>
+
+                                </>
+                            )}
+                        </Card.Body>
+                    </Card>
                     <Modal show={show} onHide={handleClose}>
                         <ModalDetailKota onClick={handleClose} kotaId={kotaId} />
                     </Modal>

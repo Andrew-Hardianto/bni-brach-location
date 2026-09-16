@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react';
+import { useGetWilayahByIdQuery } from '@/entities/wilayah/api/wilayahApi';
+import React from 'react';
 import { Card, Modal, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-
+import Loader from '@/shared/ui/Loader';
+import Message from '@/shared/ui/Message';
 
 const ModalDetailRegion = ({ onClick, wilayahId }) => {
+    const { data: queryData, isLoading, error } = useGetWilayahByIdQuery(wilayahId, { skip: !wilayahId });
+    const wilayah = queryData?.wilayah || {};
 
-    const dispatch = useDispatch();
-
-
-    useEffect(() => {
-        dispatch(detailWilayah(wilayahId));
-    }, [dispatch, wilayahId,])
+    if (isLoading) return <Loader />;
+    if (error) return <Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>;
 
     return (
         <div>
@@ -29,7 +27,7 @@ const ModalDetailRegion = ({ onClick, wilayahId }) => {
                             </td>
                             <td>
                                 <Card.Text>
-                                    : {wilayah.wilayah?.Region_Code}
+                                    : {wilayah?.Region_Code}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -41,7 +39,7 @@ const ModalDetailRegion = ({ onClick, wilayahId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {wilayah.wilayah?.Region_Subname}
+                                    : {wilayah?.Region_Subname}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -53,7 +51,7 @@ const ModalDetailRegion = ({ onClick, wilayahId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {wilayah.wilayah?.Region_Name}
+                                    : {wilayah?.Region_Name}
                                 </Card.Text>
                             </td>
                         </tr>
@@ -65,7 +63,7 @@ const ModalDetailRegion = ({ onClick, wilayahId }) => {
                             </td>
                             <td>
                                 <Card.Text className="font-weight-bold">
-                                    : {wilayah.wilayah?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
+                                    : {wilayah?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}
                                 </Card.Text>
                             </td>
                         </tr>

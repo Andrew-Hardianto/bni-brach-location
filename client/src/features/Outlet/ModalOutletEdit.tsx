@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Button, Modal, Col, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
 import { useGetCabangsQuery } from '@/entities/cabang/api/cabangApi';
+import { useGetOutletByIdQuery, useUpdateOutletMutation } from '@/entities/outlet/api/outletApi';
 import Apikey from '@/shared/ui/Apikey';
 
 const initialState = {
@@ -23,31 +22,31 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
 
     const [data, setData] = useState(initialState);
 
-    const dispatch = useDispatch();
+    const { data: queryData, isLoading: loadingDetail, error: errorDetail } = useGetOutletByIdQuery(outletId, { skip: !outletId });
+    const outlet = queryData?.outlet || queryData || {};
 
+    const [updateOutletApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: success }] = useUpdateOutletMutation();
 
-
+    const { data: cabangData } = useGetCabangsQuery({ limit: 100 });
+    const cabang = cabangData?.cabang || [];
 
     useEffect(() => {
-        ;
         if (success) {
-            dispatch({ type: OUTLET_UPDATE_RESET })
-            window.location.reload()
-            onClick()
+            window.location.reload();
+            onClick();
         } else {
-            if (!outlet.outlet?.Outlet_Name || outlet.outlet?.ID_Outlet !== outletId) {
-                dispatch(detailOutlet(outletId));
+            if (outlet && outlet.ID_Outlet === outletId) {
+                setData(outlet);
             }
-            setData(outlet?.outlet)
         }
-    }, [dispatch, outletId, outlet.outlet?.ID_Outlet, success])
+    }, [outlet, outletId, success, onClick])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(editOutlet({ ...data }))
+        await updateOutletApi({ id: outletId, body: { ...data } });
     }
 
-    const coords = [isNaN(outlet?.outlet?.Latitude) ? -6.241586 : outlet?.outlet?.Latitude, isNaN(cabang?.cabang?.Longitude) ? 106.992416 : cabang?.cabang?.Longitude];
+    const coords = [isNaN(outlet?.Latitude) ? -6.241586 : outlet?.Latitude, isNaN(outlet?.Longitude) ? 106.992416 : outlet?.Longitude] as [number, number];
 
     const [draggable, setDraggable] = useState(false)
     const markerRef = useRef(null)
@@ -56,7 +55,7 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
             dragend() {
                 const marker = markerRef.current?.getLatLng()
                 if (marker != null) {
-                    setData({ Latitude: marker.lat, Longitude: marker.lng })
+                    setData(prev => ({ ...prev, Latitude: marker.lat, Longitude: marker.lng }))
                 }
             },
         }),
@@ -69,20 +68,20 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
     return (
         <div>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Kelurahan</Modal.Title>
+                <Modal.Title>Edit Outlet</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {error && <Message variant="danger" >{error}</Message>}
-                {loading && <Loader />}
+                {errorUpdate && <Message variant="danger" >{(errorUpdate as any)?.data?.message || 'Gagal mengubah data'}</Message>}
+                {(loadingUpdate || loadingDetail) && <Loader />}
                 <Form>
                     <Form.Group controlId="Outlet_Code">
-                        <Form.Label>Kode Cabang</Form.Label>
+                        <Form.Label>Kode Outlet</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Masukkan Kode Cabang..."
+                            placeholder="Masukkan Kode Outlet..."
                             name="Outlet_Code"
-                            value={data?.Outlet_Code}
-                            onChange={(e) => setData({ ...data, Outlet_Code: e.target.value }, [])}
+                            value={data?.Outlet_Code || ''}
+                            onChange={(e) => setData({ ...data, Outlet_Code: e.target.value })}
                         />
                     </Form.Group>
                     <Form.Group controlId="Outlet_Name">
@@ -91,7 +90,7 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                             type="text"
                             placeholder="Masukkan Nama Outlet..."
                             name="Outlet_Name"
-                            value={data?.Outlet_Name}
+                            value={data?.Outlet_Name || ''}
                             onChange={(e) => setData({ ...data, Outlet_Name: e.target.value })}
                         />
                     </Form.Group>
@@ -103,7 +102,7 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                             as="textarea"
                             rows={3}
                             name="Address"
-                            value={data?.Address}
+                            value={data?.Address || ''}
                             onChange={(e) => setData({ ...data, Address: e.target.value })}
                         />
                     </Form.Group>
@@ -113,14 +112,13 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                             as="select"
                             custom
                             name="Branch_Code"
-                            value={data?.Branch_Code}
+                            value={data?.Branch_Code || ''}
                             onChange={(e) => setData({ ...data, Branch_Code: e.target.value })}
                         >
                             <option value="">- Pilih Cabang -</option>
                             {cabang
-                                // .filter(cab => cab.Branch_Code.toString().includes(data?.Outlet_Code.toString().substring(0, 4)))
-                                .map((data) => (
-                                    <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
+                                .map((cab) => (
+                                    <option key={cab.ID_Branch} value={cab.Branch_Code || ''} >{cab.Branch_Name}</option>
                                 ))}
                         </Form.Control>
                     </Form.Group>
@@ -131,7 +129,7 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                                 type="text"
                                 placeholder="Masukkan Latitude..."
                                 name="Latitude"
-                                value={data?.Latitude}
+                                value={data?.Latitude || ''}
                                 onChange={(e) => setData({ ...data, Latitude: e.target.value })}
                             />
                         </Form.Group>
@@ -142,7 +140,7 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                                 type="text"
                                 placeholder="Masukkan Longitude..."
                                 name="Longitude"
-                                value={data?.Longitude}
+                                value={data?.Longitude || ''}
                                 onChange={(e) => setData({ ...data, Longitude: e.target.value })}
                             />
                         </Form.Group>
@@ -153,17 +151,16 @@ const ModalOutletEdit = ({ onClick, outletId }) => {
                             as="select"
                             custom
                             name="Status"
-                            value={data?.Status}
+                            value={data?.Status || ''}
                             onChange={(e) => setData({ ...data, Status: e.target.value })}
                         >
-                            <option value={data?.Status}>{data?.Status === 'Y' ? 'Aktif' : 'Tidak Aktif'}</option>
                             <option value="Y" >Aktif</option>
                             <option value="N" >Tidak Aktif</option>
                         </Form.Control>
                     </Form.Group>
                     <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                         <TileLayer
-                            attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url={Apikey.maptiler.url}
                         />
                         <Marker

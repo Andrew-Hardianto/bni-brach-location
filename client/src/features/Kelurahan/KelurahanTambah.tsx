@@ -1,7 +1,6 @@
 import { useCreateKelurahanMutation } from '@/entities/kelurahan/api/kelurahanApi';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -16,13 +15,10 @@ const KelurahanTambah = ({ history }) => {
 
     const [createKelurahanApi, { isLoading: loading, error, isSuccess: success }] = useCreateKelurahanMutation();
 
-    
-
     const { data: kecamatanData } = useGetKecamatansQuery({ limit: 100 });
     const kecamatan = kecamatanData?.kecamatan || [];
 
     useEffect(() => {
-        
         if (success) {
             history.push('/location/kelurahan')
         }
@@ -32,9 +28,9 @@ const KelurahanTambah = ({ history }) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(createKelurahan(data))
+        await createKelurahanApi(data);
     }
 
     return (
@@ -43,7 +39,7 @@ const KelurahanTambah = ({ history }) => {
                 <Card.Body>
                     <Card.Title>Tambah Kelurahan</Card.Title>
                     {loading && <Loader />}
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {error && <Message variant="danger" >{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="Kelurahan_Code">
                             <Form.Label>Kode Kelurahan</Form.Label>
@@ -51,7 +47,7 @@ const KelurahanTambah = ({ history }) => {
                                 type="text"
                                 placeholder="Masukkan Kode Kelurahan..."
                                 name="Kelurahan_Code"
-                                // value={id}
+                                // value={id || ''}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -62,7 +58,7 @@ const KelurahanTambah = ({ history }) => {
                                 type="text"
                                 placeholder="Masukkan Nama Kelurahan..."
                                 name="Kelurahan_Name"
-                                // value={nama}
+                                // value={nama || ''}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -72,13 +68,13 @@ const KelurahanTambah = ({ history }) => {
                                 as="select"
                                 custom
                                 name="Kecamatan_Code"
-                                // value={kecamatanId}
+                                // value={kecamatanId || ''}
                                 onChange={handleChange}
                             >
                                 <option value="">- Pilih Kecamatan -</option>
                                 {kecamatan.filter((kc) => kc.Kecamatan_Code.toString().includes(data.Kelurahan_Code.toString().substring(0, 7)))
                                     .map((data) => (
-                                        <option key={data.ID_Kecamatan} value={data.Kecamatan_Code} >{data.Kecamatan_Name}</option>
+                                        <option key={data.ID_Kecamatan} value={data.Kecamatan_Code || ''} >{data.Kecamatan_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>

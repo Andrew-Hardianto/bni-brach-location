@@ -2,7 +2,6 @@ import { useGetOutletByIdQuery, useUpdateOutletMutation } from '@/entities/outle
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Button, Card, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import Loader from '@/shared/ui/Loader';
@@ -28,32 +27,25 @@ const OutletEdit = ({ history, match }) => {
     const outlet = queryData?.outlet || queryData || {};
     const [updateOutletApi, { isLoading: loadingUpdate, error: errorUpdate, isSuccess: successUpdate }] = useUpdateOutletMutation();
 
-    
-
-    const { loading, error, success } = outletUpdate;
-
     const { data: cabangData } = useGetCabangsQuery({ limit: 100 });
     const cabang = cabangData?.cabang || [];
 
     useEffect(() => {
-        ;
-        if (success) {
-            dispatch({ type: OUTLET_UPDATE_RESET })
+        if (successUpdate) {
             history.push('/location/outlet')
         } else {
-            if (!outlet.outlet?.Outlet_Name || outlet.outlet?.ID_Outlet !== outletId) {
-                dispatch(detailOutlet(outletId));
+            if (outlet && outlet.ID_Outlet === outletId) {
+                setData(outlet)
             }
-            setData(outlet?.outlet)
         }
-    }, [dispatch, history, outletId, outlet.outlet?.ID_Outlet, success])
+    }, [history, outletId, outlet, successUpdate])
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(editOutlet({ ...data }))
+        await updateOutletApi({ id: outletId, body: { ...data } });
     }
 
-    const coords = [isNaN(outlet?.outlet?.Latitude) ? -6.241586 : outlet?.outlet?.Latitude, isNaN(cabang?.cabang?.Longitude) ? 106.992416 : cabang?.cabang?.Longitude];
+    const coords = [isNaN(outlet?.Latitude) ? -6.241586 : outlet?.Latitude, isNaN(outlet?.Longitude) ? 106.992416 : outlet?.Longitude] as [number, number];
 
     const [draggable, setDraggable] = useState(false)
     const markerRef = useRef(null)
@@ -62,7 +54,7 @@ const OutletEdit = ({ history, match }) => {
             dragend() {
                 const marker = markerRef.current?.getLatLng()
                 if (marker != null) {
-                    setData({ Latitude: marker.lat, Longitude: marker.lng })
+                    setData(prev => ({ ...prev, Latitude: marker.lat, Longitude: marker.lng }))
                 }
             },
         }),
@@ -78,8 +70,9 @@ const OutletEdit = ({ history, match }) => {
             <Card style={{ width: '35rem' }} className="mt-5">
                 <Card.Body>
                     <Card.Title>Edit Outlet</Card.Title>
-                    {loading && <Loader />}
-                    {error && <Message variant="danger" >{error}</Message>}
+                    {(loadingUpdate || loadingDetail) && <Loader />}
+                    {errorUpdate && <Message variant="danger" >{(errorUpdate as any)?.data?.message || 'Gagal mengubah data'}</Message>}
+                    {errorDetail && <Message variant="danger" >{(errorDetail as any)?.data?.message || 'Gagal memuat data'}</Message>}
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId="Outlet_Code">
                             <Form.Label>Kode Cabang</Form.Label>
@@ -87,8 +80,8 @@ const OutletEdit = ({ history, match }) => {
                                 type="text"
                                 placeholder="Masukkan Kode Cabang..."
                                 name="Outlet_Code"
-                                value={data?.Outlet_Code}
-                                onChange={(e) => setData({ ...data, Outlet_Code: e.target.value }, [])}
+                                value={data?.Outlet_Code || ''}
+                                onChange={(e) => setData({ ...data, Outlet_Code: e.target.value })}
                             />
                         </Form.Group>
                         <Form.Group controlId="Outlet_Name">
@@ -97,7 +90,7 @@ const OutletEdit = ({ history, match }) => {
                                 type="text"
                                 placeholder="Masukkan Nama Outlet..."
                                 name="Outlet_Name"
-                                value={data?.Outlet_Name}
+                                value={data?.Outlet_Name || ''}
                                 onChange={(e) => setData({ ...data, Outlet_Name: e.target.value })}
                             />
                         </Form.Group>
@@ -109,7 +102,7 @@ const OutletEdit = ({ history, match }) => {
                                 as="textarea"
                                 rows={3}
                                 name="Address"
-                                value={data?.Address}
+                                value={data?.Address || ''}
                                 onChange={(e) => setData({ ...data, Address: e.target.value })}
                             />
                         </Form.Group>
@@ -119,14 +112,14 @@ const OutletEdit = ({ history, match }) => {
                                 as="select"
                                 custom
                                 name="Branch_Code"
-                                value={data?.Branch_Code}
+                                value={data?.Branch_Code || ''}
                                 onChange={(e) => setData({ ...data, Branch_Code: e.target.value })}
                             >
                                 <option value="">- Pilih Cabang -</option>
                                 {cabang
                                     .filter(cab => cab.Branch_Code.toString().includes(data.Outlet_Code.toString().substring(0, 4)))
-                                    .map((data) => (
-                                        <option key={data.ID_Branch} value={data.Branch_Code} >{data.Branch_Name}</option>
+                                    .map((cab) => (
+                                        <option key={cab.ID_Branch} value={cab.Branch_Code || ''} >{cab.Branch_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>
@@ -137,7 +130,7 @@ const OutletEdit = ({ history, match }) => {
                                     type="text"
                                     placeholder="Masukkan Latitude..."
                                     name="Latitude"
-                                    value={data?.Latitude}
+                                    value={data?.Latitude || ''}
                                     onChange={(e) => setData({ ...data, Latitude: e.target.value })}
                                 />
                             </Form.Group>
@@ -148,14 +141,14 @@ const OutletEdit = ({ history, match }) => {
                                     type="text"
                                     placeholder="Masukkan Longitude..."
                                     name="Longitude"
-                                    value={data?.Longitude}
+                                    value={data?.Longitude || ''}
                                     onChange={(e) => setData({ ...data, Longitude: e.target.value })}
                                 />
                             </Form.Group>
                         </Form.Row>
                         <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
-                                attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url={Apikey.maptiler.url}
                             />
                             <Marker

@@ -13,7 +13,7 @@ const Search = ({ onSearch }) => {
             type="text"
             placeholder="Search"
             className="mr-sm-2"
-            value={search}
+            value={search || ''}
             onChange={e => onInputChange(e.target.value)} />
 
     );

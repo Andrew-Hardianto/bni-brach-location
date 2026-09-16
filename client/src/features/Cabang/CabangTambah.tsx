@@ -125,7 +125,7 @@ const CabangTambah = ({ history }) => {
                             >
                                 <option value="">- Pilih Wilayah -</option>
                                 {wilayah?.map((data) => (
-                                    <option key={data.ID_Region} value={data.Region_Code} >{data.Region_Name}</option>
+                                    <option key={data.ID_Region} value={data.Region_Code || ''} >{data.Region_Name}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -166,7 +166,7 @@ const CabangTambah = ({ history }) => {
                                 as="select"
                                 custom
                                 name="Status"
-                                value={Status}
+                                value={Status || ''}
                                 onChange={(e) => setStatus(e.target.value)}
                             >
                                 <option value="">- Pilih Status -</option>
@@ -176,7 +176,7 @@ const CabangTambah = ({ history }) => {
                         </Form.Group>
                         <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
-                                attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url={Apikey.maptiler.url}
                             />
                             <Marker

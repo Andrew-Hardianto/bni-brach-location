@@ -1,7 +1,6 @@
 import { useGetKodeposByIdQuery } from '@/entities/kodepos/api/kodeposApi';
 import React, { useEffect } from 'react';
 import { Card } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Loader from '@/shared/ui/Loader';
@@ -15,9 +14,7 @@ const KodeposDetail = ({ match }) => {
 
     
 
-    useEffect(() => {
-        dispatch(detailKodepos(kodeposId));
-    }, [dispatch, kodeposId])
+    
 
     console.log(kodepos?.kodepos)
 

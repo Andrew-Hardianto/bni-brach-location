@@ -7,6 +7,8 @@ import { useLoginMutation } from '@/entities/user/api/authApi'
 import { setCredentials } from '@/entities/user/model/authSlice'
 
 const Login = ({ location, history }) => {
+    const { userInfo } = useSelector((state: any) => state.userLogin);
+
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -56,7 +58,7 @@ const Login = ({ location, history }) => {
                                                         id="username"
                                                         placeholder="Username"
                                                         name="username"
-                                                        value={username}
+                                                        value={username || ''}
                                                         onChange={(e) => setUsername(e.target.value)}
                                                     />
                                                 </div>
@@ -67,7 +69,7 @@ const Login = ({ location, history }) => {
                                                         id="password"
                                                         placeholder="Password"
                                                         name="password"
-                                                        value={password}
+                                                        value={password || ''}
                                                         onChange={(e) => setPassword(e.target.value)}
                                                     />
                                                 </div>

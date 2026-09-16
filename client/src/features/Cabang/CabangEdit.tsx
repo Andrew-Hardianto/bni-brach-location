@@ -59,7 +59,7 @@ const CabangEdit = ({ history, match }) => {
         }
     }
 
-    const coords = [isNaN(data?.Latitude) ? -6.241586 : data?.Latitude, isNaN(data?.Longitude) ? 106.992416 : data?.Longitude];
+    const coords = [isNaN(data?.Latitude) ? -6.241586 : data?.Latitude, isNaN(data?.Longitude) ? 106.992416 : data?.Longitude] as [number, number];
 
     const [draggable, setDraggable] = useState(false)
     const markerRef = useRef(null)
@@ -134,7 +134,7 @@ const CabangEdit = ({ history, match }) => {
                                 {wilayah
                                     ?.filter(wil => wil?.Region_Code.toString().includes(data?.Branch_Code?.toString().substring(0, 2) || ''))
                                     .map((item) => (
-                                        <option key={item.ID_Region} value={item.Region_Code} >{item.Region_Name}</option>
+                                        <option key={item.ID_Region} value={item.Region_Code || ''} >{item.Region_Name}</option>
                                     ))}
                             </Form.Control>
                         </Form.Group>
@@ -173,7 +173,7 @@ const CabangEdit = ({ history, match }) => {
                         </Form.Row>
                         <MapContainer style={{ width: "520px", height: "400px" }} center={coords} zoom={14} scrollWheelZoom={false}>
                             <TileLayer
-                                attribution='&copy; <a href="https://legal.here.com/en-gb/privacy">HERE 2021</a>'
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url={Apikey.maptiler.url}
                             />
                             <Marker

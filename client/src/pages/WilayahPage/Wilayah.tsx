@@ -1,8 +1,8 @@
+import { useSelector } from 'react-redux';
 import { useGetWilayahsQuery, useDeleteWilayahMutation } from '@/entities/wilayah/api/wilayahApi';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -27,16 +27,10 @@ const Wilayah = ({ history }) => {
     const [keyword, setKeyword] = useState('');
     
     const { data: queryData, isLoading: loading, error } = useGetWilayahsQuery({ page, limit, keyword });
-    const wilayah = data?.wilayah || [];
-    const pagination = data?.pagination || {};
+    const wilayah = queryData?.wilayah || [];
+    const pagination = queryData?.pagination || {};
     
     const [deleteWilayahApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteWilayahMutation();
-    
-
-    
-
-    
-
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -51,11 +45,11 @@ const Wilayah = ({ history }) => {
         setShowEdit(true);
     }, []);
 
-    useEffect(() => {
-        if (!userInfo) {
-            history.push('/login')
-        }
-    }, [userInfo, history])
+    // useEffect(() => {
+    //     if (!userInfo) {
+    //         history.push('/login')
+    //     }
+    // }, [userInfo, history])
 
 
     const handleTableChange = (type, { page, sizePerPage, searchText }) => {
@@ -123,14 +117,14 @@ const Wilayah = ({ history }) => {
                     <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
                                         <Card.Title className="font-weight-bold text-center">Data Region</Card.Title>
-                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{error?.data?.message || error?.error || 'Terjadi kesalahan'}</Message>) : (
+                                        {loading ? <TableSkeleton columns={5} rows={5} /> : error ? (<Message variant="danger">{(error as any)?.data?.message || (error as any)?.error || 'Terjadi kesalahan'}</Message>) : (
                                             
                                         <>
                                         {loadingDelete && <Loader />}
-                                        {errorDelete && <Message variant="danger">{errorDelete?.data?.message || 'Gagal menghapus'}</Message>}
+                                        {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
                                         <ToolkitProvider
                                             bootstrap4
-                                            keyField="ID_Region"
+                                            keyField="Region_Code"
                                             data={wilayah}
                                             columns={columns}
                                             search
