@@ -4,7 +4,7 @@ const Op = db.Sequelize.Op;
 
 const advancedResults = (model: any, options: { include?: string[], searchableField?: string } = {}) => async (req: Request, res: Response, next: NextFunction) => {
     let queryOptions: any = {};
-    
+
     if (options.include) {
         queryOptions.include = options.include;
     }
@@ -19,13 +19,12 @@ const advancedResults = (model: any, options: { include?: string[], searchableFi
 
     const page = parseInt(req.query.page as string, 10) || 1;
     const limit = parseInt(req.query.limit as string, 10) || 10;
-    
+
     queryOptions.offset = (page - 1) * limit;
     queryOptions.limit = limit;
 
     try {
         const { count, rows } = await model.findAndCountAll(queryOptions);
-        
         // Expose pagination in res.advancedResults so the controller can use it
         (res as any).advancedResults = {
             success: true,
@@ -37,7 +36,7 @@ const advancedResults = (model: any, options: { include?: string[], searchableFi
                 limit: limit
             }
         };
-        
+
         next();
     } catch (error) {
         next(error);

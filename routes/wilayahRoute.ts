@@ -11,7 +11,7 @@ import { getAllWilayah,
 const router = express.Router();
 
 router.route('/')
-    .get(getAllWilayah)
+    .get(advancedResults(db.Wilayah, { searchableField: 'Region_Name' }), getAllWilayah)
     .post(createWilayah)
 
 router.route('/:id')

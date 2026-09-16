@@ -11,7 +11,7 @@ import { getAllCabang,
 const router = express.Router();
 
 router.route('/')
-    .get(getAllCabang)
+    .get(advancedResults(db.Cabang, { include: ['wilayah'], searchableField: 'Branch_Name' }), getAllCabang)
     .post(createCabang)
 
 router.route('/:id')

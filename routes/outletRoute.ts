@@ -11,7 +11,7 @@ import { getAllOutlet,
 const router = express.Router();
 
 router.route('/')
-    .get(getAllOutlet)
+    .get(advancedResults(db.Outlet, { include: ['cabang'], searchableField: 'Outlet_Name' }), getAllOutlet)
     .post(createOutlet)
 
 router.route('/:id')
