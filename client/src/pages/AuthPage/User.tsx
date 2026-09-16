@@ -2,10 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import BootstrapTable from "react-bootstrap-table-next";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import DataTable from '@/shared/ui/DataTable';
+import { ColumnDef } from '@tanstack/react-table';
 
 import Loader from '@/shared/ui/Loader';
 import Message from '@/shared/ui/Message';
@@ -16,13 +14,16 @@ import ModalEditUser from '@/features/Auth/ModalEditUser';
 const User = () => {
     const { userInfo } = useSelector((state: any) => state.userLogin);
 
-    const { SearchBar } = Search;
-
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [userId, setUserId] = useState();
 
-    const { data: users = [], isLoading: loading, error } = useGetUsersQuery();
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [keyword, setKeyword] = useState('');
+
+    const { data: usersData = [], isLoading: loading, error } = useGetUsersQuery();
+    
     const [deleteUser, { isLoading: loadingDelete, error: errorDelete }] = useDeleteUserMutation();
 
     const handleClose = () => setShow(false);
@@ -48,33 +49,47 @@ const User = () => {
         }
     }
 
-    const columns = [
+    const filteredUsers = (usersData || []).filter((u: any) => u.Username?.toLowerCase().includes(keyword.toLowerCase()));
+    const totalItems = filteredUsers.length;
+    const totalPages = Math.ceil(totalItems / limit) || 1;
+    const paginatedUsers = filteredUsers.slice((page - 1) * limit, page * limit);
+
+    const pagination = {
+        currentPage: page,
+        limit: limit,
+        totalItems: totalItems,
+        totalPages: totalPages
+    };
+
+    const columns: ColumnDef<any>[] = [
         {
-            dataField: 'Username',
-            text: 'Username'
+            accessorKey: 'Username',
+            header: 'Username',
+            enableSorting: true
         },
         {
-            dataField: "link",
-            text: 'Aksi',
-            formatter: (rowContent, row) => {
+            id: "link",
+            header: 'Aksi',
+            cell: ({ row }) => {
+                const data = row.original;
                 return (
                     <div className="">
                         {
-                            userInfo?.user?.ID_User !== row.ID_User ? (
+                            userInfo?.user?.ID_User !== data.ID_User ? (
                                 <>
-                                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_User)}>
+                                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(data.ID_User)}>
                                         <i className="fas fa-info"></i>
                                     </Button>
-                                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_User)}>
+                                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(data.ID_User)}>
                                         <i className="fas fa-edit"></i>
                                     </Button>
-                                    <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(row.ID_User)}>
+                                    <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(data.ID_User)}>
                                         <i className="fas fa-trash-alt"></i>
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_User)}>
+                                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(data.ID_User)}>
                                         <i className="fas fa-info"></i>
                                     </Button>
                                 </>
@@ -86,11 +101,6 @@ const User = () => {
         }
     ];
 
-    const defaultSortedBy = [{
-        dataField: "Username",
-        order: "asc" as const // or desc
-    }];
-
     return (
         <div className="home">
             <div className="container-fluid">
@@ -100,38 +110,24 @@ const User = () => {
                             : (
                                 <Card className="mt-3 shadow-lg" >
                                     <Card.Body>
+                                        <Card.Title className="text-center font-weight-bold">DATA USER</Card.Title>
                                         {loadingDelete && <Loader />}
                                         {errorDelete && <Message variant="danger" >{(errorDelete as any)?.data?.message || 'Error deleting user'}</Message>}
-                                        <ToolkitProvider
-                                            bootstrap4
-                                            keyField="ID_User"
-                                            data={users}
+                                        <DataTable
+                                            data={paginatedUsers}
                                             columns={columns}
-                                            search
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        <Row className="mb-3">
-                                                            <Col sm={9} className="mb-2">
-                                                                <Link to="/user/tambah" className="btn btn-primary">Tambah User</Link>
-                                                            </Col>
-                                                            <Col sm={3}>
-                                                                <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
-                                                            </Col>
-                                                        </Row>
-                                                        <Card.Title>Data User</Card.Title>
-                                                        <BootstrapTable
-                                                            {...props.baseProps}
-                                                            pagination={paginationFactory()}
-                                                            defaultSorted={defaultSortedBy}
-                                                            wrapperClasses="table-responsive"
-                                                            rowClasses="text-nowrap"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
+                                            pagination={{
+                                                currentPage: pagination?.currentPage || 1,
+                                                limit: pagination?.limit || 10,
+                                                totalItems: pagination?.totalItems || 0,
+                                                totalPages: pagination?.totalPages || 1
+                                            }}
+                                            onPaginationChange={(p, l) => { setPage(p); setLimit(l); }}
+                                            onSearch={(kw) => setKeyword(kw)}
+                                            keyword={keyword}
+                                            searchPlaceholder="Cari Username..."
+                                            actionButtons={<Link to="/user/tambah" className="btn btn-primary">Tambah User</Link>}
+                                        />
                                     </Card.Body>
                                 </Card>
                             )}

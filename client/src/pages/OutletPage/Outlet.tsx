@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import BootstrapTable from "react-bootstrap-table-next";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import DataTable from '@/shared/ui/DataTable';
+import { ColumnDef } from '@tanstack/react-table';
 
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
@@ -16,8 +14,6 @@ import { useGetOutletsQuery, useDeleteOutletMutation } from '@/entities/outlet/a
 import ModalOutletEdit from '@/features/Outlet/ModalOutletEdit';
 
 const Outlet = ({ history }) => {
-    const { SearchBar } = Search;
-
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [outletId, setOutletId] = useState();
@@ -54,52 +50,47 @@ const Outlet = ({ history }) => {
         }
     }, [userInfo, history])
 
-
-    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        setPage(page);
-        setLimit(sizePerPage);
-        setKeyword(searchText || '');
-    }
-
-
     const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
             await deleteOutletApi(id);
         }
     }
-    
 
-    const columns = [
+    const columns: ColumnDef<any>[] = [
         {
-            dataField: 'Outlet_Code',
-            text: 'Kode Outlet'
+            accessorKey: 'Outlet_Code',
+            header: 'Kode Outlet'
         },
         {
-            dataField: 'Outlet_Name',
-            text: 'Nama Outlet'
+            accessorKey: 'Outlet_Name',
+            header: 'Nama Outlet'
         },
         {
-            dataField: 'cabang.Branch_Name',
-            text: 'Nama Branch'
+            accessorKey: 'cabang.Branch_Name',
+            header: 'Nama Branch'
         },
         {
-            dataField: 'Address',
-            text: 'Alamat',
-            style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
+            accessorKey: 'Address',
+            header: 'Alamat',
+            cell: ({ getValue }) => {
+                const cell = getValue() as string;
+                return <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cell}</div>;
+            }
         },
         {
-            dataField: "link",
-            text: 'Aksi',
-            formatter: (rowContent, row) => {
+            id: "link",
+            header: 'Aksi',
+            cell: ({ row }) => {
+                const data = row.original;
                 return (
                     <div className="">
-                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Outlet)}>
+                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(data.ID_Outlet)}>
                             <i className="fas fa-info"></i>
                         </Button>
-                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Outlet)}>
+                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(data.ID_Outlet)}>
                             <i className="fas fa-edit"></i>
                         </Button>
-                        <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Outlet)}>
+                        <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(data.ID_Outlet)}>
                             <i className="fas fa-trash-alt"></i>
                         </Button>
                     </div>
@@ -120,37 +111,22 @@ const Outlet = ({ history }) => {
                             <>
                             {loadingDelete && <Loader />}
                             {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
-                            <ToolkitProvider
-                                bootstrap4
-                                keyField="Outlet_Code"
+                            
+                            <DataTable
                                 data={outlet}
                                 columns={columns}
-                                search
-                            >
-                                {
-                                    props => (
-                                        <div>
-                                            <Row className="mb-3">
-                                                <Col sm={9} className="mb-2">
-                                                    <Link to="/location/outlet/tambah" className="btn btn-primary">Tambah Outlet</Link>
-                                                </Col>
-                                                <Col sm={3}>
-                                                    <SearchBar placeholder="Cari Outlet..." {...props.searchProps} />
-                                                </Col>
-                                            </Row>
-                                            <Card.Title>Data Outlet</Card.Title>
-                                            <BootstrapTable
-                                                {...props.baseProps}
-                                                remote={{ search: true, pagination: true }}
-                                                onTableChange={handleTableChange}
-                                                pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                wrapperClasses="table-responsive"
-                                                rowClasses="text-nowrap"
-                                            />
-                                        </div>
-                                    )
-                                }
-                            </ToolkitProvider>
+                                pagination={{
+                                    currentPage: pagination?.currentPage || 1,
+                                    limit: pagination?.limit || 10,
+                                    totalItems: pagination?.totalItems || 0,
+                                    totalPages: pagination?.totalPages || 1
+                                }}
+                                onPaginationChange={(p, l) => { setPage(p); setLimit(l); }}
+                                onSearch={(kw) => setKeyword(kw)}
+                                keyword={keyword}
+                                searchPlaceholder="Cari Outlet..."
+                                actionButtons={<Link to="/location/outlet/tambah" className="btn btn-primary">Tambah Outlet</Link>}
+                            />
                         
                             </>
                             )}
