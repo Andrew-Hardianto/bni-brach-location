@@ -2,10 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import BootstrapTable from "react-bootstrap-table-next";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import DataTable from '@/shared/ui/DataTable';
+import { ColumnDef } from '@tanstack/react-table';
 
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
@@ -15,7 +13,6 @@ import { useGetKotasQuery, useDeleteKotaMutation } from '@/entities/kota/api/kot
 import ModalEditKota from '@/features/Kota/ModalEditKota';
 
 const Kota = ({ history }) => {
-    const { SearchBar } = Search;
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [kotaId, setKotaId] = useState();
@@ -29,12 +26,6 @@ const Kota = ({ history }) => {
     const pagination = queryData?.pagination || {};
 
     const [deleteKotaApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteKotaMutation();
-
-
-
-
-
-
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -50,87 +41,61 @@ const Kota = ({ history }) => {
     }, []);
 
 
-    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        setPage(page);
-        setLimit(sizePerPage);
-        setKeyword(searchText || '');
-    }
-
-
     const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
             await deleteKotaApi(id);
         }
     }
 
-    const columns = [{
-        dataField: 'Kabkota_Code',
-        text: 'Kode Kota/Kabupaten',
-        sort: true
+    const columns: ColumnDef<any>[] = [{
+        accessorKey: 'Kabkota_Code',
+        header: 'Kode Kota/Kabupaten',
+        enableSorting: true
     }, {
-        dataField: 'Kabkota_Name',
-        text: 'Nama Kota'
+        accessorKey: 'Kabkota_Name',
+        header: 'Nama Kota'
     }, {
-        dataField: 'BI_Location_Code',
-        text: 'BI Location Code'
+        accessorKey: 'BI_Location_Code',
+        header: 'BI Location Code'
     }, {
-        dataField: 'Antasena_Code',
-        text: 'Antasena Code'
+        accessorKey: 'Antasena_Code',
+        header: 'Antasena Code'
     }, {
-        dataField: 'provinsi.Provinsi_Name',
-        text: 'Nama Provinsi',
+        accessorKey: 'provinsi.Provinsi_Name',
+        header: 'Nama Provinsi',
         // formatter: (cell) => {
         //     return cell === null && ''
         // }
     },
     {
-        dataField: 'Status',
-        text: 'Status',
-        sort: true,
-        formatter: (cell) => {
+        accessorKey: 'Status',
+        header: 'Status',
+        enableSorting: true,
+        cell: ({ getValue }) => {
+            const cell = getValue();
             return cell === 'Y' ? 'Aktif' : 'Tidak Aktif'
         }
     },
     {
-        dataField: "link",
-        text: 'Aksi',
-        formatter: (rowContent, row) => {
+        id: "link",
+        header: 'Aksi',
+        cell: ({ row }) => {
+            const data = row.original;
             return (
                 <div className="">
-                    {/* <LinkContainer to={`/location/kota/detail/${row.ID_Kabupaten}`}>
-                        <Button variant="info" className="btn-sm">
-                            <i className="fas fa-info"></i>
-                        </Button>
-                    </LinkContainer>
-                    <LinkContainer to={`/location/kota/edit/${row.ID_Kabupaten}`} className="ml-2">
-                        <Button variant="success" className="btn-sm">
-                            <i className="fas fa-edit"></i>
-                        </Button>
-                    </LinkContainer> */}
-                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Kabkota)}>
+                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(data.ID_Kabkota)}>
                         <i className="fas fa-info"></i>
                     </Button>
-                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Kabkota)}>
+                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(data.ID_Kabkota)}>
                         <i className="fas fa-edit"></i>
                     </Button>
-                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Kabkota)}>
+                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(data.ID_Kabkota)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
                 </div>
             )
         }
     }];
-
-    const defaultSortedBy = [{
-        dataField: "kode",
-        order: "asc"  // or desc
-    }];
-
-    // const data = kota.map((data) => (
-    //     {
-    //         id: data.id, nama: data.nama, biCode: data.biCode, antasenaCode: data.antasenaCode, provinsiId: data.provinsi.nama
-    //     }
-    // ))
 
     return (
         <div className="home">
@@ -144,37 +109,21 @@ const Kota = ({ history }) => {
                                 <>
                                     {loadingDelete && <Loader />}
                                     {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
-                                    <ToolkitProvider
-                                        bootstrap4
-                                        keyField="Kabkota_Code"
+                                    <DataTable
                                         data={kota}
                                         columns={columns}
-                                        search
-                                    >
-                                        {
-                                            props => (
-                                                <div>
-                                                    <Row className="mb-3">
-                                                        <Col sm={9} className="mb-2">
-                                                            <Link to="/location/kota/tambah" className="btn btn-primary">Tambah Kota</Link>
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <SearchBar placeholder="Cari Kota/Kabupaten..." {...props.searchProps} />
-                                                        </Col>
-                                                    </Row>
-                                                    <BootstrapTable
-                                                        {...props.baseProps}
-                                                        remote={{ search: true, pagination: true }}
-                                                        onTableChange={handleTableChange}
-                                                        pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                        defaultSorted={defaultSortedBy}
-                                                        wrapperClasses="table-responsive"
-                                                        rowClasses="text-nowrap"
-                                                    />
-                                                </div>
-                                            )
-                                        }
-                                    </ToolkitProvider>
+                                        pagination={{
+                                            currentPage: pagination?.currentPage || 1,
+                                            limit: pagination?.limit || 10,
+                                            totalItems: pagination?.totalItems || 0,
+                                            totalPages: pagination?.totalPages || 1
+                                        }}
+                                        onPaginationChange={(p, l) => { setPage(p); setLimit(l); }}
+                                        onSearch={(kw) => setKeyword(kw)}
+                                        keyword={keyword}
+                                        searchPlaceholder="Cari Kota/Kabupaten..."
+                                        actionButtons={<Link to="/location/kota/tambah" className="btn btn-primary">Tambah Kota</Link>}
+                                    />
 
                                 </>
                             )}

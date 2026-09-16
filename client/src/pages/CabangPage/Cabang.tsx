@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Row, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import BootstrapTable from "react-bootstrap-table-next";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import DataTable from '@/shared/ui/DataTable';
+import { ColumnDef } from '@tanstack/react-table';
 
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
@@ -16,8 +14,6 @@ import { useGetCabangsQuery, useDeleteCabangMutation } from '@/entities/cabang/a
 
 const Cabang = ({ history }) => {
     const { userInfo } = useSelector((state: any) => state.userLogin);
-
-    const { SearchBar } = Search;
 
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
@@ -32,7 +28,6 @@ const Cabang = ({ history }) => {
     const pagination = queryData?.pagination || {};
 
     const [deleteCabangApi, { isLoading: loadingDelete, error: errorDelete }] = useDeleteCabangMutation();
-
 
     const handleClose = () => setShow(false);
     const handleCloseEdit = () => setShowEdit(false);
@@ -53,49 +48,47 @@ const Cabang = ({ history }) => {
         }
     }, [userInfo, history])
 
-    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        setPage(page);
-        setLimit(sizePerPage);
-        setKeyword(searchText || '');
-    }
-
     const deletehandler = async (id) => {
         if (window.confirm('Apa anda yakin ?')) {
             await deleteCabangApi(id);
         }
     }
 
-    const columns = [
+    const columns: ColumnDef<any>[] = [
         {
-            dataField: 'Branch_Code',
-            text: 'Kode Cabang'
+            accessorKey: 'Branch_Code',
+            header: 'Kode Cabang'
         },
         {
-            dataField: 'Branch_Name',
-            text: 'Nama Cabang'
+            accessorKey: 'Branch_Name',
+            header: 'Nama Cabang'
         },
         {
-            dataField: 'wilayah.Region_Name',
-            text: 'Nama Region'
+            accessorKey: 'wilayah.Region_Name',
+            header: 'Nama Region'
         },
         {
-            dataField: 'Address',
-            text: 'Alamat',
-            style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
+            accessorKey: 'Address',
+            header: 'Alamat',
+            cell: ({ getValue }) => {
+                const cell = getValue() as string;
+                return <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cell}</div>;
+            }
         },
         {
-            dataField: "link",
-            text: 'Aksi',
-            formatter: (rowContent, row) => {
+            id: "link",
+            header: 'Aksi',
+            cell: ({ row }) => {
+                const data = row.original;
                 return (
                     <div className="">
-                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Branch)}>
+                        <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(data.ID_Branch)}>
                             <i className="fas fa-info"></i>
                         </Button>
-                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Branch)}>
+                        <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(data.ID_Branch)}>
                             <i className="fas fa-edit"></i>
                         </Button>
-                        <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(row.ID_Branch)}>
+                        <Button variant="danger" size="sm" className="ml-2" onClick={() => deletehandler(data.ID_Branch)}>
                             <i className="fas fa-trash-alt"></i>
                         </Button>
                     </div>
@@ -103,11 +96,6 @@ const Cabang = ({ history }) => {
             }
         }
     ];
-
-    const defaultSortedBy = [{
-        dataField: "kode",
-        order: "asc"  // or desc
-    }];
 
     return (
         <div className="container-fluid">
@@ -120,38 +108,21 @@ const Cabang = ({ history }) => {
                             <>
                                 {loadingDelete && <Loader />}
                                 {errorDelete && <Message variant="danger" >{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
-                                <ToolkitProvider
-                                    bootstrap4
-                                    keyField="Branch_Code"
+                                <DataTable
                                     data={cabang}
                                     columns={columns}
-                                    search
-                                >
-                                    {
-                                        props => (
-                                            <div>
-                                                <Row className="mb-3">
-                                                    <Col sm={9} className="mb-2">
-                                                        <Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>
-                                                    </Col>
-                                                    <Col sm={3}>
-                                                        <SearchBar placeholder="Cari Branch.." {...props.searchProps} />
-                                                    </Col>
-                                                </Row>
-                                                <BootstrapTable
-                                                    {...props.baseProps}
-                                                    remote={{ search: true, pagination: true }}
-                                                    onTableChange={handleTableChange}
-                                                    pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                    defaultSorted={defaultSortedBy}
-                                                    wrapperClasses="table-responsive"
-                                                    rowClasses="text-nowrap"
-                                                />
-                                            </div>
-                                        )
-                                    }
-                                </ToolkitProvider>
-
+                                    pagination={{
+                                        currentPage: pagination?.currentPage || 1,
+                                        limit: pagination?.limit || 10,
+                                        totalItems: pagination?.totalItems || 0,
+                                        totalPages: pagination?.totalPages || 1
+                                    }}
+                                    onPaginationChange={(p, l) => { setPage(p); setLimit(l); }}
+                                    onSearch={(kw) => setKeyword(kw)}
+                                    keyword={keyword}
+                                    searchPlaceholder="Cari Branch.."
+                                    actionButtons={<Link to="/location/branch/tambah" className="btn btn-primary">Tambah Branch</Link>}
+                                />
                             </>
                         )}
                     </Card.Body>

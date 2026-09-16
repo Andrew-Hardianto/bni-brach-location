@@ -2,10 +2,8 @@ import { useGetProvinsisQuery, useDeleteProvinsiMutation } from '@/entities/prov
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
-import BootstrapTable from "react-bootstrap-table-next";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import DataTable from '@/shared/ui/DataTable';
+import { ColumnDef } from '@tanstack/react-table';
 
 import Loader from '@/shared/ui/Loader';
 import TableSkeleton from '@/shared/ui/TableSkeleton';
@@ -14,7 +12,6 @@ import ModalDetail from '@/features/Provinsi/ModalDetail';
 import ModalEdit from '@/features/Provinsi/ModalEdit';
 
 const Provinsi = ({ history }) => {
-    const { SearchBar } = Search;
 
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
@@ -46,11 +43,7 @@ const Provinsi = ({ history }) => {
 
 
 
-    const handleTableChange = (type, { page, sizePerPage, searchText }) => {
-        setPage(page);
-        setLimit(sizePerPage);
-        setKeyword(searchText || '');
-    }
+
 
 
     const deletehandler = async (id) => {
@@ -60,35 +53,37 @@ const Provinsi = ({ history }) => {
     }
 
 
-    const columns = [{
-        dataField: 'Provinsi_Code',
-        text: 'Kode Provinsi',
-        sort: true,
+    const columns: ColumnDef<any>[] = [{
+        accessorKey: 'Provinsi_Code',
+        header: 'Kode Provinsi',
+        enableSorting: true,
     }, {
-        dataField: 'Provinsi_Name',
-        text: 'Nama Provinsi'
+        accessorKey: 'Provinsi_Name',
+        header: 'Nama Provinsi'
     },
     {
-        dataField: 'Status',
-        text: 'Status',
-        sort: true,
-        formatter: (cell) => {
+        accessorKey: 'Status',
+        header: 'Status',
+        enableSorting: true,
+        cell: ({ getValue }) => {
+            const cell = getValue();
             return cell === 'Y' ? 'Aktif' : 'Tidak Aktif'
         }
     },
     {
-        dataField: "link",
-        text: 'Aksi',
-        formatter: (rowContent, row) => {
+        id: "link",
+        header: 'Aksi',
+        cell: ({ row }) => {
+            const data = row.original;
             return (
                 <div className="">
-                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(row.ID_Provinsi)}>
+                    <Button variant="info" className="btn-sm mr-2" onClick={() => handleShow(data.ID_Provinsi)}>
                         <i className="fas fa-info"></i>
                     </Button>
-                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(row.ID_Provinsi)}>
+                    <Button variant="success" className="btn-sm" onClick={() => handleShowEdit(data.ID_Provinsi)}>
                         <i className="fas fa-edit"></i>
                     </Button>
-                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(row.ID_Provinsi)}>
+                    <Button variant="danger" className="btn-sm ml-2" onClick={() => deletehandler(data.ID_Provinsi)}>
                         <i className="fas fa-trash-alt"></i>
                     </Button>
                 </div>
@@ -96,10 +91,7 @@ const Provinsi = ({ history }) => {
         }
     }];
 
-    const defaultSortedBy = [{
-        dataField: "kode",
-        order: "asc"  // or desc
-    }];
+
 
     return (
         <div className="home">
@@ -113,37 +105,21 @@ const Provinsi = ({ history }) => {
                                 <>
                                     {loadingDelete && <Loader />}
                                     {errorDelete && <Message variant="danger">{(errorDelete as any)?.data?.message || 'Gagal menghapus'}</Message>}
-                                    <ToolkitProvider
-                                        bootstrap4
-                                        keyField="Provinsi_Code"
+                                    <DataTable
                                         data={provinsi}
                                         columns={columns}
-                                        search
-                                    >
-                                        {
-                                            props => (
-                                                <div>
-                                                    <Row className="mb-3">
-                                                        <Col sm={9} className="mb-2">
-                                                            <Link to="/location/provinsi/tambah" className="btn btn-primary">Tambah Provinsi</Link>
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <SearchBar placeholder="Cari Provinsi..." {...props.searchProps} />
-                                                        </Col>
-                                                    </Row>
-                                                    <BootstrapTable
-                                                        {...props.baseProps}
-                                                        remote={{ search: true, pagination: true }}
-                                                        onTableChange={handleTableChange}
-                                                        pagination={paginationFactory({ page: pagination?.currentPage || 1, sizePerPage: pagination?.limit || 10, totalSize: pagination?.totalItems || 0 })}
-                                                        defaultSorted={defaultSortedBy}
-                                                        wrapperClasses="table-responsive"
-                                                        rowClasses="text-nowrap"
-                                                    />
-                                                </div>
-                                            )
-                                        }
-                                    </ToolkitProvider>
+                                        pagination={{
+                                            currentPage: pagination?.currentPage || 1,
+                                            limit: pagination?.limit || 10,
+                                            totalItems: pagination?.totalItems || 0,
+                                            totalPages: pagination?.totalPages || 1
+                                        }}
+                                        onPaginationChange={(p, l) => { setPage(p); setLimit(l); }}
+                                        onSearch={(kw) => setKeyword(kw)}
+                                        keyword={keyword}
+                                        searchPlaceholder="Cari Provinsi..."
+                                        actionButtons={<Link to="/location/provinsi/tambah" className="btn btn-primary">Tambah Provinsi</Link>}
+                                    />
 
                                 </>
                             )}
